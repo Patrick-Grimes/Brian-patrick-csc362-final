@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NC Dollar General Data Table</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #0f172a; color: #e2e8f0;
+            font-size: 14px; padding: 1.5rem; }
+    h1   { font-size: 1.2rem; margin-bottom: 0.5rem; }
+    p    { color: #94a3b8; font-size: 0.85rem; margin-bottom: 1rem; }
+    a    { color: #60a5fa; }
+    .wrap { overflow-x: auto; }
+    table { border-collapse: collapse; min-width: 900px; width: 100%; }
+    thead { background: #1e293b; }
+    th   { padding: 8px 10px; text-align: left; font-size: 0.78rem;
+            border-bottom: 1px solid #334155; white-space: nowrap; }
+    td   { padding: 6px 10px; font-size: 0.78rem; border-bottom: 1px solid #1e293b; }
+    tr:nth-child(even) { background: #141f30; }
+    tr:hover { background: #1a2a40; }
+    td:nth-child(10) { font-weight: 600; }
+    td[data-yes="yes"] { color: #f87171; }
+    td[data-yes="no"]  { color: #86efac; }
+  </style>
+</head>
+<body>
+  <h1>NC Dollar General — Underlying Data Table</h1>
+  <p>
+    474 unique places across North Carolina with at least one Dollar General store.
+    Data sources: U.S. Census Bureau ACS 2023 5-Year Estimates (Table S1701) &amp;
+    Dollar General location database (Simplemaps.com).
+    <a href="index.html">← Back to visualization</a>
+  </p>
+  <div class="wrap">
+    <table aria-label="NC Dollar General store saturation data by place and county">
+      <thead><tr><th scope='col'>City</th><th scope='col'>County</th><th scope='col'>Place Classification</th><th scope='col'>Place Store Count</th><th scope='col'>Place Stores per 10,000</th><th scope='col'>Place Poverty Rate %</th><th scope='col'>County Stores per 10,000</th><th scope='col'>Adjusted County Density (excl. Place)</th><th scope='col'>County Poverty Rate %</th><th scope='col'>Place Density &gt; Adjusted County Density</th></tr></thead>
+      <tbody><tr><td>Cary</td><td>Wake</td><td>Urban (5,000+)</td><td>2</td><td>0.11</td><td>5.3%</td><td>0.19</td><td>0.21</td><td>7.9%</td><td>No</td></tr>
+<tr><td>Raleigh</td><td>Wake</td><td>Urban (5,000+)</td><td>5</td><td>0.11</td><td>11.4%</td><td>0.19</td><td>0.25</td><td>7.9%</td><td>No</td></tr>
+<tr><td>Winston Salem</td><td>Forsyth</td><td>Urban (5,000+)</td><td>4</td><td>0.16</td><td>17.9%</td><td>0.35</td><td>0.67</td><td>14.7%</td><td>No</td></tr>
+<tr><td>Huntersville</td><td>Mecklenburg</td><td>Urban (5,000+)</td><td>1</td><td>0.16</td><td>3.4%</td><td>0.17</td><td>0.17</td><td>10.4%</td><td>No</td></tr>
+<tr><td>Charlotte</td><td>Mecklenburg</td><td>Urban (5,000+)</td><td>15</td><td>0.17</td><td>11.7%</td><td>0.17</td><td>0.17</td><td>10.4%</td><td>No</td></tr>
+<tr><td>Wake Forest</td><td>Wake</td><td>Urban (5,000+)</td><td>1</td><td>0.21</td><td>2.9%</td><td>0.19</td><td>0.19</td><td>7.9%</td><td>Yes</td></tr>
+<tr><td>Durham</td><td>Durham</td><td>Urban (5,000+)</td><td>7</td><td>0.25</td><td>12.2%</td><td>0.22</td><td>0.0</td><td>12.0%</td><td>Yes</td></tr>
+<tr><td>Concord</td><td>Cabarrus</td><td>Urban (5,000+)</td><td>4</td><td>0.38</td><td>8.6%</td><td>0.48</td><td>0.56</td><td>8.9%</td><td>No</td></tr>
+<tr><td>Clayton</td><td>Johnston</td><td>Urban (5,000+)</td><td>1</td><td>0.42</td><td>8.0%</td><td>0.85</td><td>0.92</td><td>11.2%</td><td>No</td></tr>
+<tr><td>Asheville</td><td>Buncombe</td><td>Urban (5,000+)</td><td>4</td><td>0.43</td><td>14.6%</td><td>0.6</td><td>0.69</td><td>11.8%</td><td>No</td></tr>
+<tr><td>High Point</td><td>Guilford</td><td>Urban (5,000+)</td><td>5</td><td>0.43</td><td>14.7%</td><td>0.67</td><td>0.73</td><td>15.2%</td><td>No</td></tr>
+<tr><td>Carrboro</td><td>Orange</td><td>Urban (5,000+)</td><td>1</td><td>0.45</td><td>11.3%</td><td>0.22</td><td>0.17</td><td>12.4%</td><td>Yes</td></tr>
+<tr><td>Waxhaw</td><td>Union</td><td>Urban (5,000+)</td><td>1</td><td>0.49</td><td>4.3%</td><td>0.5</td><td>0.5</td><td>7.7%</td><td>No</td></tr>
+<tr><td>Greensboro</td><td>Guilford</td><td>Urban (5,000+)</td><td>16</td><td>0.54</td><td>18.4%</td><td>0.67</td><td>0.8</td><td>15.2%</td><td>No</td></tr>
+<tr><td>Knightdale</td><td>Wake</td><td>Urban (5,000+)</td><td>1</td><td>0.54</td><td>5.8%</td><td>0.19</td><td>0.19</td><td>7.9%</td><td>Yes</td></tr>
+<tr><td>Garner</td><td>Wake</td><td>Urban (5,000+)</td><td>2</td><td>0.6</td><td>7.3%</td><td>0.19</td><td>0.18</td><td>7.9%</td><td>Yes</td></tr>
+<tr><td>Mount Holly</td><td>Gaston</td><td>Urban (5,000+)</td><td>1</td><td>0.61</td><td>8.2%</td><td>0.97</td><td>1.0</td><td>12.8%</td><td>No</td></tr>
+<tr><td>Stallings</td><td>Union</td><td>Urban (5,000+)</td><td>1</td><td>0.62</td><td>3.7%</td><td>0.5</td><td>0.49</td><td>7.7%</td><td>Yes</td></tr>
+<tr><td>Mint Hill</td><td>Mecklenburg</td><td>Urban (5,000+)</td><td>2</td><td>0.65</td><td>8.7%</td><td>0.17</td><td>0.16</td><td>10.4%</td><td>Yes</td></tr>
+<tr><td>Southern Pines</td><td>Moore</td><td>Urban (5,000+)</td><td>1</td><td>0.67</td><td>10.0%</td><td>1.48</td><td>1.64</td><td>10.0%</td><td>No</td></tr>
+<tr><td>Fuquay Varina</td><td>Wake</td><td>Urban (5,000+)</td><td>3</td><td>0.77</td><td>8.8%</td><td>0.19</td><td>0.17</td><td>7.9%</td><td>Yes</td></tr>
+<tr><td>Fayetteville</td><td>Cumberland</td><td>Urban (5,000+)</td><td>20</td><td>0.94</td><td>18.1%</td><td>0.88</td><td>0.64</td><td>17.2%</td><td>Yes</td></tr>
+<tr><td>Jacksonville</td><td>Onslow</td><td>Urban (5,000+)</td><td>7</td><td>0.95</td><td>13.5%</td><td>0.91</td><td>0.76</td><td>11.7%</td><td>Yes</td></tr>
+<tr><td>Clemmons</td><td>Forsyth</td><td>Urban (5,000+)</td><td>2</td><td>0.95</td><td>7.9%</td><td>0.35</td><td>0.31</td><td>14.7%</td><td>Yes</td></tr>
+<tr><td>Wilmington</td><td>New Hanover</td><td>Urban (5,000+)</td><td>12</td><td>0.97</td><td>16.3%</td><td>0.62</td><td>0.18</td><td>12.4%</td><td>Yes</td></tr>
+<tr><td>Arden</td><td>Buncombe</td><td>Urban (5,000+)</td><td>1</td><td>1.02</td><td>nan%</td><td>0.6</td><td>0.59</td><td>11.8%</td><td>Yes</td></tr>
+<tr><td>Morehead City</td><td>Carteret</td><td>Urban (5,000+)</td><td>1</td><td>1.04</td><td>17.4%</td><td>2.22</td><td>2.41</td><td>10.0%</td><td>No</td></tr>
+<tr><td>Leland</td><td>Brunswick</td><td>Urban (5,000+)</td><td>3</td><td>1.08</td><td>5.8%</td><td>1.52</td><td>1.6</td><td>9.4%</td><td>No</td></tr>
+<tr><td>Rolesville</td><td>Wake</td><td>Urban (5,000+)</td><td>1</td><td>1.08</td><td>0.9%</td><td>0.19</td><td>0.19</td><td>7.9%</td><td>Yes</td></tr>
+<tr><td>Pineville</td><td>Mecklenburg</td><td>Urban (5,000+)</td><td>1</td><td>1.09</td><td>14.0%</td><td>0.17</td><td>0.16</td><td>10.4%</td><td>Yes</td></tr>
+<tr><td>Kannapolis</td><td>Cabarrus</td><td>Urban (5,000+)</td><td>6</td><td>1.14</td><td>12.2%</td><td>0.48</td><td>0.29</td><td>8.9%</td><td>Yes</td></tr>
+<tr><td>Wendell</td><td>Wake</td><td>Urban (5,000+)</td><td>1</td><td>1.15</td><td>4.2%</td><td>0.19</td><td>0.19</td><td>7.9%</td><td>Yes</td></tr>
+<tr><td>Kernersville</td><td>Forsyth</td><td>Urban (5,000+)</td><td>3</td><td>1.2</td><td>11.5%</td><td>0.35</td><td>0.29</td><td>14.7%</td><td>Yes</td></tr>
+<tr><td>Oak Island</td><td>Brunswick</td><td>Urban (5,000+)</td><td>1</td><td>1.2</td><td>9.7%</td><td>1.52</td><td>1.55</td><td>9.4%</td><td>No</td></tr>
+<tr><td>Wilson</td><td>Wilson</td><td>Urban (5,000+)</td><td>6</td><td>1.23</td><td>25.1%</td><td>1.55</td><td>1.95</td><td>21.0%</td><td>No</td></tr>
+<tr><td>Gastonia</td><td>Gaston</td><td>Urban (5,000+)</td><td>10</td><td>1.24</td><td>14.3%</td><td>0.97</td><td>0.81</td><td>12.8%</td><td>Yes</td></tr>
+<tr><td>Mooresville</td><td>Iredell</td><td>Urban (5,000+)</td><td>6</td><td>1.27</td><td>7.6%</td><td>1.11</td><td>1.08</td><td>9.1%</td><td>Yes</td></tr>
+<tr><td>Greenville</td><td>Pitt</td><td>Urban (5,000+)</td><td>12</td><td>1.28</td><td>24.5%</td><td>1.38</td><td>1.33</td><td>19.4%</td><td>No</td></tr>
+<tr><td>Butner</td><td>Granville</td><td>Urban (5,000+)</td><td>1</td><td>1.32</td><td>15.5%</td><td>1.58</td><td>1.63</td><td>14.1%</td><td>No</td></tr>
+<tr><td>Browns Summit</td><td>Guilford</td><td>Urban (5,000+)</td><td>1</td><td>1.33</td><td>nan%</td><td>0.67</td><td>0.66</td><td>15.2%</td><td>Yes</td></tr>
+<tr><td>Hampstead</td><td>Pender</td><td>Urban (5,000+)</td><td>1</td><td>1.35</td><td>10.1%</td><td>1.29</td><td>1.32</td><td>10.7%</td><td>Yes</td></tr>
+<tr><td>Spring Lake</td><td>Cumberland</td><td>Urban (5,000+)</td><td>2</td><td>1.4</td><td>20.9%</td><td>0.88</td><td>0.85</td><td>17.2%</td><td>Yes</td></tr>
+<tr><td>Mills River</td><td>Henderson</td><td>Urban (5,000+)</td><td>1</td><td>1.42</td><td>2.0%</td><td>0.95</td><td>0.92</td><td>11.7%</td><td>Yes</td></tr>
+<tr><td>Boone</td><td>Watauga</td><td>Urban (5,000+)</td><td>3</td><td>1.49</td><td>52.1%</td><td>1.23</td><td>0.86</td><td>24.7%</td><td>Yes</td></tr>
+<tr><td>Havelock</td><td>Craven</td><td>Urban (5,000+)</td><td>3</td><td>1.52</td><td>13.4%</td><td>1.56</td><td>1.45</td><td>13.9%</td><td>Yes</td></tr>
+<tr><td>Carolina Beach</td><td>New Hanover</td><td>Urban (5,000+)</td><td>1</td><td>1.52</td><td>8.4%</td><td>0.62</td><td>0.59</td><td>12.4%</td><td>Yes</td></tr>
+<tr><td>Midway Park</td><td>Onslow</td><td>Urban (5,000+)</td><td>1</td><td>1.54</td><td>nan%</td><td>0.91</td><td>0.89</td><td>11.7%</td><td>Yes</td></tr>
+<tr><td>Moyock</td><td>Currituck</td><td>Urban (5,000+)</td><td>1</td><td>1.56</td><td>6.8%</td><td>2.04</td><td>2.1</td><td>7.6%</td><td>No</td></tr>
+<tr><td>Smithfield</td><td>Johnston</td><td>Urban (5,000+)</td><td>2</td><td>1.58</td><td>31.4%</td><td>0.85</td><td>0.8</td><td>11.2%</td><td>Yes</td></tr>
+<tr><td>Elon</td><td>Alamance</td><td>Urban (5,000+)</td><td>2</td><td>1.67</td><td>22.5%</td><td>1.54</td><td>1.48</td><td>14.1%</td><td>Yes</td></tr>
+<tr><td>Angier</td><td>Harnett</td><td>Urban (5,000+)</td><td>1</td><td>1.69</td><td>7.7%</td><td>0.83</td><td>0.78</td><td>14.5%</td><td>Yes</td></tr>
+<tr><td>Archdale</td><td>Randolph</td><td>Urban (5,000+)</td><td>2</td><td>1.7</td><td>6.3%</td><td>1.39</td><td>1.37</td><td>14.8%</td><td>Yes</td></tr>
+<tr><td>Hope Mills</td><td>Cumberland</td><td>Urban (5,000+)</td><td>3</td><td>1.73</td><td>15.0%</td><td>0.88</td><td>0.83</td><td>17.2%</td><td>Yes</td></tr>
+<tr><td>Summerfield</td><td>Guilford</td><td>Urban (5,000+)</td><td>2</td><td>1.76</td><td>7.7%</td><td>0.67</td><td>0.65</td><td>15.2%</td><td>Yes</td></tr>
+<tr><td>Pfafftown</td><td>Forsyth</td><td>Urban (5,000+)</td><td>1</td><td>1.79</td><td>nan%</td><td>0.35</td><td>0.32</td><td>14.7%</td><td>Yes</td></tr>
+<tr><td>Leicester</td><td>Buncombe</td><td>Urban (5,000+)</td><td>1</td><td>1.82</td><td>nan%</td><td>0.6</td><td>0.58</td><td>11.8%</td><td>Yes</td></tr>
+<tr><td>Burlington</td><td>Alamance</td><td>Urban (5,000+)</td><td>11</td><td>1.92</td><td>18.0%</td><td>1.54</td><td>1.35</td><td>14.1%</td><td>Yes</td></tr>
+<tr><td>Belews Creek</td><td>Forsyth</td><td>Urban (5,000+)</td><td>1</td><td>1.92</td><td>nan%</td><td>0.35</td><td>0.32</td><td>14.7%</td><td>Yes</td></tr>
+<tr><td>Cramerton</td><td>Gaston</td><td>Urban (5,000+)</td><td>1</td><td>1.93</td><td>3.8%</td><td>0.97</td><td>0.94</td><td>12.8%</td><td>Yes</td></tr>
+<tr><td>Monroe</td><td>Union</td><td>Urban (5,000+)</td><td>7</td><td>1.94</td><td>13.9%</td><td>0.5</td><td>0.24</td><td>7.7%</td><td>Yes</td></tr>
+<tr><td>Jamestown</td><td>Guilford</td><td>Rural (&lt; 5,000)</td><td>1</td><td>1.96</td><td>3.6%</td><td>0.67</td><td>0.66</td><td>15.2%</td><td>Yes</td></tr>
+<tr><td>Walkertown</td><td>Forsyth</td><td>Urban (5,000+)</td><td>1</td><td>1.97</td><td>6.0%</td><td>0.35</td><td>0.32</td><td>14.7%</td><td>Yes</td></tr>
+<tr><td>Ayden</td><td>Pitt</td><td>Rural (&lt; 5,000)</td><td>1</td><td>2.0</td><td>21.6%</td><td>1.38</td><td>1.36</td><td>19.4%</td><td>Yes</td></tr>
+<tr><td>Pleasant Garden</td><td>Guilford</td><td>Rural (&lt; 5,000)</td><td>1</td><td>2.08</td><td>9.5%</td><td>0.67</td><td>0.66</td><td>15.2%</td><td>Yes</td></tr>
+<tr><td>Erwin</td><td>Harnett</td><td>Rural (&lt; 5,000)</td><td>1</td><td>2.1</td><td>11.5%</td><td>0.83</td><td>0.78</td><td>14.5%</td><td>Yes</td></tr>
+<tr><td>Pittsboro</td><td>Chatham</td><td>Rural (&lt; 5,000)</td><td>1</td><td>2.15</td><td>10.4%</td><td>0.65</td><td>0.55</td><td>10.5%</td><td>Yes</td></tr>
+<tr><td>Willow Spring</td><td>Wake</td><td>Urban (5,000+)</td><td>2</td><td>2.17</td><td>nan%</td><td>0.19</td><td>0.18</td><td>7.9%</td><td>Yes</td></tr>
+<tr><td>Ahoskie</td><td>Hertford</td><td>Rural (&lt; 5,000)</td><td>1</td><td>2.19</td><td>24.4%</td><td>1.07</td><td>0.71</td><td>21.4%</td><td>Yes</td></tr>
+<tr><td>Swannanoa</td><td>Buncombe</td><td>Urban (5,000+)</td><td>1</td><td>2.22</td><td>15.1%</td><td>0.6</td><td>0.58</td><td>11.8%</td><td>Yes</td></tr>
+<tr><td>Valdese</td><td>Burke</td><td>Rural (&lt; 5,000)</td><td>1</td><td>2.23</td><td>8.8%</td><td>1.75</td><td>1.73</td><td>17.9%</td><td>Yes</td></tr>
+<tr><td>Dunn</td><td>Harnett</td><td>Urban (5,000+)</td><td>2</td><td>2.25</td><td>18.6%</td><td>0.83</td><td>0.72</td><td>14.5%</td><td>Yes</td></tr>
+<tr><td>Winterville</td><td>Pitt</td><td>Urban (5,000+)</td><td>3</td><td>2.29</td><td>9.4%</td><td>1.38</td><td>1.29</td><td>19.4%</td><td>Yes</td></tr>
+<tr><td>Black Mountain</td><td>Buncombe</td><td>Urban (5,000+)</td><td>2</td><td>2.31</td><td>6.5%</td><td>0.6</td><td>0.55</td><td>11.8%</td><td>Yes</td></tr>
+<tr><td>Wingate</td><td>Union</td><td>Rural (&lt; 5,000)</td><td>1</td><td>2.34</td><td>17.7%</td><td>0.5</td><td>0.46</td><td>7.7%</td><td>Yes</td></tr>
+<tr><td>Bethlehem</td><td>Alexander</td><td>Rural (&lt; 5,000)</td><td>1</td><td>2.38</td><td>3.9%</td><td>1.72</td><td>1.62</td><td>12.1%</td><td>Yes</td></tr>
+<tr><td>Denver</td><td>Lincoln</td><td>Rural (&lt; 5,000)</td><td>1</td><td>2.38</td><td>1.9%</td><td>1.34</td><td>1.26</td><td>9.0%</td><td>Yes</td></tr>
+<tr><td>Timberlake</td><td>Person</td><td>Rural (&lt; 5,000)</td><td>1</td><td>2.38</td><td>nan%</td><td>2.05</td><td>2.02</td><td>18.4%</td><td>Yes</td></tr>
+<tr><td>Newton</td><td>Catawba</td><td>Urban (5,000+)</td><td>3</td><td>2.39</td><td>14.2%</td><td>1.7</td><td>1.64</td><td>12.8%</td><td>Yes</td></tr>
+<tr><td>Siler City</td><td>Chatham</td><td>Urban (5,000+)</td><td>2</td><td>2.42</td><td>25.2%</td><td>0.65</td><td>0.43</td><td>10.5%</td><td>Yes</td></tr>
+<tr><td>Mebane</td><td>Alamance</td><td>Urban (5,000+)</td><td>4</td><td>2.44</td><td>7.1%</td><td>1.54</td><td>1.46</td><td>14.1%</td><td>Yes</td></tr>
+<tr><td>Millers Creek</td><td>Wilkes</td><td>Rural (&lt; 5,000)</td><td>1</td><td>2.44</td><td>7.0%</td><td>2.17</td><td>2.06</td><td>16.4%</td><td>Yes</td></tr>
+<tr><td>Burgaw</td><td>Pender</td><td>Rural (&lt; 5,000)</td><td>1</td><td>2.47</td><td>22.3%</td><td>1.29</td><td>1.18</td><td>10.7%</td><td>Yes</td></tr>
+<tr><td>Hudson</td><td>Caldwell</td><td>Rural (&lt; 5,000)</td><td>1</td><td>2.48</td><td>17.5%</td><td>1.38</td><td>1.32</td><td>12.7%</td><td>Yes</td></tr>
+<tr><td>Elkin</td><td>Surry</td><td>Rural (&lt; 5,000)</td><td>1</td><td>2.49</td><td>23.0%</td><td>2.71</td><td>2.71</td><td>16.7%</td><td>No</td></tr>
+<tr><td>Hillsborough</td><td>Orange</td><td>Urban (5,000+)</td><td>2</td><td>2.53</td><td>8.7%</td><td>0.22</td><td>0.08</td><td>12.4%</td><td>Yes</td></tr>
+<tr><td>Hubert</td><td>Onslow</td><td>Urban (5,000+)</td><td>2</td><td>2.56</td><td>nan%</td><td>0.91</td><td>0.84</td><td>11.7%</td><td>Yes</td></tr>
+<tr><td>Rocky Mount</td><td>Nash</td><td>Urban (5,000+)</td><td>14</td><td>2.59</td><td>21.2%</td><td>2.57</td><td>2.49</td><td>14.0%</td><td>Yes</td></tr>
+<tr><td>Thomasville</td><td>Davidson</td><td>Urban (5,000+)</td><td>7</td><td>2.59</td><td>18.4%</td><td>1.42</td><td>1.19</td><td>13.8%</td><td>Yes</td></tr>
+<tr><td>Roanoke Rapids</td><td>Halifax</td><td>Urban (5,000+)</td><td>4</td><td>2.63</td><td>21.8%</td><td>2.34</td><td>2.18</td><td>25.2%</td><td>Yes</td></tr>
+<tr><td>Welcome</td><td>Davidson</td><td>Rural (&lt; 5,000)</td><td>1</td><td>2.63</td><td>8.9%</td><td>1.42</td><td>1.39</td><td>13.8%</td><td>Yes</td></tr>
+<tr><td>Mcleansville</td><td>Guilford</td><td>Rural (&lt; 5,000)</td><td>1</td><td>2.63</td><td>20.3%</td><td>0.67</td><td>0.66</td><td>15.2%</td><td>Yes</td></tr>
+<tr><td>Salisbury</td><td>Rowan</td><td>Urban (5,000+)</td><td>9</td><td>2.64</td><td>24.3%</td><td>1.25</td><td>0.8</td><td>15.8%</td><td>Yes</td></tr>
+<tr><td>New Bern</td><td>Craven</td><td>Urban (5,000+)</td><td>8</td><td>2.66</td><td>16.3%</td><td>1.56</td><td>1.08</td><td>13.9%</td><td>Yes</td></tr>
+<tr><td>Locust</td><td>Stanly</td><td>Urban (5,000+)</td><td>1</td><td>2.72</td><td>8.2%</td><td>2.44</td><td>2.5</td><td>14.2%</td><td>Yes</td></tr>
+<tr><td>King</td><td>Stokes</td><td>Urban (5,000+)</td><td>2</td><td>2.72</td><td>6.4%</td><td>1.81</td><td>1.62</td><td>12.0%</td><td>Yes</td></tr>
+<tr><td>Emerald Isle</td><td>Carteret</td><td>Rural (&lt; 5,000)</td><td>1</td><td>2.73</td><td>3.9%</td><td>2.22</td><td>2.2</td><td>10.0%</td><td>Yes</td></tr>
+<tr><td>Tarboro</td><td>Edgecombe</td><td>Urban (5,000+)</td><td>3</td><td>2.74</td><td>19.8%</td><td>1.04</td><td>0.53</td><td>21.9%</td><td>Yes</td></tr>
+<tr><td>Windsor</td><td>Bertie</td><td>Rural (&lt; 5,000)</td><td>1</td><td>2.75</td><td>25.4%</td><td>2.51</td><td>2.15</td><td>19.8%</td><td>Yes</td></tr>
+<tr><td>Hickory</td><td>Catawba</td><td>Urban (5,000+)</td><td>12</td><td>2.76</td><td>16.9%</td><td>1.7</td><td>1.28</td><td>12.8%</td><td>Yes</td></tr>
+<tr><td>Colfax</td><td>Guilford</td><td>Rural (&lt; 5,000)</td><td>1</td><td>2.78</td><td>nan%</td><td>0.67</td><td>0.66</td><td>15.2%</td><td>Yes</td></tr>
+<tr><td>Iron Station</td><td>Lincoln</td><td>Rural (&lt; 5,000)</td><td>1</td><td>2.78</td><td>0.0%</td><td>1.34</td><td>1.24</td><td>9.0%</td><td>Yes</td></tr>
+<tr><td>Lowell</td><td>Gaston</td><td>Rural (&lt; 5,000)</td><td>1</td><td>2.84</td><td>19.2%</td><td>0.97</td><td>0.94</td><td>12.8%</td><td>Yes</td></tr>
+<tr><td>Candler</td><td>Buncombe</td><td>Urban (5,000+)</td><td>3</td><td>2.86</td><td>nan%</td><td>0.6</td><td>0.51</td><td>11.8%</td><td>Yes</td></tr>
+<tr><td>Etowah</td><td>Henderson</td><td>Urban (5,000+)</td><td>1</td><td>2.86</td><td>12.8%</td><td>0.95</td><td>0.92</td><td>11.7%</td><td>Yes</td></tr>
+<tr><td>Trinity</td><td>Randolph</td><td>Urban (5,000+)</td><td>2</td><td>2.87</td><td>10.4%</td><td>1.39</td><td>1.32</td><td>14.8%</td><td>Yes</td></tr>
+<tr><td>Red Oak</td><td>Nash</td><td>Rural (&lt; 5,000)</td><td>1</td><td>2.94</td><td>2.8%</td><td>2.57</td><td>2.55</td><td>14.0%</td><td>Yes</td></tr>
+<tr><td>Elizabeth City</td><td>Pasquotank</td><td>Urban (5,000+)</td><td>5</td><td>3.01</td><td>15.0%</td><td>1.31</td><td>0.0</td><td>10.0%</td><td>Yes</td></tr>
+<tr><td>Spencer</td><td>Rowan</td><td>Rural (&lt; 5,000)</td><td>1</td><td>3.03</td><td>13.1%</td><td>1.25</td><td>1.2</td><td>15.8%</td><td>Yes</td></tr>
+<tr><td>Troy</td><td>Montgomery</td><td>Rural (&lt; 5,000)</td><td>1</td><td>3.09</td><td>18.1%</td><td>2.4</td><td>2.2</td><td>16.1%</td><td>Yes</td></tr>
+<tr><td>Asheboro</td><td>Randolph</td><td>Urban (5,000+)</td><td>8</td><td>3.1</td><td>20.2%</td><td>1.39</td><td>1.03</td><td>14.8%</td><td>Yes</td></tr>
+<tr><td>Green Level</td><td>Alamance</td><td>Rural (&lt; 5,000)</td><td>1</td><td>3.12</td><td>18.0%</td><td>1.54</td><td>1.51</td><td>14.1%</td><td>Yes</td></tr>
+<tr><td>Currituck</td><td>Currituck</td><td>Rural (&lt; 5,000)</td><td>1</td><td>3.12</td><td>nan%</td><td>2.04</td><td>1.91</td><td>7.6%</td><td>Yes</td></tr>
+<tr><td>Castle Hayne</td><td>New Hanover</td><td>Rural (&lt; 5,000)</td><td>1</td><td>3.12</td><td>8.1%</td><td>0.62</td><td>0.58</td><td>12.4%</td><td>Yes</td></tr>
+<tr><td>Hendersonville</td><td>Henderson</td><td>Urban (5,000+)</td><td>5</td><td>3.21</td><td>16.8%</td><td>0.95</td><td>0.59</td><td>11.7%</td><td>Yes</td></tr>
+<tr><td>Goldsboro</td><td>Wayne</td><td>Urban (5,000+)</td><td>11</td><td>3.21</td><td>20.8%</td><td>1.74</td><td>1.09</td><td>16.9%</td><td>Yes</td></tr>
+<tr><td>Warsaw</td><td>Duplin</td><td>Rural (&lt; 5,000)</td><td>1</td><td>3.28</td><td>10.6%</td><td>2.88</td><td>2.82</td><td>17.9%</td><td>Yes</td></tr>
+<tr><td>Sanford</td><td>Lee</td><td>Urban (5,000+)</td><td>10</td><td>3.31</td><td>20.3%</td><td>1.74</td><td>0.3</td><td>15.5%</td><td>Yes</td></tr>
+<tr><td>Laurinburg</td><td>Scotland</td><td>Urban (5,000+)</td><td>5</td><td>3.31</td><td>32.0%</td><td>2.49</td><td>1.67</td><td>26.6%</td><td>Yes</td></tr>
+<tr><td>Nashville</td><td>Nash</td><td>Urban (5,000+)</td><td>2</td><td>3.31</td><td>20.8%</td><td>2.57</td><td>2.5</td><td>14.0%</td><td>Yes</td></tr>
+<tr><td>Cherryville</td><td>Gaston</td><td>Urban (5,000+)</td><td>2</td><td>3.32</td><td>15.0%</td><td>0.97</td><td>0.9</td><td>12.8%</td><td>Yes</td></tr>
+<tr><td>Murfreesboro</td><td>Hertford</td><td>Rural (&lt; 5,000)</td><td>1</td><td>3.4</td><td>35.8%</td><td>1.07</td><td>0.61</td><td>21.4%</td><td>Yes</td></tr>
+<tr><td>Surf City</td><td>Pender</td><td>Rural (&lt; 5,000)</td><td>1</td><td>3.41</td><td>4.9%</td><td>1.29</td><td>1.21</td><td>10.7%</td><td>Yes</td></tr>
+<tr><td>Aberdeen</td><td>Moore</td><td>Urban (5,000+)</td><td>3</td><td>3.47</td><td>10.3%</td><td>1.48</td><td>1.3</td><td>10.0%</td><td>Yes</td></tr>
+<tr><td>Fletcher</td><td>Henderson</td><td>Urban (5,000+)</td><td>3</td><td>3.48</td><td>7.4%</td><td>0.95</td><td>0.74</td><td>11.7%</td><td>Yes</td></tr>
+<tr><td>Bessemer City</td><td>Gaston</td><td>Urban (5,000+)</td><td>2</td><td>3.52</td><td>16.3%</td><td>0.97</td><td>0.9</td><td>12.8%</td><td>Yes</td></tr>
+<tr><td>Kinston</td><td>Lenoir</td><td>Urban (5,000+)</td><td>7</td><td>3.56</td><td>28.9%</td><td>2.04</td><td>1.14</td><td>22.5%</td><td>Yes</td></tr>
+<tr><td>Stokesdale</td><td>Guilford</td><td>Urban (5,000+)</td><td>2</td><td>3.57</td><td>7.6%</td><td>0.67</td><td>0.64</td><td>15.2%</td><td>Yes</td></tr>
+<tr><td>Rocky Point</td><td>Pender</td><td>Rural (&lt; 5,000)</td><td>1</td><td>3.57</td><td>37.8%</td><td>1.29</td><td>1.15</td><td>10.7%</td><td>Yes</td></tr>
+<tr><td>Sophia</td><td>Randolph</td><td>Rural (&lt; 5,000)</td><td>1</td><td>3.57</td><td>nan%</td><td>1.39</td><td>1.35</td><td>14.8%</td><td>Yes</td></tr>
+<tr><td>Statesville</td><td>Iredell</td><td>Urban (5,000+)</td><td>11</td><td>3.63</td><td>16.4%</td><td>1.11</td><td>0.62</td><td>9.1%</td><td>Yes</td></tr>
+<tr><td>Albemarle</td><td>Stanly</td><td>Urban (5,000+)</td><td>6</td><td>3.68</td><td>22.5%</td><td>2.44</td><td>1.98</td><td>14.2%</td><td>Yes</td></tr>
+<tr><td>Liberty</td><td>Randolph</td><td>Rural (&lt; 5,000)</td><td>1</td><td>3.7</td><td>18.1%</td><td>1.39</td><td>1.35</td><td>14.8%</td><td>Yes</td></tr>
+<tr><td>Mars Hill</td><td>Madison</td><td>Rural (&lt; 5,000)</td><td>1</td><td>3.86</td><td>3.3%</td><td>0.96</td><td>0.54</td><td>11.4%</td><td>Yes</td></tr>
+<tr><td>Tobaccoville</td><td>Forsyth</td><td>Rural (&lt; 5,000)</td><td>1</td><td>3.91</td><td>10.0%</td><td>0.35</td><td>0.32</td><td>14.7%</td><td>Yes</td></tr>
+<tr><td>Wadesboro</td><td>Anson</td><td>Rural (&lt; 5,000)</td><td>2</td><td>3.94</td><td>30.0%</td><td>2.5</td><td>1.97</td><td>21.2%</td><td>Yes</td></tr>
+<tr><td>Sharpsburg</td><td>Nash</td><td>Rural (&lt; 5,000)</td><td>1</td><td>3.95</td><td>19.8%</td><td>2.57</td><td>2.5</td><td>14.0%</td><td>Yes</td></tr>
+<tr><td>Graham</td><td>Alamance</td><td>Urban (5,000+)</td><td>6</td><td>3.98</td><td>18.1%</td><td>1.54</td><td>1.32</td><td>14.1%</td><td>Yes</td></tr>
+<tr><td>Gibsonville</td><td>Guilford</td><td>Urban (5,000+)</td><td>3</td><td>3.99</td><td>8.4%</td><td>0.67</td><td>0.63</td><td>15.2%</td><td>Yes</td></tr>
+<tr><td>Cashiers</td><td>Jackson</td><td>Rural (&lt; 5,000)</td><td>1</td><td>4.0</td><td>0.0%</td><td>1.53</td><td>1.3</td><td>19.3%</td><td>Yes</td></tr>
+<tr><td>Mayodan</td><td>Rockingham</td><td>Rural (&lt; 5,000)</td><td>1</td><td>4.05</td><td>14.5%</td><td>2.12</td><td>2.07</td><td>16.8%</td><td>Yes</td></tr>
+<tr><td>Weaverville</td><td>Buncombe</td><td>Rural (&lt; 5,000)</td><td>2</td><td>4.05</td><td>5.6%</td><td>0.6</td><td>0.54</td><td>11.8%</td><td>Yes</td></tr>
+<tr><td>Haw River</td><td>Alamance</td><td>Rural (&lt; 5,000)</td><td>1</td><td>4.15</td><td>17.0%</td><td>1.54</td><td>1.5</td><td>14.1%</td><td>Yes</td></tr>
+<tr><td>Grifton</td><td>Pitt</td><td>Rural (&lt; 5,000)</td><td>1</td><td>4.21</td><td>31.3%</td><td>1.38</td><td>1.35</td><td>19.4%</td><td>Yes</td></tr>
+<tr><td>Granite Falls</td><td>Caldwell</td><td>Rural (&lt; 5,000)</td><td>2</td><td>4.24</td><td>15.1%</td><td>1.38</td><td>1.2</td><td>12.7%</td><td>Yes</td></tr>
+<tr><td>Mount Olive</td><td>Wayne</td><td>Rural (&lt; 5,000)</td><td>2</td><td>4.26</td><td>21.7%</td><td>1.74</td><td>1.62</td><td>16.9%</td><td>Yes</td></tr>
+<tr><td>Farmville</td><td>Pitt</td><td>Rural (&lt; 5,000)</td><td>2</td><td>4.3</td><td>27.0%</td><td>1.38</td><td>1.3</td><td>19.4%</td><td>Yes</td></tr>
+<tr><td>Sneads Ferry</td><td>Onslow</td><td>Rural (&lt; 5,000)</td><td>2</td><td>4.35</td><td>19.7%</td><td>0.91</td><td>0.82</td><td>11.7%</td><td>Yes</td></tr>
+<tr><td>Creedmoor</td><td>Granville</td><td>Rural (&lt; 5,000)</td><td>2</td><td>4.39</td><td>12.2%</td><td>1.58</td><td>1.34</td><td>14.1%</td><td>Yes</td></tr>
+<tr><td>Lenoir</td><td>Caldwell</td><td>Urban (5,000+)</td><td>8</td><td>4.47</td><td>12.9%</td><td>1.38</td><td>0.49</td><td>12.7%</td><td>Yes</td></tr>
+<tr><td>Yanceyville</td><td>Caswell</td><td>Rural (&lt; 5,000)</td><td>1</td><td>4.49</td><td>34.3%</td><td>2.36</td><td>2.07</td><td>15.7%</td><td>Yes</td></tr>
+<tr><td>Randleman</td><td>Randolph</td><td>Rural (&lt; 5,000)</td><td>2</td><td>4.49</td><td>33.8%</td><td>1.39</td><td>1.29</td><td>14.8%</td><td>Yes</td></tr>
+<tr><td>Saint Pauls</td><td>Robeson</td><td>Rural (&lt; 5,000)</td><td>1</td><td>4.52</td><td>38.9%</td><td>2.47</td><td>2.44</td><td>28.8%</td><td>Yes</td></tr>
+<tr><td>Polkton</td><td>Anson</td><td>Rural (&lt; 5,000)</td><td>1</td><td>4.55</td><td>28.1%</td><td>2.5</td><td>2.12</td><td>21.2%</td><td>Yes</td></tr>
+<tr><td>Princeville</td><td>Edgecombe</td><td>Rural (&lt; 5,000)</td><td>1</td><td>4.55</td><td>24.1%</td><td>1.04</td><td>0.86</td><td>21.9%</td><td>Yes</td></tr>
+<tr><td>Coats</td><td>Harnett</td><td>Rural (&lt; 5,000)</td><td>1</td><td>4.63</td><td>24.1%</td><td>0.83</td><td>0.76</td><td>14.5%</td><td>Yes</td></tr>
+<tr><td>Oxford</td><td>Granville</td><td>Urban (5,000+)</td><td>4</td><td>4.64</td><td>25.3%</td><td>1.58</td><td>1.03</td><td>14.1%</td><td>Yes</td></tr>
+<tr><td>Henderson</td><td>Vance</td><td>Urban (5,000+)</td><td>7</td><td>4.65</td><td>27.4%</td><td>2.39</td><td>1.1</td><td>19.0%</td><td>Yes</td></tr>
+<tr><td>Clinton</td><td>Sampson</td><td>Urban (5,000+)</td><td>4</td><td>4.68</td><td>23.6%</td><td>1.9</td><td>1.39</td><td>20.2%</td><td>Yes</td></tr>
+<tr><td>Eden</td><td>Rockingham</td><td>Urban (5,000+)</td><td>7</td><td>4.73</td><td>19.8%</td><td>2.12</td><td>1.61</td><td>16.8%</td><td>Yes</td></tr>
+<tr><td>China Grove</td><td>Rowan</td><td>Rural (&lt; 5,000)</td><td>2</td><td>4.76</td><td>18.4%</td><td>1.25</td><td>1.14</td><td>15.8%</td><td>Yes</td></tr>
+<tr><td>Lumberton</td><td>Robeson</td><td>Urban (5,000+)</td><td>10</td><td>4.81</td><td>31.0%</td><td>2.47</td><td>1.88</td><td>28.8%</td><td>Yes</td></tr>
+<tr><td>Southport</td><td>Brunswick</td><td>Rural (&lt; 5,000)</td><td>2</td><td>4.81</td><td>5.3%</td><td>1.52</td><td>1.42</td><td>9.4%</td><td>Yes</td></tr>
+<tr><td>Spindale</td><td>Rutherford</td><td>Rural (&lt; 5,000)</td><td>2</td><td>4.82</td><td>16.9%</td><td>2.51</td><td>2.34</td><td>17.6%</td><td>Yes</td></tr>
+<tr><td>Hamlet</td><td>Richmond</td><td>Urban (5,000+)</td><td>3</td><td>4.85</td><td>22.1%</td><td>2.4</td><td>1.96</td><td>25.2%</td><td>Yes</td></tr>
+<tr><td>Waynesville</td><td>Haywood</td><td>Urban (5,000+)</td><td>5</td><td>4.88</td><td>15.3%</td><td>1.62</td><td>0.97</td><td>11.3%</td><td>Yes</td></tr>
+<tr><td>Conover</td><td>Catawba</td><td>Urban (5,000+)</td><td>4</td><td>4.9</td><td>12.4%</td><td>1.7</td><td>1.53</td><td>12.8%</td><td>Yes</td></tr>
+<tr><td>Reidsville</td><td>Rockingham</td><td>Urban (5,000+)</td><td>7</td><td>4.91</td><td>24.9%</td><td>2.12</td><td>1.59</td><td>16.8%</td><td>Yes</td></tr>
+<tr><td>Stanley</td><td>Gaston</td><td>Rural (&lt; 5,000)</td><td>2</td><td>4.99</td><td>6.6%</td><td>0.97</td><td>0.89</td><td>12.8%</td><td>Yes</td></tr>
+<tr><td>Pine Level</td><td>Johnston</td><td>Rural (&lt; 5,000)</td><td>1</td><td>5.0</td><td>7.4%</td><td>0.85</td><td>0.81</td><td>11.2%</td><td>Yes</td></tr>
+<tr><td>Brevard</td><td>Transylvania</td><td>Urban (5,000+)</td><td>4</td><td>5.0</td><td>17.2%</td><td>1.86</td><td>0.79</td><td>14.2%</td><td>Yes</td></tr>
+<tr><td>Oakboro</td><td>Stanly</td><td>Rural (&lt; 5,000)</td><td>2</td><td>5.12</td><td>5.6%</td><td>2.44</td><td>2.2</td><td>14.2%</td><td>Yes</td></tr>
+<tr><td>Scotland Neck</td><td>Halifax</td><td>Rural (&lt; 5,000)</td><td>1</td><td>5.15</td><td>47.7%</td><td>2.34</td><td>2.22</td><td>25.2%</td><td>Yes</td></tr>
+<tr><td>Morganton</td><td>Burke</td><td>Urban (5,000+)</td><td>9</td><td>5.22</td><td>29.9%</td><td>1.75</td><td>0.87</td><td>17.9%</td><td>Yes</td></tr>
+<tr><td>Pisgah Forest</td><td>Transylvania</td><td>Rural (&lt; 5,000)</td><td>1</td><td>5.26</td><td>nan%</td><td>1.86</td><td>1.65</td><td>14.2%</td><td>Yes</td></tr>
+<tr><td>Washington</td><td>Beaufort</td><td>Urban (5,000+)</td><td>5</td><td>5.26</td><td>19.7%</td><td>2.04</td><td>1.16</td><td>18.0%</td><td>Yes</td></tr>
+<tr><td>Hildebran</td><td>Burke</td><td>Rural (&lt; 5,000)</td><td>1</td><td>5.29</td><td>19.0%</td><td>1.75</td><td>1.67</td><td>17.9%</td><td>Yes</td></tr>
+<tr><td>Richlands</td><td>Onslow</td><td>Rural (&lt; 5,000)</td><td>1</td><td>5.29</td><td>10.4%</td><td>0.91</td><td>0.87</td><td>11.7%</td><td>Yes</td></tr>
+<tr><td>Rockingham</td><td>Richmond</td><td>Urban (5,000+)</td><td>5</td><td>5.37</td><td>33.8%</td><td>2.4</td><td>1.53</td><td>25.2%</td><td>Yes</td></tr>
+<tr><td>Kings Mountain</td><td>Cleveland</td><td>Urban (5,000+)</td><td>6</td><td>5.41</td><td>23.7%</td><td>2.44</td><td>2.07</td><td>17.2%</td><td>Yes</td></tr>
+<tr><td>Lincolnton</td><td>Lincoln</td><td>Urban (5,000+)</td><td>6</td><td>5.42</td><td>18.4%</td><td>1.34</td><td>0.77</td><td>9.0%</td><td>Yes</td></tr>
+<tr><td>Wallace</td><td>Duplin</td><td>Rural (&lt; 5,000)</td><td>2</td><td>5.5</td><td>20.3%</td><td>2.88</td><td>2.65</td><td>17.9%</td><td>Yes</td></tr>
+<tr><td>Williamston</td><td>Martin</td><td>Urban (5,000+)</td><td>3</td><td>5.51</td><td>30.6%</td><td>2.35</td><td>1.23</td><td>19.6%</td><td>Yes</td></tr>
+<tr><td>Chadbourn</td><td>Columbus</td><td>Rural (&lt; 5,000)</td><td>1</td><td>5.53</td><td>50.8%</td><td>3.55</td><td>3.43</td><td>18.8%</td><td>Yes</td></tr>
+<tr><td>Sparta</td><td>Alleghany</td><td>Rural (&lt; 5,000)</td><td>1</td><td>5.54</td><td>21.2%</td><td>1.82</td><td>1.1</td><td>17.4%</td><td>Yes</td></tr>
+<tr><td>Zebulon</td><td>Wake</td><td>Urban (5,000+)</td><td>4</td><td>5.54</td><td>12.2%</td><td>0.19</td><td>0.16</td><td>7.9%</td><td>Yes</td></tr>
+<tr><td>Winnabow</td><td>Brunswick</td><td>Rural (&lt; 5,000)</td><td>1</td><td>5.56</td><td>nan%</td><td>1.52</td><td>1.47</td><td>9.4%</td><td>Yes</td></tr>
+<tr><td>Hays</td><td>Wilkes</td><td>Rural (&lt; 5,000)</td><td>1</td><td>5.56</td><td>4.4%</td><td>2.17</td><td>2.05</td><td>16.4%</td><td>Yes</td></tr>
+<tr><td>Mount Pleasant</td><td>Cabarrus</td><td>Rural (&lt; 5,000)</td><td>1</td><td>5.6</td><td>6.9%</td><td>0.48</td><td>0.44</td><td>8.9%</td><td>Yes</td></tr>
+<tr><td>Sunset Beach</td><td>Brunswick</td><td>Rural (&lt; 5,000)</td><td>2</td><td>5.6</td><td>6.0%</td><td>1.52</td><td>1.43</td><td>9.4%</td><td>Yes</td></tr>
+<tr><td>Shelby</td><td>Cleveland</td><td>Urban (5,000+)</td><td>12</td><td>5.61</td><td>18.2%</td><td>2.44</td><td>1.57</td><td>17.2%</td><td>Yes</td></tr>
+<tr><td>Biscoe</td><td>Montgomery</td><td>Rural (&lt; 5,000)</td><td>1</td><td>5.64</td><td>37.4%</td><td>2.4</td><td>2.18</td><td>16.1%</td><td>Yes</td></tr>
+<tr><td>Fairview</td><td>Buncombe</td><td>Rural (&lt; 5,000)</td><td>2</td><td>5.71</td><td>12.1%</td><td>0.6</td><td>0.53</td><td>11.8%</td><td>Yes</td></tr>
+<tr><td>Swansboro</td><td>Onslow</td><td>Rural (&lt; 5,000)</td><td>2</td><td>5.71</td><td>9.6%</td><td>0.91</td><td>0.82</td><td>11.7%</td><td>Yes</td></tr>
+<tr><td>Badin</td><td>Stanly</td><td>Rural (&lt; 5,000)</td><td>1</td><td>5.79</td><td>23.3%</td><td>2.44</td><td>2.33</td><td>14.2%</td><td>Yes</td></tr>
+<tr><td>Jefferson</td><td>Ashe</td><td>Rural (&lt; 5,000)</td><td>1</td><td>5.97</td><td>25.7%</td><td>1.89</td><td>1.61</td><td>14.1%</td><td>Yes</td></tr>
+<tr><td>Dallas</td><td>Gaston</td><td>Urban (5,000+)</td><td>3</td><td>6.0</td><td>8.8%</td><td>0.97</td><td>0.86</td><td>12.8%</td><td>Yes</td></tr>
+<tr><td>Red Springs</td><td>Robeson</td><td>Rural (&lt; 5,000)</td><td>2</td><td>6.01</td><td>39.1%</td><td>2.47</td><td>2.36</td><td>28.8%</td><td>Yes</td></tr>
+<tr><td>Selma</td><td>Johnston</td><td>Urban (5,000+)</td><td>4</td><td>6.02</td><td>27.1%</td><td>0.85</td><td>0.69</td><td>11.2%</td><td>Yes</td></tr>
+<tr><td>Roxboro</td><td>Person</td><td>Urban (5,000+)</td><td>5</td><td>6.04</td><td>33.7%</td><td>2.05</td><td>0.97</td><td>18.4%</td><td>Yes</td></tr>
+<tr><td>Manteo</td><td>Dare</td><td>Rural (&lt; 5,000)</td><td>1</td><td>6.18</td><td>23.2%</td><td>0.8</td><td>0.56</td><td>7.5%</td><td>Yes</td></tr>
+<tr><td>Belhaven</td><td>Beaufort</td><td>Rural (&lt; 5,000)</td><td>1</td><td>6.23</td><td>45.5%</td><td>2.04</td><td>1.88</td><td>18.0%</td><td>Yes</td></tr>
+<tr><td>Harkers Island</td><td>Carteret</td><td>Rural (&lt; 5,000)</td><td>1</td><td>6.25</td><td>11.9%</td><td>2.22</td><td>2.11</td><td>10.0%</td><td>Yes</td></tr>
+<tr><td>Lake Waccamaw</td><td>Columbus</td><td>Rural (&lt; 5,000)</td><td>1</td><td>6.3</td><td>6.8%</td><td>3.55</td><td>3.44</td><td>18.8%</td><td>Yes</td></tr>
+<tr><td>Lexington</td><td>Davidson</td><td>Urban (5,000+)</td><td>13</td><td>6.36</td><td>25.4%</td><td>1.42</td><td>0.73</td><td>13.8%</td><td>Yes</td></tr>
+<tr><td>Robersonville</td><td>Martin</td><td>Rural (&lt; 5,000)</td><td>1</td><td>6.61</td><td>19.1%</td><td>2.35</td><td>2.0</td><td>19.6%</td><td>Yes</td></tr>
+<tr><td>Grandy</td><td>Currituck</td><td>Rural (&lt; 5,000)</td><td>1</td><td>6.67</td><td>5.0%</td><td>2.04</td><td>1.85</td><td>7.6%</td><td>Yes</td></tr>
+<tr><td>Atlantic Beach</td><td>Carteret</td><td>Rural (&lt; 5,000)</td><td>1</td><td>6.69</td><td>18.5%</td><td>2.22</td><td>2.13</td><td>10.0%</td><td>Yes</td></tr>
+<tr><td>Bethel</td><td>Pitt</td><td>Rural (&lt; 5,000)</td><td>1</td><td>6.77</td><td>12.0%</td><td>1.38</td><td>1.34</td><td>19.4%</td><td>Yes</td></tr>
+<tr><td>Forest City</td><td>Rutherford</td><td>Urban (5,000+)</td><td>5</td><td>6.92</td><td>33.6%</td><td>2.51</td><td>1.95</td><td>17.6%</td><td>Yes</td></tr>
+<tr><td>Beaufort</td><td>Carteret</td><td>Rural (&lt; 5,000)</td><td>3</td><td>6.95</td><td>14.2%</td><td>2.22</td><td>1.9</td><td>10.0%</td><td>Yes</td></tr>
+<tr><td>Troutman</td><td>Iredell</td><td>Rural (&lt; 5,000)</td><td>2</td><td>7.02</td><td>3.3%</td><td>1.11</td><td>1.02</td><td>9.1%</td><td>Yes</td></tr>
+<tr><td>Canton</td><td>Haywood</td><td>Rural (&lt; 5,000)</td><td>3</td><td>7.1</td><td>11.8%</td><td>1.62</td><td>1.22</td><td>11.3%</td><td>Yes</td></tr>
+<tr><td>Glen Alpine</td><td>Burke</td><td>Rural (&lt; 5,000)</td><td>1</td><td>7.11</td><td>13.2%</td><td>1.75</td><td>1.68</td><td>17.9%</td><td>Yes</td></tr>
+<tr><td>Pinebluff</td><td>Moore</td><td>Rural (&lt; 5,000)</td><td>1</td><td>7.15</td><td>4.1%</td><td>1.48</td><td>1.41</td><td>10.0%</td><td>Yes</td></tr>
+<tr><td>Fremont</td><td>Wayne</td><td>Rural (&lt; 5,000)</td><td>1</td><td>7.24</td><td>31.9%</td><td>1.74</td><td>1.67</td><td>16.9%</td><td>Yes</td></tr>
+<tr><td>Carthage</td><td>Moore</td><td>Rural (&lt; 5,000)</td><td>2</td><td>7.24</td><td>13.6%</td><td>1.48</td><td>1.32</td><td>10.0%</td><td>Yes</td></tr>
+<tr><td>West Jefferson</td><td>Ashe</td><td>Rural (&lt; 5,000)</td><td>1</td><td>7.31</td><td>15.3%</td><td>1.89</td><td>1.6</td><td>14.1%</td><td>Yes</td></tr>
+<tr><td>Clyde</td><td>Haywood</td><td>Rural (&lt; 5,000)</td><td>1</td><td>7.32</td><td>6.3%</td><td>1.62</td><td>1.5</td><td>11.3%</td><td>Yes</td></tr>
+<tr><td>Princeton</td><td>Johnston</td><td>Rural (&lt; 5,000)</td><td>1</td><td>7.39</td><td>10.6%</td><td>0.85</td><td>0.81</td><td>11.2%</td><td>Yes</td></tr>
+<tr><td>Stony Point</td><td>Alexander</td><td>Rural (&lt; 5,000)</td><td>1</td><td>7.41</td><td>3.8%</td><td>1.72</td><td>1.49</td><td>12.1%</td><td>Yes</td></tr>
+<tr><td>La Grange</td><td>Lenoir</td><td>Rural (&lt; 5,000)</td><td>2</td><td>7.48</td><td>29.0%</td><td>2.04</td><td>1.76</td><td>22.5%</td><td>Yes</td></tr>
+<tr><td>Rutherfordton</td><td>Rutherford</td><td>Rural (&lt; 5,000)</td><td>3</td><td>7.5</td><td>19.1%</td><td>2.51</td><td>2.16</td><td>17.6%</td><td>Yes</td></tr>
+<tr><td>Marion</td><td>McDowell</td><td>Urban (5,000+)</td><td>6</td><td>7.62</td><td>24.2%</td><td>2.54</td><td>1.36</td><td>14.0%</td><td>Yes</td></tr>
+<tr><td>Buxton</td><td>Dare</td><td>Rural (&lt; 5,000)</td><td>1</td><td>7.69</td><td>7.8%</td><td>0.8</td><td>0.56</td><td>7.5%</td><td>Yes</td></tr>
+<tr><td>West End</td><td>Moore</td><td>Rural (&lt; 5,000)</td><td>2</td><td>7.69</td><td>nan%</td><td>1.48</td><td>1.32</td><td>10.0%</td><td>Yes</td></tr>
+<tr><td>Pinetops</td><td>Edgecombe</td><td>Rural (&lt; 5,000)</td><td>1</td><td>7.92</td><td>18.4%</td><td>1.04</td><td>0.86</td><td>21.9%</td><td>Yes</td></tr>
+<tr><td>Boonville</td><td>Yadkin</td><td>Rural (&lt; 5,000)</td><td>1</td><td>8.04</td><td>13.1%</td><td>2.43</td><td>2.25</td><td>13.6%</td><td>Yes</td></tr>
+<tr><td>Maiden</td><td>Catawba</td><td>Rural (&lt; 5,000)</td><td>3</td><td>8.2</td><td>12.8%</td><td>1.7</td><td>1.54</td><td>12.8%</td><td>Yes</td></tr>
+<tr><td>Maggie Valley</td><td>Haywood</td><td>Rural (&lt; 5,000)</td><td>1</td><td>8.22</td><td>11.8%</td><td>1.62</td><td>1.51</td><td>11.3%</td><td>Yes</td></tr>
+<tr><td>Marshville</td><td>Union</td><td>Rural (&lt; 5,000)</td><td>2</td><td>8.3</td><td>18.0%</td><td>0.5</td><td>0.42</td><td>7.7%</td><td>Yes</td></tr>
+<tr><td>Advance</td><td>Davie</td><td>Rural (&lt; 5,000)</td><td>1</td><td>8.33</td><td>5.6%</td><td>2.08</td><td>1.92</td><td>10.0%</td><td>Yes</td></tr>
+<tr><td>Holly Ridge</td><td>Onslow</td><td>Rural (&lt; 5,000)</td><td>2</td><td>8.35</td><td>0.8%</td><td>0.91</td><td>0.83</td><td>11.7%</td><td>Yes</td></tr>
+<tr><td>Roseboro</td><td>Sampson</td><td>Rural (&lt; 5,000)</td><td>1</td><td>8.35</td><td>37.5%</td><td>1.9</td><td>1.76</td><td>20.2%</td><td>Yes</td></tr>
+<tr><td>Jonesville</td><td>Yadkin</td><td>Rural (&lt; 5,000)</td><td>2</td><td>8.36</td><td>23.2%</td><td>2.43</td><td>2.04</td><td>13.6%</td><td>Yes</td></tr>
+<tr><td>Edenton</td><td>Chowan</td><td>Rural (&lt; 5,000)</td><td>4</td><td>8.56</td><td>35.7%</td><td>3.68</td><td>1.07</td><td>20.5%</td><td>Yes</td></tr>
+<tr><td>Madison</td><td>Rockingham</td><td>Rural (&lt; 5,000)</td><td>2</td><td>8.6</td><td>9.4%</td><td>2.12</td><td>1.95</td><td>16.8%</td><td>Yes</td></tr>
+<tr><td>Broadway</td><td>Lee</td><td>Rural (&lt; 5,000)</td><td>1</td><td>8.7</td><td>19.8%</td><td>1.74</td><td>1.62</td><td>15.5%</td><td>Yes</td></tr>
+<tr><td>Ellerbe</td><td>Richmond</td><td>Rural (&lt; 5,000)</td><td>1</td><td>8.72</td><td>16.0%</td><td>2.4</td><td>2.22</td><td>25.2%</td><td>Yes</td></tr>
+<tr><td>Plymouth</td><td>Washington</td><td>Rural (&lt; 5,000)</td><td>3</td><td>8.83</td><td>34.5%</td><td>4.7</td><td>2.67</td><td>24.7%</td><td>Yes</td></tr>
+<tr><td>Benson</td><td>Johnston</td><td>Rural (&lt; 5,000)</td><td>3</td><td>8.95</td><td>32.9%</td><td>0.85</td><td>0.73</td><td>11.2%</td><td>Yes</td></tr>
+<tr><td>Stoneville</td><td>Rockingham</td><td>Rural (&lt; 5,000)</td><td>1</td><td>9.03</td><td>23.3%</td><td>2.12</td><td>2.04</td><td>16.8%</td><td>Yes</td></tr>
+<tr><td>Linwood</td><td>Davidson</td><td>Rural (&lt; 5,000)</td><td>1</td><td>9.09</td><td>nan%</td><td>1.42</td><td>1.37</td><td>13.8%</td><td>Yes</td></tr>
+<tr><td>Calabash</td><td>Brunswick</td><td>Rural (&lt; 5,000)</td><td>2</td><td>9.1</td><td>20.7%</td><td>1.52</td><td>1.41</td><td>9.4%</td><td>Yes</td></tr>
+<tr><td>Spruce Pine</td><td>Mitchell</td><td>Rural (&lt; 5,000)</td><td>2</td><td>9.14</td><td>18.2%</td><td>2.74</td><td>1.63</td><td>13.0%</td><td>Yes</td></tr>
+<tr><td>Maysville</td><td>Jones</td><td>Rural (&lt; 5,000)</td><td>1</td><td>9.16</td><td>21.8%</td><td>3.29</td><td>2.45</td><td>21.3%</td><td>Yes</td></tr>
+<tr><td>Lucama</td><td>Wilson</td><td>Rural (&lt; 5,000)</td><td>1</td><td>9.2</td><td>26.4%</td><td>1.55</td><td>1.44</td><td>21.0%</td><td>Yes</td></tr>
+<tr><td>Shallotte</td><td>Brunswick</td><td>Rural (&lt; 5,000)</td><td>4</td><td>9.4</td><td>9.9%</td><td>1.52</td><td>1.28</td><td>9.4%</td><td>Yes</td></tr>
+<tr><td>Rowland</td><td>Robeson</td><td>Rural (&lt; 5,000)</td><td>1</td><td>9.54</td><td>33.3%</td><td>2.47</td><td>2.4</td><td>28.8%</td><td>Yes</td></tr>
+<tr><td>Columbus</td><td>Polk</td><td>Rural (&lt; 5,000)</td><td>1</td><td>9.55</td><td>15.2%</td><td>3.1</td><td>2.74</td><td>13.7%</td><td>Yes</td></tr>
+<tr><td>Highlands</td><td>Macon</td><td>Rural (&lt; 5,000)</td><td>1</td><td>9.76</td><td>12.8%</td><td>2.16</td><td>1.95</td><td>14.4%</td><td>Yes</td></tr>
+<tr><td>Whiteville</td><td>Columbus</td><td>Rural (&lt; 5,000)</td><td>5</td><td>9.92</td><td>16.2%</td><td>3.55</td><td>2.76</td><td>18.8%</td><td>Yes</td></tr>
+<tr><td>Youngsville</td><td>Franklin</td><td>Rural (&lt; 5,000)</td><td>2</td><td>9.94</td><td>12.6%</td><td>1.42</td><td>1.18</td><td>10.1%</td><td>Yes</td></tr>
+<tr><td>Lillington</td><td>Harnett</td><td>Rural (&lt; 5,000)</td><td>5</td><td>9.95</td><td>6.3%</td><td>0.83</td><td>0.46</td><td>14.5%</td><td>Yes</td></tr>
+<tr><td>Peletier</td><td>Carteret</td><td>Rural (&lt; 5,000)</td><td>1</td><td>10.0</td><td>14.5%</td><td>2.22</td><td>2.1</td><td>10.0%</td><td>Yes</td></tr>
+<tr><td>Yadkinville</td><td>Yadkin</td><td>Rural (&lt; 5,000)</td><td>3</td><td>10.17</td><td>23.0%</td><td>2.43</td><td>1.75</td><td>13.6%</td><td>Yes</td></tr>
+<tr><td>Mount Airy</td><td>Surry</td><td>Urban (5,000+)</td><td>11</td><td>10.42</td><td>27.1%</td><td>2.71</td><td>1.34</td><td>16.7%</td><td>Yes</td></tr>
+<tr><td>Sylva</td><td>Jackson</td><td>Rural (&lt; 5,000)</td><td>3</td><td>10.49</td><td>26.6%</td><td>1.53</td><td>0.82</td><td>19.3%</td><td>Yes</td></tr>
+<tr><td>Newport</td><td>Carteret</td><td>Rural (&lt; 5,000)</td><td>5</td><td>10.73</td><td>9.9%</td><td>2.22</td><td>1.57</td><td>10.0%</td><td>Yes</td></tr>
+<tr><td>Garysburg</td><td>Northampton</td><td>Rural (&lt; 5,000)</td><td>1</td><td>10.99</td><td>16.7%</td><td>4.22</td><td>3.76</td><td>20.0%</td><td>Yes</td></tr>
+<tr><td>Magnolia</td><td>Duplin</td><td>Rural (&lt; 5,000)</td><td>1</td><td>11.07</td><td>35.6%</td><td>2.88</td><td>2.73</td><td>17.9%</td><td>Yes</td></tr>
+<tr><td>Burnsville</td><td>Yancey</td><td>Rural (&lt; 5,000)</td><td>2</td><td>11.1</td><td>25.5%</td><td>1.08</td><td>0.0</td><td>14.9%</td><td>Yes</td></tr>
+<tr><td>Knotts Island</td><td>Currituck</td><td>Rural (&lt; 5,000)</td><td>1</td><td>11.11</td><td>nan%</td><td>2.04</td><td>1.75</td><td>7.6%</td><td>Yes</td></tr>
+<tr><td>Point Harbor</td><td>Currituck</td><td>Rural (&lt; 5,000)</td><td>1</td><td>11.11</td><td>nan%</td><td>2.04</td><td>1.75</td><td>7.6%</td><td>Yes</td></tr>
+<tr><td>Bunnlevel</td><td>Harnett</td><td>Rural (&lt; 5,000)</td><td>1</td><td>11.11</td><td>0.0%</td><td>0.83</td><td>0.76</td><td>14.5%</td><td>Yes</td></tr>
+<tr><td>Whittier</td><td>Jackson</td><td>Rural (&lt; 5,000)</td><td>1</td><td>11.11</td><td>nan%</td><td>1.53</td><td>1.27</td><td>19.3%</td><td>Yes</td></tr>
+<tr><td>Rougemont</td><td>Person</td><td>Rural (&lt; 5,000)</td><td>1</td><td>11.11</td><td>2.3%</td><td>2.05</td><td>1.84</td><td>18.4%</td><td>Yes</td></tr>
+<tr><td>Louisburg</td><td>Franklin</td><td>Rural (&lt; 5,000)</td><td>4</td><td>11.15</td><td>37.1%</td><td>1.42</td><td>0.88</td><td>10.1%</td><td>Yes</td></tr>
+<tr><td>Elizabethtown</td><td>Bladen</td><td>Rural (&lt; 5,000)</td><td>4</td><td>11.16</td><td>34.1%</td><td>3.42</td><td>2.29</td><td>21.2%</td><td>Yes</td></tr>
+<tr><td>Kenansville</td><td>Duplin</td><td>Rural (&lt; 5,000)</td><td>1</td><td>11.19</td><td>22.7%</td><td>2.88</td><td>2.73</td><td>17.9%</td><td>Yes</td></tr>
+<tr><td>Cleveland</td><td>Rowan</td><td>Rural (&lt; 5,000)</td><td>1</td><td>11.31</td><td>18.9%</td><td>1.25</td><td>1.19</td><td>15.8%</td><td>Yes</td></tr>
+<tr><td>Fair Bluff</td><td>Columbus</td><td>Rural (&lt; 5,000)</td><td>1</td><td>11.36</td><td>31.0%</td><td>3.55</td><td>3.37</td><td>18.8%</td><td>Yes</td></tr>
+<tr><td>Denton</td><td>Davidson</td><td>Rural (&lt; 5,000)</td><td>2</td><td>11.37</td><td>15.1%</td><td>1.42</td><td>1.31</td><td>13.8%</td><td>Yes</td></tr>
+<tr><td>Cooleemee</td><td>Davie</td><td>Rural (&lt; 5,000)</td><td>1</td><td>11.4</td><td>11.1%</td><td>2.08</td><td>1.9</td><td>10.0%</td><td>Yes</td></tr>
+<tr><td>Columbia</td><td>Tyrrell</td><td>Rural (&lt; 5,000)</td><td>1</td><td>11.51</td><td>35.3%</td><td>3.56</td><td>0.0</td><td>20.8%</td><td>Yes</td></tr>
+<tr><td>Taylorsville</td><td>Alexander</td><td>Rural (&lt; 5,000)</td><td>3</td><td>11.51</td><td>27.8%</td><td>1.72</td><td>0.92</td><td>12.1%</td><td>Yes</td></tr>
+<tr><td>Andrews</td><td>Cherokee</td><td>Rural (&lt; 5,000)</td><td>2</td><td>11.59</td><td>23.7%</td><td>2.43</td><td>1.86</td><td>14.6%</td><td>Yes</td></tr>
+<tr><td>Rich Square</td><td>Northampton</td><td>Rural (&lt; 5,000)</td><td>1</td><td>11.63</td><td>29.4%</td><td>4.22</td><td>3.77</td><td>20.0%</td><td>Yes</td></tr>
+<tr><td>Tabor City</td><td>Columbus</td><td>Rural (&lt; 5,000)</td><td>3</td><td>11.7</td><td>40.5%</td><td>3.55</td><td>3.07</td><td>18.8%</td><td>Yes</td></tr>
+<tr><td>Oriental</td><td>Pamlico</td><td>Rural (&lt; 5,000)</td><td>1</td><td>11.72</td><td>6.3%</td><td>3.5</td><td>2.86</td><td>12.4%</td><td>Yes</td></tr>
+<tr><td>Wilkesboro</td><td>Wilkes</td><td>Rural (&lt; 5,000)</td><td>4</td><td>11.72</td><td>18.7%</td><td>2.17</td><td>1.63</td><td>16.4%</td><td>Yes</td></tr>
+<tr><td>Hiddenite</td><td>Alexander</td><td>Rural (&lt; 5,000)</td><td>1</td><td>11.76</td><td>37.5%</td><td>1.72</td><td>1.44</td><td>12.1%</td><td>Yes</td></tr>
+<tr><td>Pinnacle</td><td>Stokes</td><td>Rural (&lt; 5,000)</td><td>1</td><td>11.76</td><td>33.2%</td><td>1.81</td><td>1.6</td><td>12.0%</td><td>Yes</td></tr>
+<tr><td>North Wilkesboro</td><td>Wilkes</td><td>Rural (&lt; 5,000)</td><td>5</td><td>11.78</td><td>21.1%</td><td>2.17</td><td>1.48</td><td>16.4%</td><td>Yes</td></tr>
+<tr><td>Star</td><td>Montgomery</td><td>Rural (&lt; 5,000)</td><td>1</td><td>11.85</td><td>28.0%</td><td>2.4</td><td>2.11</td><td>16.1%</td><td>Yes</td></tr>
+<tr><td>Franklinton</td><td>Franklin</td><td>Rural (&lt; 5,000)</td><td>3</td><td>12.01</td><td>10.8%</td><td>1.42</td><td>1.03</td><td>10.1%</td><td>Yes</td></tr>
+<tr><td>Tryon</td><td>Polk</td><td>Rural (&lt; 5,000)</td><td>2</td><td>12.05</td><td>28.0%</td><td>3.1</td><td>2.26</td><td>13.7%</td><td>Yes</td></tr>
+<tr><td>Candor</td><td>Montgomery</td><td>Rural (&lt; 5,000)</td><td>1</td><td>12.06</td><td>22.3%</td><td>2.4</td><td>2.1</td><td>16.1%</td><td>Yes</td></tr>
+<tr><td>Fairmont</td><td>Robeson</td><td>Rural (&lt; 5,000)</td><td>3</td><td>12.1</td><td>31.5%</td><td>2.47</td><td>2.25</td><td>28.8%</td><td>Yes</td></tr>
+<tr><td>Maxton</td><td>Robeson</td><td>Rural (&lt; 5,000)</td><td>3</td><td>12.16</td><td>43.1%</td><td>2.47</td><td>2.25</td><td>28.8%</td><td>Yes</td></tr>
+<tr><td>Ramseur</td><td>Randolph</td><td>Rural (&lt; 5,000)</td><td>2</td><td>12.19</td><td>53.3%</td><td>1.39</td><td>1.27</td><td>14.8%</td><td>Yes</td></tr>
+<tr><td>Mocksville</td><td>Davie</td><td>Urban (5,000+)</td><td>7</td><td>12.38</td><td>19.9%</td><td>2.08</td><td>0.54</td><td>10.0%</td><td>Yes</td></tr>
+<tr><td>Union Mills</td><td>Rutherford</td><td>Rural (&lt; 5,000)</td><td>1</td><td>12.5</td><td>nan%</td><td>2.51</td><td>2.39</td><td>17.6%</td><td>Yes</td></tr>
+<tr><td>Deep Gap</td><td>Watauga</td><td>Rural (&lt; 5,000)</td><td>1</td><td>12.5</td><td>nan%</td><td>1.23</td><td>1.05</td><td>24.7%</td><td>Yes</td></tr>
+<tr><td>Norwood</td><td>Stanly</td><td>Rural (&lt; 5,000)</td><td>3</td><td>12.53</td><td>10.8%</td><td>2.44</td><td>2.05</td><td>14.2%</td><td>Yes</td></tr>
+<tr><td>Wagram</td><td>Scotland</td><td>Rural (&lt; 5,000)</td><td>1</td><td>12.55</td><td>8.9%</td><td>2.49</td><td>2.24</td><td>26.6%</td><td>Yes</td></tr>
+<tr><td>Conway</td><td>Northampton</td><td>Rural (&lt; 5,000)</td><td>1</td><td>12.67</td><td>30.9%</td><td>4.22</td><td>3.79</td><td>20.0%</td><td>Yes</td></tr>
+<tr><td>Robbinsville</td><td>Graham</td><td>Rural (&lt; 5,000)</td><td>1</td><td>12.82</td><td>36.7%</td><td>1.27</td><td>0.0</td><td>8.7%</td><td>Yes</td></tr>
+<tr><td>Alliance</td><td>Pamlico</td><td>Rural (&lt; 5,000)</td><td>1</td><td>12.82</td><td>17.6%</td><td>3.5</td><td>2.81</td><td>12.4%</td><td>Yes</td></tr>
+<tr><td>Woodland</td><td>Northampton</td><td>Rural (&lt; 5,000)</td><td>1</td><td>13.05</td><td>27.6%</td><td>4.22</td><td>3.75</td><td>20.0%</td><td>Yes</td></tr>
+<tr><td>Stantonsburg</td><td>Wilson</td><td>Rural (&lt; 5,000)</td><td>1</td><td>13.26</td><td>24.0%</td><td>1.55</td><td>1.44</td><td>21.0%</td><td>Yes</td></tr>
+<tr><td>Pembroke</td><td>Robeson</td><td>Rural (&lt; 5,000)</td><td>4</td><td>13.31</td><td>43.7%</td><td>2.47</td><td>2.17</td><td>28.8%</td><td>Yes</td></tr>
+<tr><td>Chocowinity</td><td>Beaufort</td><td>Rural (&lt; 5,000)</td><td>1</td><td>13.32</td><td>34.2%</td><td>2.04</td><td>1.86</td><td>18.0%</td><td>Yes</td></tr>
+<tr><td>Holden Beach</td><td>Brunswick</td><td>Rural (&lt; 5,000)</td><td>1</td><td>13.32</td><td>5.6%</td><td>1.52</td><td>1.46</td><td>9.4%</td><td>Yes</td></tr>
+<tr><td>Hollister</td><td>Halifax</td><td>Rural (&lt; 5,000)</td><td>1</td><td>13.33</td><td>16.3%</td><td>2.34</td><td>2.17</td><td>25.2%</td><td>Yes</td></tr>
+<tr><td>Enfield</td><td>Halifax</td><td>Rural (&lt; 5,000)</td><td>3</td><td>13.9</td><td>30.7%</td><td>2.34</td><td>1.77</td><td>25.2%</td><td>Yes</td></tr>
+<tr><td>Mount Gilead</td><td>Montgomery</td><td>Rural (&lt; 5,000)</td><td>2</td><td>13.92</td><td>17.1%</td><td>2.4</td><td>1.67</td><td>16.1%</td><td>Yes</td></tr>
+<tr><td>Raeford</td><td>Hoke</td><td>Rural (&lt; 5,000)</td><td>7</td><td>13.95</td><td>23.5%</td><td>1.35</td><td>0.0</td><td>17.4%</td><td>Yes</td></tr>
+<tr><td>Four Oaks</td><td>Johnston</td><td>Rural (&lt; 5,000)</td><td>3</td><td>13.98</td><td>12.5%</td><td>0.85</td><td>0.72</td><td>11.2%</td><td>Yes</td></tr>
+<tr><td>Walnut Cove</td><td>Stokes</td><td>Rural (&lt; 5,000)</td><td>2</td><td>14.02</td><td>13.8%</td><td>1.81</td><td>1.42</td><td>12.0%</td><td>Yes</td></tr>
+<tr><td>Garland</td><td>Sampson</td><td>Rural (&lt; 5,000)</td><td>1</td><td>14.22</td><td>28.4%</td><td>1.9</td><td>1.75</td><td>20.2%</td><td>Yes</td></tr>
+<tr><td>Camden</td><td>Camden</td><td>Rural (&lt; 5,000)</td><td>1</td><td>14.29</td><td>0.9%</td><td>2.81</td><td>2.08</td><td>5.0%</td><td>Yes</td></tr>
+<tr><td>Julian</td><td>Guilford</td><td>Rural (&lt; 5,000)</td><td>1</td><td>14.29</td><td>nan%</td><td>0.67</td><td>0.66</td><td>15.2%</td><td>Yes</td></tr>
+<tr><td>Grantsboro</td><td>Pamlico</td><td>Rural (&lt; 5,000)</td><td>1</td><td>14.29</td><td>17.1%</td><td>3.5</td><td>2.79</td><td>12.4%</td><td>Yes</td></tr>
+<tr><td>Maple Hill</td><td>Pender</td><td>Rural (&lt; 5,000)</td><td>1</td><td>14.29</td><td>nan%</td><td>1.29</td><td>1.14</td><td>10.7%</td><td>Yes</td></tr>
+<tr><td>Cliffside</td><td>Rutherford</td><td>Rural (&lt; 5,000)</td><td>1</td><td>14.29</td><td>4.9%</td><td>2.51</td><td>2.38</td><td>17.6%</td><td>Yes</td></tr>
+<tr><td>Ocean Isle Beach</td><td>Brunswick</td><td>Rural (&lt; 5,000)</td><td>1</td><td>14.35</td><td>5.9%</td><td>1.52</td><td>1.46</td><td>9.4%</td><td>Yes</td></tr>
+<tr><td>Franklin</td><td>Macon</td><td>Rural (&lt; 5,000)</td><td>6</td><td>14.39</td><td>21.6%</td><td>2.16</td><td>0.61</td><td>14.4%</td><td>Yes</td></tr>
+<tr><td>Rockwell</td><td>Rowan</td><td>Rural (&lt; 5,000)</td><td>3</td><td>14.58</td><td>8.9%</td><td>1.25</td><td>1.06</td><td>15.8%</td><td>Yes</td></tr>
+<tr><td>Manson</td><td>Vance</td><td>Rural (&lt; 5,000)</td><td>1</td><td>14.93</td><td>nan%</td><td>2.39</td><td>2.18</td><td>19.0%</td><td>Yes</td></tr>
+<tr><td>Seaboard</td><td>Northampton</td><td>Rural (&lt; 5,000)</td><td>1</td><td>15.04</td><td>32.1%</td><td>4.22</td><td>3.76</td><td>20.0%</td><td>Yes</td></tr>
+<tr><td>Laurel Hill</td><td>Scotland</td><td>Rural (&lt; 5,000)</td><td>1</td><td>15.38</td><td>40.9%</td><td>2.49</td><td>2.24</td><td>26.6%</td><td>Yes</td></tr>
+<tr><td>Clarkton</td><td>Bladen</td><td>Rural (&lt; 5,000)</td><td>1</td><td>15.5</td><td>48.2%</td><td>3.42</td><td>3.17</td><td>21.2%</td><td>Yes</td></tr>
+<tr><td>Littleton</td><td>Halifax</td><td>Rural (&lt; 5,000)</td><td>1</td><td>15.6</td><td>26.0%</td><td>2.34</td><td>2.15</td><td>25.2%</td><td>Yes</td></tr>
+<tr><td>Roper</td><td>Washington</td><td>Rural (&lt; 5,000)</td><td>1</td><td>15.7</td><td>47.8%</td><td>4.7</td><td>3.97</td><td>24.7%</td><td>Yes</td></tr>
+<tr><td>Lawndale</td><td>Cleveland</td><td>Rural (&lt; 5,000)</td><td>1</td><td>15.77</td><td>22.1%</td><td>2.44</td><td>2.36</td><td>17.2%</td><td>Yes</td></tr>
+<tr><td>Spring Hope</td><td>Nash</td><td>Rural (&lt; 5,000)</td><td>2</td><td>15.99</td><td>18.4%</td><td>2.57</td><td>2.39</td><td>14.0%</td><td>Yes</td></tr>
+<tr><td>South Mills</td><td>Camden</td><td>Rural (&lt; 5,000)</td><td>1</td><td>16.67</td><td>0.0%</td><td>2.81</td><td>1.92</td><td>5.0%</td><td>Yes</td></tr>
+<tr><td>Fallston</td><td>Cleveland</td><td>Rural (&lt; 5,000)</td><td>1</td><td>16.67</td><td>32.4%</td><td>2.44</td><td>2.36</td><td>17.2%</td><td>Yes</td></tr>
+<tr><td>Barco</td><td>Currituck</td><td>Rural (&lt; 5,000)</td><td>1</td><td>16.67</td><td>nan%</td><td>2.04</td><td>1.73</td><td>7.6%</td><td>Yes</td></tr>
+<tr><td>Zirconia</td><td>Henderson</td><td>Rural (&lt; 5,000)</td><td>1</td><td>16.67</td><td>nan%</td><td>0.95</td><td>0.87</td><td>11.7%</td><td>Yes</td></tr>
+<tr><td>Crouse</td><td>Lincoln</td><td>Rural (&lt; 5,000)</td><td>1</td><td>16.67</td><td>0.0%</td><td>1.34</td><td>1.23</td><td>9.0%</td><td>Yes</td></tr>
+<tr><td>Gold Hill</td><td>Rowan</td><td>Rural (&lt; 5,000)</td><td>1</td><td>16.67</td><td>13.5%</td><td>1.25</td><td>1.18</td><td>15.8%</td><td>Yes</td></tr>
+<tr><td>Germanton</td><td>Stokes</td><td>Rural (&lt; 5,000)</td><td>1</td><td>16.67</td><td>13.4%</td><td>1.81</td><td>1.62</td><td>12.0%</td><td>Yes</td></tr>
+<tr><td>Beulaville</td><td>Duplin</td><td>Rural (&lt; 5,000)</td><td>2</td><td>17.14</td><td>20.7%</td><td>2.88</td><td>2.54</td><td>17.9%</td><td>Yes</td></tr>
+<tr><td>Connelly Springs</td><td>Burke</td><td>Rural (&lt; 5,000)</td><td>3</td><td>17.17</td><td>8.9%</td><td>1.75</td><td>1.44</td><td>17.9%</td><td>Yes</td></tr>
+<tr><td>Bladenboro</td><td>Bladen</td><td>Rural (&lt; 5,000)</td><td>3</td><td>17.2</td><td>22.2%</td><td>3.42</td><td>2.59</td><td>21.2%</td><td>Yes</td></tr>
+<tr><td>Gibson</td><td>Scotland</td><td>Rural (&lt; 5,000)</td><td>1</td><td>17.24</td><td>49.3%</td><td>2.49</td><td>2.23</td><td>26.6%</td><td>Yes</td></tr>
+<tr><td>Stem</td><td>Granville</td><td>Rural (&lt; 5,000)</td><td>1</td><td>17.3</td><td>2.6%</td><td>1.58</td><td>1.43</td><td>14.1%</td><td>Yes</td></tr>
+<tr><td>Saluda</td><td>Polk</td><td>Rural (&lt; 5,000)</td><td>1</td><td>17.3</td><td>18.8%</td><td>3.1</td><td>2.66</td><td>13.7%</td><td>Yes</td></tr>
+<tr><td>Robbins</td><td>Moore</td><td>Rural (&lt; 5,000)</td><td>2</td><td>17.42</td><td>33.1%</td><td>1.48</td><td>1.3</td><td>10.0%</td><td>Yes</td></tr>
+<tr><td>Bailey</td><td>Nash</td><td>Rural (&lt; 5,000)</td><td>1</td><td>17.42</td><td>25.6%</td><td>2.57</td><td>2.47</td><td>14.0%</td><td>Yes</td></tr>
+<tr><td>Lewiston</td><td>Bertie</td><td>Rural (&lt; 5,000)</td><td>1</td><td>17.51</td><td>nan%</td><td>2.51</td><td>1.95</td><td>19.8%</td><td>Yes</td></tr>
+<tr><td>Richfield</td><td>Stanly</td><td>Rural (&lt; 5,000)</td><td>1</td><td>17.89</td><td>12.8%</td><td>2.44</td><td>2.31</td><td>14.2%</td><td>Yes</td></tr>
+<tr><td>Kenly</td><td>Johnston</td><td>Rural (&lt; 5,000)</td><td>3</td><td>18.08</td><td>16.9%</td><td>0.85</td><td>0.72</td><td>11.2%</td><td>Yes</td></tr>
+<tr><td>Woodleaf</td><td>Rowan</td><td>Rural (&lt; 5,000)</td><td>1</td><td>18.18</td><td>nan%</td><td>1.25</td><td>1.18</td><td>15.8%</td><td>Yes</td></tr>
+<tr><td>Bryson City</td><td>Swain</td><td>Rural (&lt; 5,000)</td><td>3</td><td>18.66</td><td>21.5%</td><td>2.19</td><td>0.0</td><td>21.1%</td><td>Yes</td></tr>
+<tr><td>Hot Springs</td><td>Madison</td><td>Rural (&lt; 5,000)</td><td>1</td><td>18.73</td><td>18.8%</td><td>0.96</td><td>0.49</td><td>11.4%</td><td>Yes</td></tr>
+<tr><td>Dobson</td><td>Surry</td><td>Rural (&lt; 5,000)</td><td>3</td><td>18.77</td><td>16.1%</td><td>2.71</td><td>2.32</td><td>16.7%</td><td>Yes</td></tr>
+<tr><td>Rose Hill</td><td>Duplin</td><td>Rural (&lt; 5,000)</td><td>3</td><td>19.21</td><td>23.1%</td><td>2.88</td><td>2.33</td><td>17.9%</td><td>Yes</td></tr>
+<tr><td>Banner Elk</td><td>Avery</td><td>Rural (&lt; 5,000)</td><td>2</td><td>19.42</td><td>16.0%</td><td>3.34</td><td>2.1</td><td>11.0%</td><td>Yes</td></tr>
+<tr><td>Gaston</td><td>Northampton</td><td>Rural (&lt; 5,000)</td><td>2</td><td>19.76</td><td>22.6%</td><td>4.22</td><td>3.18</td><td>20.0%</td><td>Yes</td></tr>
+<tr><td>Blounts Creek</td><td>Beaufort</td><td>Rural (&lt; 5,000)</td><td>1</td><td>20.0</td><td>nan%</td><td>2.04</td><td>1.84</td><td>18.0%</td><td>Yes</td></tr>
+<tr><td>Salter Path</td><td>Carteret</td><td>Rural (&lt; 5,000)</td><td>1</td><td>20.0</td><td>nan%</td><td>2.22</td><td>2.09</td><td>10.0%</td><td>Yes</td></tr>
+<tr><td>Stokes</td><td>Pitt</td><td>Rural (&lt; 5,000)</td><td>1</td><td>20.0</td><td>0.0%</td><td>1.38</td><td>1.33</td><td>19.4%</td><td>Yes</td></tr>
+<tr><td>Bolton</td><td>Columbus</td><td>Rural (&lt; 5,000)</td><td>1</td><td>20.08</td><td>23.7%</td><td>3.55</td><td>3.37</td><td>18.8%</td><td>Yes</td></tr>
+<tr><td>Vanceboro</td><td>Craven</td><td>Rural (&lt; 5,000)</td><td>2</td><td>20.3</td><td>30.9%</td><td>1.56</td><td>1.37</td><td>13.9%</td><td>Yes</td></tr>
+<tr><td>Pink Hill</td><td>Lenoir</td><td>Rural (&lt; 5,000)</td><td>1</td><td>20.41</td><td>32.1%</td><td>2.04</td><td>1.87</td><td>22.5%</td><td>Yes</td></tr>
+<tr><td>Aurora</td><td>Beaufort</td><td>Rural (&lt; 5,000)</td><td>1</td><td>20.45</td><td>27.7%</td><td>2.04</td><td>1.84</td><td>18.0%</td><td>Yes</td></tr>
+<tr><td>Lilesville</td><td>Anson</td><td>Rural (&lt; 5,000)</td><td>1</td><td>20.53</td><td>20.9%</td><td>2.5</td><td>2.09</td><td>21.2%</td><td>Yes</td></tr>
+<tr><td>Hertford</td><td>Perquimans</td><td>Rural (&lt; 5,000)</td><td>4</td><td>20.59</td><td>24.7%</td><td>3.05</td><td>0.0</td><td>11.4%</td><td>Yes</td></tr>
+<tr><td>Claremont</td><td>Catawba</td><td>Rural (&lt; 5,000)</td><td>3</td><td>20.6</td><td>11.1%</td><td>1.7</td><td>1.53</td><td>12.8%</td><td>Yes</td></tr>
+<tr><td>Ellenboro</td><td>Rutherford</td><td>Rural (&lt; 5,000)</td><td>2</td><td>20.6</td><td>24.4%</td><td>2.51</td><td>2.23</td><td>17.6%</td><td>Yes</td></tr>
+<tr><td>Micro</td><td>Johnston</td><td>Rural (&lt; 5,000)</td><td>1</td><td>20.62</td><td>21.9%</td><td>0.85</td><td>0.81</td><td>11.2%</td><td>Yes</td></tr>
+<tr><td>Norlina</td><td>Warren</td><td>Rural (&lt; 5,000)</td><td>2</td><td>20.68</td><td>17.4%</td><td>2.22</td><td>1.18</td><td>22.2%</td><td>Yes</td></tr>
+<tr><td>Pilot Mountain</td><td>Surry</td><td>Rural (&lt; 5,000)</td><td>3</td><td>20.98</td><td>15.4%</td><td>2.71</td><td>2.33</td><td>16.7%</td><td>Yes</td></tr>
+<tr><td>Fountain</td><td>Pitt</td><td>Rural (&lt; 5,000)</td><td>1</td><td>21.1</td><td>53.6%</td><td>1.38</td><td>1.33</td><td>19.4%</td><td>Yes</td></tr>
+<tr><td>New London</td><td>Stanly</td><td>Rural (&lt; 5,000)</td><td>1</td><td>21.23</td><td>14.2%</td><td>2.44</td><td>2.3</td><td>14.2%</td><td>Yes</td></tr>
+<tr><td>Jamesville</td><td>Martin</td><td>Rural (&lt; 5,000)</td><td>1</td><td>21.41</td><td>7.8%</td><td>2.35</td><td>1.91</td><td>19.6%</td><td>Yes</td></tr>
+<tr><td>Old Fort</td><td>McDowell</td><td>Rural (&lt; 5,000)</td><td>2</td><td>21.48</td><td>14.0%</td><td>2.54</td><td>2.11</td><td>14.0%</td><td>Yes</td></tr>
+<tr><td>Elk Park</td><td>Avery</td><td>Rural (&lt; 5,000)</td><td>1</td><td>21.65</td><td>27.4%</td><td>3.34</td><td>2.8</td><td>11.0%</td><td>Yes</td></tr>
+<tr><td>Salemburg</td><td>Sampson</td><td>Rural (&lt; 5,000)</td><td>1</td><td>21.74</td><td>9.8%</td><td>1.9</td><td>1.74</td><td>20.2%</td><td>Yes</td></tr>
+<tr><td>Snow Camp</td><td>Alamance</td><td>Rural (&lt; 5,000)</td><td>1</td><td>22.22</td><td>nan%</td><td>1.54</td><td>1.48</td><td>14.1%</td><td>Yes</td></tr>
+<tr><td>Corapeake</td><td>Gates</td><td>Rural (&lt; 5,000)</td><td>1</td><td>22.22</td><td>nan%</td><td>2.93</td><td>2.04</td><td>11.8%</td><td>Yes</td></tr>
+<tr><td>Parkton</td><td>Robeson</td><td>Rural (&lt; 5,000)</td><td>1</td><td>22.22</td><td>15.9%</td><td>2.47</td><td>2.39</td><td>28.8%</td><td>Yes</td></tr>
+<tr><td>Sandy Ridge</td><td>Stokes</td><td>Rural (&lt; 5,000)</td><td>1</td><td>22.22</td><td>nan%</td><td>1.81</td><td>1.6</td><td>12.0%</td><td>Yes</td></tr>
+<tr><td>Hamptonville</td><td>Yadkin</td><td>Rural (&lt; 5,000)</td><td>1</td><td>22.22</td><td>nan%</td><td>2.43</td><td>2.19</td><td>13.6%</td><td>Yes</td></tr>
+<tr><td>Bridgeton</td><td>Craven</td><td>Rural (&lt; 5,000)</td><td>1</td><td>22.37</td><td>50.4%</td><td>1.56</td><td>1.46</td><td>13.9%</td><td>Yes</td></tr>
+<tr><td>Warrenton</td><td>Warren</td><td>Rural (&lt; 5,000)</td><td>2</td><td>22.78</td><td>25.6%</td><td>2.22</td><td>1.17</td><td>22.2%</td><td>Yes</td></tr>
+<tr><td>Murphy</td><td>Cherokee</td><td>Rural (&lt; 5,000)</td><td>4</td><td>22.95</td><td>20.6%</td><td>2.43</td><td>1.09</td><td>14.6%</td><td>Yes</td></tr>
+<tr><td>Grimesland</td><td>Pitt</td><td>Rural (&lt; 5,000)</td><td>1</td><td>23.15</td><td>27.3%</td><td>1.38</td><td>1.33</td><td>19.4%</td><td>Yes</td></tr>
+<tr><td>Supply</td><td>Brunswick</td><td>Rural (&lt; 5,000)</td><td>2</td><td>23.53</td><td>nan%</td><td>1.52</td><td>1.39</td><td>9.4%</td><td>Yes</td></tr>
+<tr><td>Stedman</td><td>Cumberland</td><td>Rural (&lt; 5,000)</td><td>2</td><td>23.53</td><td>6.4%</td><td>0.88</td><td>0.82</td><td>17.2%</td><td>Yes</td></tr>
+<tr><td>Elm City</td><td>Wilson</td><td>Rural (&lt; 5,000)</td><td>3</td><td>23.68</td><td>18.4%</td><td>1.55</td><td>1.18</td><td>21.0%</td><td>Yes</td></tr>
+<tr><td>Arapahoe</td><td>Pamlico</td><td>Rural (&lt; 5,000)</td><td>1</td><td>23.75</td><td>18.9%</td><td>3.5</td><td>2.71</td><td>12.4%</td><td>Yes</td></tr>
+<tr><td>Ronda</td><td>Wilkes</td><td>Rural (&lt; 5,000)</td><td>1</td><td>24.21</td><td>19.2%</td><td>2.17</td><td>2.03</td><td>16.4%</td><td>Yes</td></tr>
+<tr><td>Middlesex</td><td>Nash</td><td>Rural (&lt; 5,000)</td><td>2</td><td>24.24</td><td>10.8%</td><td>2.57</td><td>2.38</td><td>14.0%</td><td>Yes</td></tr>
+<tr><td>Calypso</td><td>Duplin</td><td>Rural (&lt; 5,000)</td><td>1</td><td>24.51</td><td>14.7%</td><td>2.88</td><td>2.7</td><td>17.9%</td><td>Yes</td></tr>
+<tr><td>Sea Level</td><td>Carteret</td><td>Rural (&lt; 5,000)</td><td>1</td><td>25.0</td><td>nan%</td><td>2.22</td><td>2.09</td><td>10.0%</td><td>Yes</td></tr>
+<tr><td>Sapphire</td><td>Transylvania</td><td>Rural (&lt; 5,000)</td><td>1</td><td>25.0</td><td>nan%</td><td>1.86</td><td>1.57</td><td>14.2%</td><td>Yes</td></tr>
+<tr><td>Kittrell</td><td>Vance</td><td>Rural (&lt; 5,000)</td><td>1</td><td>25.0</td><td>13.2%</td><td>2.39</td><td>2.15</td><td>19.0%</td><td>Yes</td></tr>
+<tr><td>Peachland</td><td>Anson</td><td>Rural (&lt; 5,000)</td><td>1</td><td>25.13</td><td>5.0%</td><td>2.5</td><td>2.05</td><td>21.2%</td><td>Yes</td></tr>
+<tr><td>Stovall</td><td>Granville</td><td>Rural (&lt; 5,000)</td><td>1</td><td>25.13</td><td>10.7%</td><td>1.58</td><td>1.41</td><td>14.1%</td><td>Yes</td></tr>
+<tr><td>Cove City</td><td>Craven</td><td>Rural (&lt; 5,000)</td><td>1</td><td>25.19</td><td>8.7%</td><td>1.56</td><td>1.47</td><td>13.9%</td><td>Yes</td></tr>
+<tr><td>Bunn</td><td>Franklin</td><td>Rural (&lt; 5,000)</td><td>1</td><td>25.64</td><td>5.3%</td><td>1.42</td><td>1.28</td><td>10.1%</td><td>Yes</td></tr>
+<tr><td>Snow Hill</td><td>Greene</td><td>Rural (&lt; 5,000)</td><td>4</td><td>25.86</td><td>35.2%</td><td>2.25</td><td>0.0</td><td>22.4%</td><td>Yes</td></tr>
+<tr><td>Leasburg</td><td>Caswell</td><td>Rural (&lt; 5,000)</td><td>1</td><td>26.32</td><td>nan%</td><td>2.36</td><td>1.92</td><td>15.7%</td><td>Yes</td></tr>
+<tr><td>Casar</td><td>Cleveland</td><td>Rural (&lt; 5,000)</td><td>1</td><td>26.32</td><td>22.4%</td><td>2.44</td><td>2.35</td><td>17.2%</td><td>Yes</td></tr>
+<tr><td>Pine Hall</td><td>Stokes</td><td>Rural (&lt; 5,000)</td><td>1</td><td>27.03</td><td>nan%</td><td>1.81</td><td>1.6</td><td>12.0%</td><td>Yes</td></tr>
+<tr><td>East Bend</td><td>Yadkin</td><td>Rural (&lt; 5,000)</td><td>2</td><td>27.17</td><td>11.2%</td><td>2.43</td><td>1.93</td><td>13.6%</td><td>Yes</td></tr>
+<tr><td>Grover</td><td>Cleveland</td><td>Rural (&lt; 5,000)</td><td>2</td><td>27.62</td><td>20.8%</td><td>2.44</td><td>2.25</td><td>17.2%</td><td>Yes</td></tr>
+<tr><td>Pikeville</td><td>Wayne</td><td>Rural (&lt; 5,000)</td><td>2</td><td>28.13</td><td>19.4%</td><td>1.74</td><td>1.58</td><td>16.9%</td><td>Yes</td></tr>
+<tr><td>Mooresboro</td><td>Cleveland</td><td>Rural (&lt; 5,000)</td><td>1</td><td>28.41</td><td>22.0%</td><td>2.44</td><td>2.35</td><td>17.2%</td><td>Yes</td></tr>
+<tr><td>Newland</td><td>Avery</td><td>Rural (&lt; 5,000)</td><td>2</td><td>28.49</td><td>12.1%</td><td>3.34</td><td>2.11</td><td>11.0%</td><td>Yes</td></tr>
+<tr><td>Pelham</td><td>Caswell</td><td>Rural (&lt; 5,000)</td><td>1</td><td>28.57</td><td>nan%</td><td>2.36</td><td>1.92</td><td>15.7%</td><td>Yes</td></tr>
+<tr><td>Evergreen</td><td>Columbus</td><td>Rural (&lt; 5,000)</td><td>1</td><td>28.57</td><td>32.5%</td><td>3.55</td><td>3.37</td><td>18.8%</td><td>Yes</td></tr>
+<tr><td>Waves</td><td>Dare</td><td>Rural (&lt; 5,000)</td><td>1</td><td>28.57</td><td>0.0%</td><td>0.8</td><td>0.54</td><td>7.5%</td><td>Yes</td></tr>
+<tr><td>Albertson</td><td>Duplin</td><td>Rural (&lt; 5,000)</td><td>1</td><td>28.57</td><td>nan%</td><td>2.88</td><td>2.69</td><td>17.9%</td><td>Yes</td></tr>
+<tr><td>Faison</td><td>Duplin</td><td>Rural (&lt; 5,000)</td><td>2</td><td>28.57</td><td>40.3%</td><td>2.88</td><td>2.51</td><td>17.9%</td><td>Yes</td></tr>
+<tr><td>Gates</td><td>Gates</td><td>Rural (&lt; 5,000)</td><td>1</td><td>28.57</td><td>nan%</td><td>2.93</td><td>2.02</td><td>11.8%</td><td>Yes</td></tr>
+<tr><td>Deep Run</td><td>Lenoir</td><td>Rural (&lt; 5,000)</td><td>1</td><td>28.57</td><td>13.3%</td><td>2.04</td><td>1.88</td><td>22.5%</td><td>Yes</td></tr>
+<tr><td>Semora</td><td>Person</td><td>Rural (&lt; 5,000)</td><td>1</td><td>28.57</td><td>nan%</td><td>2.05</td><td>1.81</td><td>18.4%</td><td>Yes</td></tr>
+<tr><td>Lawsonville</td><td>Rockingham</td><td>Rural (&lt; 5,000)</td><td>1</td><td>28.57</td><td>nan%</td><td>2.12</td><td>2.02</td><td>16.8%</td><td>Yes</td></tr>
+<tr><td>State Road</td><td>Surry</td><td>Rural (&lt; 5,000)</td><td>1</td><td>28.57</td><td>nan%</td><td>2.71</td><td>2.58</td><td>16.7%</td><td>Yes</td></tr>
+<tr><td>Zionville</td><td>Watauga</td><td>Rural (&lt; 5,000)</td><td>1</td><td>28.57</td><td>nan%</td><td>1.23</td><td>1.04</td><td>24.7%</td><td>Yes</td></tr>
+<tr><td>Boomer</td><td>Wilkes</td><td>Rural (&lt; 5,000)</td><td>1</td><td>28.57</td><td>nan%</td><td>2.17</td><td>2.02</td><td>16.4%</td><td>Yes</td></tr>
+<tr><td>Dublin</td><td>Bladen</td><td>Rural (&lt; 5,000)</td><td>1</td><td>29.41</td><td>37.8%</td><td>3.42</td><td>3.13</td><td>21.2%</td><td>Yes</td></tr>
+<tr><td>Willard</td><td>Pender</td><td>Rural (&lt; 5,000)</td><td>1</td><td>29.41</td><td>nan%</td><td>1.29</td><td>1.13</td><td>10.7%</td><td>Yes</td></tr>
+<tr><td>Catawba</td><td>Catawba</td><td>Rural (&lt; 5,000)</td><td>2</td><td>31.1</td><td>20.3%</td><td>1.7</td><td>1.58</td><td>12.8%</td><td>Yes</td></tr>
+<tr><td>Engelhard</td><td>Hyde</td><td>Rural (&lt; 5,000)</td><td>1</td><td>31.45</td><td>35.2%</td><td>2.5</td><td>0.0</td><td>22.4%</td><td>Yes</td></tr>
+<tr><td>Atkinson</td><td>Pender</td><td>Rural (&lt; 5,000)</td><td>1</td><td>31.55</td><td>12.3%</td><td>1.29</td><td>1.14</td><td>10.7%</td><td>Yes</td></tr>
+<tr><td>Providence</td><td>Caswell</td><td>Rural (&lt; 5,000)</td><td>1</td><td>33.33</td><td>nan%</td><td>2.36</td><td>1.92</td><td>15.7%</td><td>Yes</td></tr>
+<tr><td>Bennett</td><td>Chatham</td><td>Rural (&lt; 5,000)</td><td>1</td><td>33.33</td><td>0.0%</td><td>0.65</td><td>0.52</td><td>10.5%</td><td>Yes</td></tr>
+<tr><td>Vilas</td><td>Watauga</td><td>Rural (&lt; 5,000)</td><td>1</td><td>33.33</td><td>nan%</td><td>1.23</td><td>1.03</td><td>24.7%</td><td>Yes</td></tr>
+<tr><td>Newton Grove</td><td>Sampson</td><td>Rural (&lt; 5,000)</td><td>2</td><td>34.25</td><td>3.9%</td><td>1.9</td><td>1.57</td><td>20.2%</td><td>Yes</td></tr>
+<tr><td>Climax</td><td>Guilford</td><td>Rural (&lt; 5,000)</td><td>1</td><td>34.36</td><td>nan%</td><td>0.67</td><td>0.65</td><td>15.2%</td><td>Yes</td></tr>
+<tr><td>Cameron</td><td>Moore</td><td>Rural (&lt; 5,000)</td><td>1</td><td>34.36</td><td>12.6%</td><td>1.48</td><td>1.39</td><td>10.0%</td><td>Yes</td></tr>
+<tr><td>Gatesville</td><td>Gates</td><td>Rural (&lt; 5,000)</td><td>1</td><td>34.48</td><td>0.0%</td><td>2.93</td><td>2.01</td><td>11.8%</td><td>Yes</td></tr>
+<tr><td>Goldston</td><td>Chatham</td><td>Rural (&lt; 5,000)</td><td>1</td><td>34.72</td><td>0.3%</td><td>0.65</td><td>0.52</td><td>10.5%</td><td>Yes</td></tr>
+<tr><td>Harmony</td><td>Iredell</td><td>Rural (&lt; 5,000)</td><td>2</td><td>35.09</td><td>8.8%</td><td>1.11</td><td>1.01</td><td>9.1%</td><td>Yes</td></tr>
+<tr><td>Pollocksville</td><td>Jones</td><td>Rural (&lt; 5,000)</td><td>1</td><td>35.46</td><td>17.4%</td><td>3.29</td><td>2.28</td><td>21.3%</td><td>Yes</td></tr>
+<tr><td>Currie</td><td>Pender</td><td>Rural (&lt; 5,000)</td><td>1</td><td>35.71</td><td>nan%</td><td>1.29</td><td>1.13</td><td>10.7%</td><td>Yes</td></tr>
+<tr><td>Creswell</td><td>Washington</td><td>Rural (&lt; 5,000)</td><td>1</td><td>36.23</td><td>31.2%</td><td>4.7</td><td>3.83</td><td>24.7%</td><td>Yes</td></tr>
+<tr><td>Turkey</td><td>Sampson</td><td>Rural (&lt; 5,000)</td><td>1</td><td>36.5</td><td>5.2%</td><td>1.9</td><td>1.74</td><td>20.2%</td><td>Yes</td></tr>
+<tr><td>Castalia</td><td>Nash</td><td>Rural (&lt; 5,000)</td><td>1</td><td>36.76</td><td>36.8%</td><td>2.57</td><td>2.47</td><td>14.0%</td><td>Yes</td></tr>
+<tr><td>Halifax</td><td>Halifax</td><td>Rural (&lt; 5,000)</td><td>1</td><td>37.45</td><td>6.2%</td><td>2.34</td><td>2.14</td><td>25.2%</td><td>Yes</td></tr>
+<tr><td>Delco</td><td>Columbus</td><td>Rural (&lt; 5,000)</td><td>1</td><td>38.46</td><td>0.0%</td><td>3.55</td><td>3.35</td><td>18.8%</td><td>Yes</td></tr>
+<tr><td>Trenton</td><td>Jones</td><td>Rural (&lt; 5,000)</td><td>1</td><td>39.68</td><td>15.1%</td><td>3.29</td><td>2.24</td><td>21.3%</td><td>Yes</td></tr>
+<tr><td>Vass</td><td>Moore</td><td>Rural (&lt; 5,000)</td><td>3</td><td>39.79</td><td>7.5%</td><td>1.48</td><td>1.2</td><td>10.0%</td><td>Yes</td></tr>
+<tr><td>Crumpler</td><td>Ashe</td><td>Rural (&lt; 5,000)</td><td>1</td><td>40.0</td><td>nan%</td><td>1.89</td><td>1.52</td><td>14.1%</td><td>Yes</td></tr>
+<tr><td>Merry Hill</td><td>Bertie</td><td>Rural (&lt; 5,000)</td><td>1</td><td>40.0</td><td>nan%</td><td>2.51</td><td>1.91</td><td>19.8%</td><td>Yes</td></tr>
+<tr><td>Powellsville</td><td>Bertie</td><td>Rural (&lt; 5,000)</td><td>1</td><td>40.0</td><td>2.1%</td><td>2.51</td><td>1.9</td><td>19.8%</td><td>Yes</td></tr>
+<tr><td>Marble</td><td>Cherokee</td><td>Rural (&lt; 5,000)</td><td>1</td><td>40.0</td><td>6.6%</td><td>2.43</td><td>2.11</td><td>14.6%</td><td>Yes</td></tr>
+<tr><td>Hallsboro</td><td>Columbus</td><td>Rural (&lt; 5,000)</td><td>1</td><td>40.0</td><td>11.7%</td><td>3.55</td><td>3.35</td><td>18.8%</td><td>Yes</td></tr>
+<tr><td>Longwood</td><td>Columbus</td><td>Rural (&lt; 5,000)</td><td>1</td><td>40.0</td><td>nan%</td><td>3.55</td><td>3.36</td><td>18.8%</td><td>Yes</td></tr>
+<tr><td>Sims</td><td>Wilson</td><td>Rural (&lt; 5,000)</td><td>1</td><td>40.0</td><td>9.3%</td><td>1.55</td><td>1.43</td><td>21.0%</td><td>Yes</td></tr>
+<tr><td>Bakersville</td><td>Mitchell</td><td>Rural (&lt; 5,000)</td><td>2</td><td>43.76</td><td>17.7%</td><td>2.74</td><td>1.44</td><td>13.0%</td><td>Yes</td></tr>
+<tr><td>Cerro Gordo</td><td>Columbus</td><td>Rural (&lt; 5,000)</td><td>1</td><td>47.17</td><td>25.1%</td><td>3.55</td><td>3.36</td><td>18.8%</td><td>Yes</td></tr>
+<tr><td>Autryville</td><td>Sampson</td><td>Rural (&lt; 5,000)</td><td>1</td><td>49.26</td><td>14.7%</td><td>1.9</td><td>1.73</td><td>20.2%</td><td>Yes</td></tr>
+<tr><td>Ennice</td><td>Alleghany</td><td>Rural (&lt; 5,000)</td><td>1</td><td>50.0</td><td>nan%</td><td>1.82</td><td>0.93</td><td>17.4%</td><td>Yes</td></tr>
+<tr><td>Glendale Springs</td><td>Ashe</td><td>Rural (&lt; 5,000)</td><td>1</td><td>50.0</td><td>nan%</td><td>1.89</td><td>1.52</td><td>14.1%</td><td>Yes</td></tr>
+<tr><td>Warrensville</td><td>Ashe</td><td>Rural (&lt; 5,000)</td><td>1</td><td>50.0</td><td>nan%</td><td>1.89</td><td>1.52</td><td>14.1%</td><td>Yes</td></tr>
+<tr><td>Prospect Hill</td><td>Caswell</td><td>Rural (&lt; 5,000)</td><td>1</td><td>50.0</td><td>nan%</td><td>2.36</td><td>1.91</td><td>15.7%</td><td>Yes</td></tr>
+<tr><td>Tyner</td><td>Chowan</td><td>Rural (&lt; 5,000)</td><td>1</td><td>50.0</td><td>nan%</td><td>3.68</td><td>2.99</td><td>20.5%</td><td>Yes</td></tr>
+<tr><td>Mill Spring</td><td>Polk</td><td>Rural (&lt; 5,000)</td><td>2</td><td>50.0</td><td>nan%</td><td>3.1</td><td>2.11</td><td>13.7%</td><td>Yes</td></tr>
+<tr><td>Thurmond</td><td>Wilkes</td><td>Rural (&lt; 5,000)</td><td>1</td><td>50.0</td><td>nan%</td><td>2.17</td><td>2.02</td><td>16.4%</td><td>Yes</td></tr>
+<tr><td>Eureka</td><td>Wayne</td><td>Rural (&lt; 5,000)</td><td>1</td><td>51.28</td><td>5.9%</td><td>1.74</td><td>1.66</td><td>16.9%</td><td>Yes</td></tr>
+<tr><td>Vale</td><td>Lincoln</td><td>Rural (&lt; 5,000)</td><td>3</td><td>54.55</td><td>nan%</td><td>1.34</td><td>1.01</td><td>9.0%</td><td>Yes</td></tr>
+<tr><td>Shiloh</td><td>Camden</td><td>Rural (&lt; 5,000)</td><td>1</td><td>55.56</td><td>nan%</td><td>2.81</td><td>1.9</td><td>5.0%</td><td>Yes</td></tr>
+<tr><td>Scaly Mountain</td><td>Macon</td><td>Rural (&lt; 5,000)</td><td>1</td><td>55.56</td><td>nan%</td><td>2.16</td><td>1.9</td><td>14.4%</td><td>Yes</td></tr>
+<tr><td>Bostic</td><td>Rutherford</td><td>Rural (&lt; 5,000)</td><td>2</td><td>56.34</td><td>15.1%</td><td>2.51</td><td>2.21</td><td>17.6%</td><td>Yes</td></tr>
+<tr><td>Dudley</td><td>Wayne</td><td>Rural (&lt; 5,000)</td><td>2</td><td>58.31</td><td>28.7%</td><td>1.74</td><td>1.6</td><td>16.9%</td><td>Yes</td></tr>
+<tr><td>Tuckasegee</td><td>Jackson</td><td>Rural (&lt; 5,000)</td><td>1</td><td>66.67</td><td>nan%</td><td>1.53</td><td>1.28</td><td>19.3%</td><td>Yes</td></tr>
+<tr><td>Nebo</td><td>McDowell</td><td>Rural (&lt; 5,000)</td><td>3</td><td>66.67</td><td>14.9%</td><td>2.54</td><td>1.92</td><td>14.0%</td><td>Yes</td></tr>
+<tr><td>Godwin</td><td>Cumberland</td><td>Rural (&lt; 5,000)</td><td>1</td><td>67.57</td><td>17.1%</td><td>0.88</td><td>0.85</td><td>17.2%</td><td>Yes</td></tr>
+<tr><td>Middleburg</td><td>Vance</td><td>Rural (&lt; 5,000)</td><td>1</td><td>68.97</td><td>48.6%</td><td>2.39</td><td>2.16</td><td>19.0%</td><td>Yes</td></tr>
+<tr><td>Seagrove</td><td>Randolph</td><td>Rural (&lt; 5,000)</td><td>2</td><td>74.63</td><td>4.3%</td><td>1.39</td><td>1.26</td><td>14.8%</td><td>Yes</td></tr>
+<tr><td>Lumber Bridge</td><td>Robeson</td><td>Rural (&lt; 5,000)</td><td>1</td><td>77.52</td><td>10.8%</td><td>2.47</td><td>2.38</td><td>28.8%</td><td>Yes</td></tr>
+<tr><td>Seven Springs</td><td>Wayne</td><td>Rural (&lt; 5,000)</td><td>1</td><td>90.91</td><td>0.0%</td><td>1.74</td><td>1.65</td><td>16.9%</td><td>Yes</td></tr>
+<tr><td>Hayesville</td><td>Clay</td><td>Rural (&lt; 5,000)</td><td>3</td><td>96.46</td><td>24.2%</td><td>2.67</td><td>0.0</td><td>13.5%</td><td>Yes</td></tr>
+<tr><td>Rennert</td><td>Robeson</td><td>Rural (&lt; 5,000)</td><td>1</td><td>100.0</td><td>31.4%</td><td>2.47</td><td>2.39</td><td>28.8%</td><td>Yes</td></tr>
+<tr><td>Tar Heel</td><td>Bladen</td><td>Rural (&lt; 5,000)</td><td>1</td><td>103.09</td><td>9.7%</td><td>3.42</td><td>3.09</td><td>21.2%</td><td>Yes</td></tr>
+<tr><td>Norman</td><td>Richmond</td><td>Rural (&lt; 5,000)</td><td>1</td><td>125.0</td><td>37.7%</td><td>2.4</td><td>2.17</td><td>25.2%</td><td>Yes</td></tr>
+<tr><td>Orrum</td><td>Robeson</td><td>Rural (&lt; 5,000)</td><td>1</td><td>140.85</td><td>28.6%</td><td>2.47</td><td>2.38</td><td>28.8%</td><td>Yes</td></tr>
+<tr><td>Bolivia</td><td>Brunswick</td><td>Rural (&lt; 5,000)</td><td>3</td><td>176.47</td><td>5.9%</td><td>1.52</td><td>1.32</td><td>9.4%</td><td>Yes</td></tr>
+</tbody>
+    </table>
+  </div>
+</body>
+</html>

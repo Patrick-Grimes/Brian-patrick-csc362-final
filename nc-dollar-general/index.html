@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NC Dollar General Saturation Analysis</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header role="banner">
+    <h1>NC Dollar General Saturation Analysis</h1>
+    <p class="subtitle">Investigating whether Dollar General targets the poorest pockets within North Carolina counties</p>
+  </header>
+
+  <section class="instructions" aria-label="How to use this visualization">
+    <p>
+      <strong>Scroll or pinch to zoom</strong> into a county — store location markers will appear.
+      <strong>Hover</strong> over a place marker to see it highlighted against its county.
+      <strong>Click</strong> a place marker to compare its density and poverty rate against the adjusted county average.
+    </p>
+  </section>
+
+  <main>
+    <div class="vis-wrapper">
+
+      <div class="map-panel">
+        <h2>Store Density by County <span class="unit">(stores per 10,000 residents)</span></h2>
+        <div class="map-frame" id="map-frame">
+          <svg id="map"
+            role="img"
+            aria-label="Choropleth map of North Carolina divided into 100 counties. Counties are shaded from light yellow to dark red based on Dollar General store density per 10,000 residents. Scroll to zoom in and reveal individual store location markers per community. Hover over a marker to highlight that community in blue against its county in orange. Click a marker to open a comparison popup.">
+          </svg>
+          <div id="map-legend" aria-label="Map color legend: light yellow indicates low store density, dark red indicates high store density"></div>
+          <div id="map-tooltip" role="tooltip" aria-live="polite" aria-atomic="true"></div>
+        </div>
+        <div id="place-popup" role="dialog" aria-modal="true" aria-label="Place vs. county comparison" tabindex="-1" hidden></div>
+      </div>
+
+      <div class="scatter-panel">
+        <h2>Poverty Rate vs. Store Density</h2>
+        <p class="chart-caption">
+          Each point is a community in NC with at least one Dollar General store.
+          A positive correlation suggests stores concentrate in higher-poverty areas.
+        </p>
+        <div class="scatter-frame">
+          <svg id="scatterplot"
+            role="img"
+            aria-label="Scatterplot. Horizontal axis: Place Poverty Rate from 0 to 60 percent. Vertical axis: Place store density from 0 to 18 stores per 10,000 residents. Two categories of communities are shown with different shapes: Rural communities under 5,000 people as coral circles, and Urban communities over 5,000 people as blue squares. A strong positive correlation is visible — higher poverty communities consistently have higher Dollar General store density. Rural communities cluster in the upper right with the highest poverty and density. Urban communities cluster in the lower left.">
+          </svg>
+        </div>
+        <div class="scatter-legend" aria-label="Scatterplot legend">
+          <span class="legend-item rural">
+            <svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="#f87171"/></svg>
+            Rural (&lt;5,000)
+          </span>
+          <span class="legend-item urban">
+            <svg width="14" height="14" aria-hidden="true"><rect x="2" y="2" width="10" height="10" fill="#60a5fa"/></svg>
+            Urban (5,000+)
+          </span>
+        </div>
+        <div id="scatter-tooltip" role="tooltip" aria-live="polite" aria-atomic="true"></div>
+      </div>
+
+    </div>
+
+    <p class="data-link">
+      <a href="data-table.html" aria-label="View the full underlying dataset in an accessible HTML table">View underlying data table</a>
+    </p>
+  </main>
+
+  <footer role="contentinfo">
+    <p>
+      Data: U.S. Census Bureau ACS 2023 5-Year Estimates (Table S1701) &amp;
+      Dollar General location database (<a href="https://simplemaps.com" target="_blank" rel="noopener">Simplemaps.com</a>).
+      CSC 362 Final Project &mdash; Patrick Grimes &amp; Brian.
+    </p>
+  </footer>
+
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/scatterplot.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+</html>

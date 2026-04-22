@@ -1,0 +1,529 @@
+/* ============================================================
+   Base & Reset
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0f172a;
+  --surface: #1e293b;
+  --surface-2: #263346;
+  --border: #334155;
+  --text: #e2e8f0;
+  --text-muted: #94a3b8;
+  --accent-blue: #3b82f6;
+  --accent-orange: #f97316;
+  --accent-green: #22c55e;
+  --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 1rem;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ============================================================
+   Header
+   ============================================================ */
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 1.25rem 2rem;
+}
+
+header h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+/* ============================================================
+   Instructions
+   ============================================================ */
+.instructions {
+  background: var(--surface-2);
+  border-left: 3px solid var(--accent-blue);
+  padding: 0.75rem 2rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.instructions strong {
+  color: var(--text);
+}
+
+/* ============================================================
+   Main layout
+   ============================================================ */
+main {
+  padding: 1.5rem 2rem 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.vis-wrapper {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+/* ============================================================
+   Map panel
+   ============================================================ */
+.map-panel {
+  flex: 1 1 60%;
+  min-width: 0;
+}
+
+.map-panel h2,
+.scatter-panel h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #cbd5e1;
+  margin-bottom: 0.5rem;
+}
+
+.unit {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.map-frame {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+#map {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: grab;
+}
+
+#map:active {
+  cursor: grabbing;
+}
+
+/* ============================================================
+   Map legend
+   ============================================================ */
+#map-legend {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+#map-legend .legend-title {
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+  font-size: 0.75rem;
+}
+
+#map-legend .legend-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#map-legend .legend-bar {
+  width: 100px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+#map-legend .legend-labels {
+  display: flex;
+  justify-content: space-between;
+  width: 100px;
+  margin-top: 2px;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   Tooltip
+   ============================================================ */
+#map-tooltip,
+#scatter-tooltip {
+  position: fixed;
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  color: var(--text);
+  pointer-events: none;
+  z-index: 1000;
+  max-width: 220px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  display: none;
+}
+
+#map-tooltip .tt-title,
+#scatter-tooltip .tt-title {
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+  color: #f1f5f9;
+}
+
+#map-tooltip .tt-row,
+#scatter-tooltip .tt-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  line-height: 1.4;
+}
+
+#map-tooltip .tt-label,
+#scatter-tooltip .tt-label {
+  color: var(--text-muted);
+}
+
+#map-tooltip .tt-value,
+#scatter-tooltip .tt-value {
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+/* ============================================================
+   Popup (bar chart comparison)
+   ============================================================ */
+#place-popup {
+  position: fixed;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  z-index: 2000;
+  min-width: 280px;
+  max-width: 340px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.7);
+}
+
+#place-popup[hidden] {
+  display: none;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.popup-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.popup-county {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.popup-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  border-radius: 4px;
+}
+
+.popup-close:hover,
+.popup-close:focus {
+  color: var(--text);
+  background: var(--border);
+  outline: 2px solid var(--accent-blue);
+}
+
+.popup-chart-area {
+  margin-bottom: 12px;
+}
+
+.popup-chart-area svg {
+  display: block;
+  width: 100%;
+}
+
+.popup-stats {
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+  margin-bottom: 10px;
+  font-size: 0.82rem;
+}
+
+.popup-stat-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 0;
+  color: var(--text-muted);
+}
+
+.popup-stat-row span:last-child {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.popup-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.popup-badge.yes {
+  background: #7f1d1d;
+  color: #fca5a5;
+  border: 1px solid #b91c1c;
+}
+
+.popup-badge.no {
+  background: #1c3549;
+  color: #94a3b8;
+  border: 1px solid var(--border);
+}
+
+/* ============================================================
+   Scatterplot panel
+   ============================================================ */
+.scatter-panel {
+  flex: 1 1 38%;
+  min-width: 0;
+}
+
+.chart-caption {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.scatter-frame {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  padding: 8px;
+}
+
+#scatterplot {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.scatter-legend {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 8px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ============================================================
+   Axis & chart text
+   ============================================================ */
+.axis text {
+  fill: var(--text-muted);
+  font-size: 12px;
+  font-family: var(--font);
+}
+
+.axis line,
+.axis path {
+  stroke: var(--border);
+}
+
+.axis-label {
+  fill: var(--text-muted);
+  font-size: 12px;
+  font-family: var(--font);
+}
+
+/* ============================================================
+   County path base styles
+   ============================================================ */
+.county-path {
+  transition: stroke-width 0.1s;
+}
+
+.county-path:focus {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   Pin styles
+   ============================================================ */
+.pin circle {
+  transition: r 0.15s;
+}
+
+.pin:hover circle,
+.pin:focus circle {
+  r: 10;
+}
+
+.pin:focus {
+  outline: none;
+}
+
+.pin:focus circle {
+  stroke: var(--accent-blue);
+  stroke-width: 2px;
+}
+
+/* ============================================================
+   Scatterplot points
+   ============================================================ */
+.scatter-point {
+  transition: opacity 0.15s;
+  cursor: pointer;
+}
+
+.scatter-point.dimmed {
+  opacity: 0.2;
+}
+
+.scatter-point.highlighted {
+  stroke: #fff;
+  stroke-width: 2px;
+}
+
+/* ============================================================
+   Data link & footer
+   ============================================================ */
+.data-link {
+  margin-top: 1.5rem;
+  font-size: 0.88rem;
+}
+
+.data-link a {
+  color: var(--accent-blue);
+  text-decoration: none;
+}
+
+.data-link a:hover,
+.data-link a:focus {
+  text-decoration: underline;
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 0.75rem 2rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 2rem;
+}
+
+footer a {
+  color: var(--accent-blue);
+  text-decoration: none;
+}
+
+.load-error {
+  background: #7f1d1d;
+  color: #fca5a5;
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 900px) {
+  .vis-wrapper {
+    flex-direction: column;
+  }
+
+  .map-panel,
+  .scatter-panel {
+    flex: 1 1 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  header {
+    padding: 1rem;
+  }
+
+  main {
+    padding: 1rem;
+  }
+
+  header h1 {
+    font-size: 1.2rem;
+  }
+}
+
+/* ============================================================
+   Zoom instruction overlay
+   ============================================================ */
+.zoom-hint {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 23, 42, 0.8);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 99px;
+  border: 1px solid var(--border);
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+
+.zoom-hint.hidden {
+  opacity: 0;
+}
