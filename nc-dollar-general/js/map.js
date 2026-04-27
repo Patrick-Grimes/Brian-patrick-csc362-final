@@ -2,6 +2,27 @@
 function initMap(placeData, countyData, countiesGeo, placesGeo) {
 
   /* ------------------------------------------------------------------ */
+  /* Place-vs-county gap formatting                                      */
+  /*                                                                     */
+  /* Each place carries `gap` (place stores/10k − adj. county stores/10k) */
+  /* and `gapPercentile` (0..1, share of NC places ranking at-or-below). */
+  /* Both are computed in main.js. Helpers below render them consistently */
+  /* in tooltip, popup, and aria-label so screen readers and sighted users */
+  /* see the same magnitude-aware signal.                                 */
+  /* ------------------------------------------------------------------ */
+  const ordinal = n => {
+    const s = ["th", "st", "nd", "rd"];
+    const v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+  };
+  const formatGap = d => {
+    const sign = d.gap >= 0 ? "+" : "−";
+    return `${sign}${Math.abs(d.gap).toFixed(2)}/10k`;
+  };
+  const formatPercentile = d =>
+    `${ordinal(Math.round(d.gapPercentile * 100))} statewide percentile`;
+
+  /* ------------------------------------------------------------------ */
   /* Dimensions                                                          */
   /* ------------------------------------------------------------------ */
   const frame   = document.getElementById("map-frame");
@@ -161,7 +182,8 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
         `${d.city}, ${d.county} County. ${d.storeCount} stores. ` +
         `Density: ${d.storesPerTenK.toFixed(2)} per 10,000. ` +
         `Poverty rate: ${(d.placePoverty * 100).toFixed(1)}%. ` +
-        `Over-saturated vs county: ${d.overSaturated ? "Yes" : "No"}.`
+        `Density gap versus adjusted county: ${formatGap(d)}, ` +
+        `${formatPercentile(d)} of all North Carolina places.`
       )
       .on("mouseover", (event, d) => {
         highlightPlace(d);
@@ -200,29 +222,48 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
 
   /* ------------------------------------------------------------------ */
   /* Three-zone highlight on hover                                       */
+  /*                                                                     */
+  /* The blue place fill is clipped to the active county boundary so a   */
+  /* TIGER place polygon that sprawls (or has a stray ring) cannot paint */
+  /* outside its county. We also keep fill-opacity low and the stroke    */
+  /* prominent so the highlight reads as an outlined region — not a giant */
+  /* blue blob obscuring the county underneath.                          */
   /* ------------------------------------------------------------------ */
+  const PLACE_CLIP_ID = "place-clip";
+
   function highlightPlace(d) {
     clearHighlights(false);
 
-    /* Zone 2: draw county in orange over its base colour */
     const countyFeat = countiesGeo.features.find(f => f.properties.name === d.county);
+
     if (countyFeat) {
+      /* Zone 2: county in orange */
       gCountyHL.append("path")
         .attr("d", pathGen(countyFeat))
         .attr("fill", "#f97316")
+        .attr("fill-opacity", 0.55)
         .attr("stroke", "#fff")
         .attr("stroke-width", 1 / currentK);
+
+      /* clipPath bound to the active county — placed inside gPlaceHL so it
+         inherits the same zoom transform as the blue path it clips. */
+      gPlaceHL.append("clipPath")
+        .attr("id", PLACE_CLIP_ID)
+        .append("path")
+        .attr("d", pathGen(countyFeat));
     }
 
-    /* Zone 1: draw place polygon in blue on top */
     const placeFeat = placeFeatByName.get(d.tigerName);
     if (placeFeat) {
+      /* Zone 1: place polygon, clipped to its county */
       gPlaceHL.append("path")
         .attr("d", pathGen(placeFeat))
+        .attr("clip-path", countyFeat ? `url(#${PLACE_CLIP_ID})` : null)
         .attr("fill", "#3b82f6")
-        .attr("fill-opacity", 0.88)
+        .attr("fill-opacity", 0.40)
         .attr("stroke", "#93c5fd")
-        .attr("stroke-width", 1.5 / currentK);
+        .attr("stroke-width", 2 / currentK)
+        .attr("stroke-linejoin", "round");
     }
 
     /* Notify scatterplot */
@@ -265,12 +306,14 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
   function showPlaceTooltip(event, d) {
     const el = document.getElementById("map-tooltip");
     el.style.display = "block";
+    const gapColor = d.gap >= 0 ? "#fca5a5" : "#86efac";
     el.innerHTML = `
       <div class="tt-title">${d.city} <span style="font-weight:400;color:#94a3b8">(${d.county} Co.)</span></div>
       <div class="tt-row"><span class="tt-label">Place density</span><span class="tt-value">${d.storesPerTenK.toFixed(2)}/10k</span></div>
       <div class="tt-row"><span class="tt-label">Adj. county density</span><span class="tt-value">${d.adjCountyDensity.toFixed(2)}/10k</span></div>
       <div class="tt-row"><span class="tt-label">Place poverty</span><span class="tt-value">${(d.placePoverty * 100).toFixed(1)}%</span></div>
-      <div class="tt-row"><span class="tt-label">Over-saturated</span><span class="tt-value" style="color:${d.overSaturated ? '#f87171' : '#86efac'}">${d.overSaturated ? "Yes" : "No"}</span></div>
+      <div class="tt-row"><span class="tt-label">Gap vs. county</span><span class="tt-value" style="color:${gapColor}">${formatGap(d)}</span></div>
+      <div class="tt-row"><span class="tt-label">NC percentile</span><span class="tt-value">${formatPercentile(d)}</span></div>
       <div style="font-size:0.72rem;color:#64748b;margin-top:4px">Click for full comparison</div>
     `;
     moveTooltip(event, "#map-tooltip");
@@ -348,13 +391,23 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
         </div>
         <div class="popup-stat-row">
           <span>Place classification</span>
-          <span>${d.classification}</span>
+          <span>${d.classification} (${(d.urbanShare * 100).toFixed(0)}% urban)</span>
+        </div>
+        <div class="popup-stat-row">
+          <span>Density gap vs. adj. county</span>
+          <span style="color:${d.gap >= 0 ? '#fca5a5' : '#86efac'}">${formatGap(d)}</span>
         </div>
       </div>
 
-      <span class="popup-badge ${d.overSaturated ? "yes" : "no"}">
-        Over-Saturated vs County: ${d.overSaturated ? "Yes" : "No"}
-      </span>
+      <div class="popup-percentile">
+        <div class="popup-percentile-label">Statewide gap percentile</div>
+        <div class="popup-percentile-bar" aria-hidden="true">
+          <div class="popup-percentile-fill" style="width:${(d.gapPercentile * 100).toFixed(1)}%"></div>
+        </div>
+        <div class="popup-percentile-value">
+          ${formatPercentile(d)} of ${placeData.length} NC places
+        </div>
+      </div>
     `;
 
     /* Draw bars with D3 into the SVG group */

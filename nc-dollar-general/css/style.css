@@ -71,6 +71,27 @@ header h1 {
   color: var(--text);
 }
 
+.instructions .methodology-note {
+  margin-top: 0.4rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.instructions .methodology-note em {
+  color: var(--text);
+  font-style: normal;
+  font-weight: 600;
+}
+
+.instructions .methodology-note code {
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 0 4px;
+  font-size: 0.78rem;
+  color: #cbd5e1;
+}
+
 /* ============================================================
    Main layout
    ============================================================ */
@@ -122,6 +143,8 @@ main {
   height: auto;
   cursor: grab;
 }
+
+#map:focus { outline: none; }
 
 #map:active {
   cursor: grabbing;
@@ -301,25 +324,36 @@ main {
   font-weight: 600;
 }
 
-.popup-badge {
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 99px;
+.popup-percentile {
+  margin-top: 4px;
+}
+
+.popup-percentile-label {
   font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
+  color: var(--text-muted);
+  margin-bottom: 4px;
 }
 
-.popup-badge.yes {
-  background: #7f1d1d;
-  color: #fca5a5;
-  border: 1px solid #b91c1c;
+.popup-percentile-bar {
+  width: 100%;
+  height: 6px;
+  border-radius: 99px;
+  background: var(--surface-2);
+  overflow: hidden;
 }
 
-.popup-badge.no {
-  background: #1c3549;
-  color: #94a3b8;
-  border: 1px solid var(--border);
+.popup-percentile-fill {
+  height: 100%;
+  background: linear-gradient(to right, #60a5fa, #f87171);
+  border-radius: 99px;
+}
+
+.popup-percentile-value {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-top: 4px;
+  text-align: right;
 }
 
 /* ============================================================
@@ -390,11 +424,18 @@ main {
    ============================================================ */
 .county-path {
   transition: stroke-width 0.1s;
+  outline: none;
 }
 
-.county-path:focus {
-  outline: 2px solid var(--accent-blue);
-  outline-offset: 2px;
+/* SVG outlines paint a tight rectangle around the bbox of the focused
+   element — for a viewport-sized county that reads as "the whole map is
+   highlighted blue". Use :focus-visible (keyboard only) and an inset SVG
+   stroke instead so the focus ring stays inside the county outline. */
+.county-path:focus { outline: none; }
+
+.county-path:focus-visible {
+  stroke: var(--accent-blue);
+  stroke-width: 2;
 }
 
 /* ============================================================

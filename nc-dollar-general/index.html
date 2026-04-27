@@ -19,6 +19,13 @@
       <strong>Hover</strong> over a place marker to see it highlighted against its county.
       <strong>Click</strong> a place marker to compare its density and poverty rate against the adjusted county average.
     </p>
+    <p class="methodology-note">
+      <strong>Rural vs. Urban:</strong> A place is classified <em>Urban</em> when at least
+      <strong>51%</strong> of its population lives inside a Census-2020-defined urban area
+      (Decennial DHC table P2). Otherwise it is <em>Rural</em>. The threshold lives in
+      <code>js/main.js</code> as <code>URBAN_SHARE_THRESHOLD</code> — change that one
+      number to reclassify every place and refresh both visualisations.
+    </p>
   </section>
 
   <main>
@@ -46,17 +53,17 @@
         <div class="scatter-frame">
           <svg id="scatterplot"
             role="img"
-            aria-label="Horizontal bar chart comparing average Dollar General store density for rural communities under 5,000 residents and urban communities with 5,000 or more residents.">
+            aria-label="Horizontal bar chart comparing average Dollar General store density for rural and urban communities, where a community counts as Urban if at least 51 percent of its 2020 Census population lives in a Census-defined urban area.">
           </svg>
         </div>
         <div class="scatter-legend" aria-label="Bar chart legend">
           <span class="legend-item rural">
             <svg width="14" height="14" aria-hidden="true"><rect x="2" y="3" width="10" height="8" rx="2" fill="#f87171"/></svg>
-            Rural (&lt;5,000)
+            Rural (&lt; 51% urban share)
           </span>
           <span class="legend-item urban">
             <svg width="14" height="14" aria-hidden="true"><rect x="2" y="3" width="10" height="8" rx="2" fill="#60a5fa"/></svg>
-            Urban (5,000+)
+            Urban (≥ 51% urban share)
           </span>
         </div>
         <div id="scatter-tooltip" role="tooltip" aria-live="polite" aria-atomic="true"></div>

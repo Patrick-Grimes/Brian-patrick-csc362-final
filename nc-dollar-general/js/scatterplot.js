@@ -14,10 +14,10 @@ function initScatterplot(placeData) {
   /* ------------------------------------------------------------------ */
   /* Aggregate by community classification                               */
   /* ------------------------------------------------------------------ */
-  const GROUP_ORDER = ["Rural (< 5,000)", "Urban (5,000+)"];
+  const GROUP_ORDER = ["Rural", "Urban"];
   const groupMeta = {
-    "Rural (< 5,000)": { label: "Rural", fill: "#f87171", stroke: "#ef4444" },
-    "Urban (5,000+)":  { label: "Urban",  fill: "#60a5fa", stroke: "#3b82f6" },
+    "Rural": { label: "Rural", fill: "#f87171", stroke: "#ef4444" },
+    "Urban": { label: "Urban", fill: "#60a5fa", stroke: "#3b82f6" },
   };
 
   const grouped = GROUP_ORDER.map(classification => {
@@ -92,7 +92,7 @@ function initScatterplot(placeData) {
     .attr("class", "bar-chart-note")
     .attr("x", 0)
     .attr("y", -6)
-    .text("Grouped by Census place population classification");
+    .text("Grouped by Census 2020 urban-population share (≥ 51% urban = Urban)");
 
   /* ------------------------------------------------------------------ */
   /* Draw bars                                                           */

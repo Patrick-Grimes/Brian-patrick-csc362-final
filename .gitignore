@@ -1,0 +1,8 @@
+# macOS
+.DS_Store
+
+# Authoring artefacts kept out of source control by request
+# (project draft, rubric, raw spreadsheet, etc. — generated/imported,
+# not part of the deployable site)
+*.pdf
+*.xlsx
