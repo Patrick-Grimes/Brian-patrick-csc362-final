@@ -38,24 +38,24 @@
       </div>
 
       <div class="scatter-panel">
-        <h2>Poverty Rate vs. Store Density</h2>
+        <h2>Average Store Density by Community Type</h2>
         <p class="chart-caption">
-          Each point is a community in NC with at least one Dollar General store.
-          A positive correlation suggests stores concentrate in higher-poverty areas.
+          Rural and urban communities are compared by their average Dollar General
+          store density per 10,000 residents.
         </p>
         <div class="scatter-frame">
           <svg id="scatterplot"
             role="img"
-            aria-label="Scatterplot. Horizontal axis: Place Poverty Rate from 0 to 60 percent. Vertical axis: Place store density from 0 to 18 stores per 10,000 residents. Two categories of communities are shown with different shapes: Rural communities under 5,000 people as coral circles, and Urban communities over 5,000 people as blue squares. A strong positive correlation is visible — higher poverty communities consistently have higher Dollar General store density. Rural communities cluster in the upper right with the highest poverty and density. Urban communities cluster in the lower left.">
+            aria-label="Horizontal bar chart comparing average Dollar General store density for rural communities under 5,000 residents and urban communities with 5,000 or more residents.">
           </svg>
         </div>
-        <div class="scatter-legend" aria-label="Scatterplot legend">
+        <div class="scatter-legend" aria-label="Bar chart legend">
           <span class="legend-item rural">
-            <svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="#f87171"/></svg>
+            <svg width="14" height="14" aria-hidden="true"><rect x="2" y="3" width="10" height="8" rx="2" fill="#f87171"/></svg>
             Rural (&lt;5,000)
           </span>
           <span class="legend-item urban">
-            <svg width="14" height="14" aria-hidden="true"><rect x="2" y="2" width="10" height="10" fill="#60a5fa"/></svg>
+            <svg width="14" height="14" aria-hidden="true"><rect x="2" y="3" width="10" height="8" rx="2" fill="#60a5fa"/></svg>
             Urban (5,000+)
           </span>
         </div>

@@ -20,7 +20,9 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
   /* ------------------------------------------------------------------ */
   /* Projection & path generator                                         */
   /* ------------------------------------------------------------------ */
-  const projection = d3.geoMercator().fitSize([W, H], countiesGeo);
+  /* geoAlbersUsa correctly projects the WGS84 lon/lat coordinates that
+     both the county and TIGER place GeoJSON files use as input. */
+  const projection = d3.geoAlbersUsa().fitSize([W, H], countiesGeo);
   const pathGen    = d3.geoPath().projection(projection);
 
   /* ------------------------------------------------------------------ */
@@ -66,8 +68,8 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
       const cd = countyData[d.properties.name];
       return cd ? colorScale(cd.storesPerTenK) : "#4b5563";
     })
-    .attr("stroke", "#1e293b")
-    .attr("stroke-width", 0.6)
+    .attr("stroke", "#fff")
+    .attr("stroke-width", 0.5)
     .attr("tabindex", "0")
     .attr("role", "listitem")
     .attr("aria-label", d => {
@@ -108,7 +110,7 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
     gPins      .attr("transform", t);
 
     /* Scale strokes to stay visually consistent */
-    gCountyBase.selectAll(".county-path").attr("stroke-width", 0.6 / t.k);
+    gCountyBase.selectAll(".county-path").attr("stroke-width", 0.5 / t.k);
     gCountyHL  .selectAll("path").attr("stroke-width", 1 / t.k);
     gPlaceHL   .selectAll("path").attr("stroke-width", 1.5 / t.k);
 
@@ -208,7 +210,7 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
       gCountyHL.append("path")
         .attr("d", pathGen(countyFeat))
         .attr("fill", "#f97316")
-        .attr("stroke", "#1e293b")
+        .attr("stroke", "#fff")
         .attr("stroke-width", 1 / currentK);
     }
 

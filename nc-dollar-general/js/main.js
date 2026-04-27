@@ -34,6 +34,49 @@
     "Longitude",
   ];
 
+  function ringArea(ring) {
+    let area = 0;
+    for (let i = 0; i < ring.length - 1; i++) {
+      const [x1, y1] = ring[i];
+      const [x2, y2] = ring[i + 1];
+      area += (x1 * y2) - (x2 * y1);
+    }
+    return area / 2;
+  }
+
+  function rewindPolygon(polygon) {
+    return polygon.map((ring, i) => {
+      const shouldBeClockwise = i === 0;
+      const isClockwise = ringArea(ring) < 0;
+      return shouldBeClockwise === isClockwise ? ring : ring.slice().reverse();
+    });
+  }
+
+  function rewindFeatureCollection(fc) {
+    return {
+      ...fc,
+      features: fc.features.map(feature => {
+        const geometry = feature.geometry;
+        if (!geometry) return feature;
+
+        let nextCoordinates = geometry.coordinates;
+        if (geometry.type === "Polygon") {
+          nextCoordinates = rewindPolygon(geometry.coordinates);
+        } else if (geometry.type === "MultiPolygon") {
+          nextCoordinates = geometry.coordinates.map(rewindPolygon);
+        }
+
+        return {
+          ...feature,
+          geometry: {
+            ...geometry,
+            coordinates: nextCoordinates,
+          },
+        };
+      }),
+    };
+  }
+
   /* ------------------------------------------------------------------ */
   /* Load all assets in parallel                                         */
   /* ------------------------------------------------------------------ */
@@ -42,7 +85,8 @@
     d3.json("data/nc_counties.json"),
     d3.json("data/nc_places.json"),
   ])
-    .then(([rawRows, countiesGeo, placesGeo]) => {
+    .then(([rawRows, rawCountiesGeo, placesGeo]) => {
+      const countiesGeo = rewindFeatureCollection(rawCountiesGeo);
 
       /* Parse numerics */
       rawRows.forEach(r => {

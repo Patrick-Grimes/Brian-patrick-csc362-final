@@ -419,20 +419,34 @@ main {
 }
 
 /* ============================================================
-   Scatterplot points
+   Bar chart
    ============================================================ */
-.scatter-point {
+.bar-group {
   transition: opacity 0.15s;
   cursor: pointer;
 }
 
-.scatter-point.dimmed {
+.bar-group.dimmed {
   opacity: 0.2;
 }
 
-.scatter-point.highlighted {
+.bar-group.highlighted .density-bar {
   stroke: #fff;
   stroke-width: 2px;
+}
+
+.bar-value {
+  fill: var(--text);
+  font-size: 12px;
+  font-family: var(--font);
+  font-weight: 700;
+}
+
+.bar-subtext,
+.bar-chart-note {
+  fill: var(--text-muted);
+  font-size: 11px;
+  font-family: var(--font);
 }
 
 /* ============================================================
