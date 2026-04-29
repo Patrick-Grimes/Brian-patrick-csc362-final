@@ -71,27 +71,6 @@ header h1 {
   color: var(--text);
 }
 
-.instructions .methodology-note {
-  margin-top: 0.4rem;
-  font-size: 0.82rem;
-  line-height: 1.45;
-}
-
-.instructions .methodology-note em {
-  color: var(--text);
-  font-style: normal;
-  font-weight: 600;
-}
-
-.instructions .methodology-note code {
-  background: rgba(15, 23, 42, 0.55);
-  border: 1px solid var(--border);
-  border-radius: 3px;
-  padding: 0 4px;
-  font-size: 0.78rem;
-  color: #cbd5e1;
-}
-
 /* ============================================================
    Main layout
    ============================================================ */
@@ -204,12 +183,12 @@ main {
   background: rgba(15, 23, 42, 0.95);
   border: 1px solid var(--border);
   border-radius: 6px;
-  padding: 8px 12px;
-  font-size: 0.8rem;
+  padding: 12px 14px;
+  font-size: 0.85rem;
   color: var(--text);
   pointer-events: none;
   z-index: 1000;
-  max-width: 220px;
+  max-width: 320px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.5);
   display: none;
 }
@@ -217,8 +196,8 @@ main {
 #map-tooltip .tt-title,
 #scatter-tooltip .tt-title {
   font-weight: 600;
-  font-size: 0.85rem;
-  margin-bottom: 4px;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
   color: #f1f5f9;
 }
 
@@ -226,8 +205,13 @@ main {
 #scatter-tooltip .tt-row {
   display: flex;
   justify-content: space-between;
-  gap: 12px;
-  line-height: 1.4;
+  gap: 18px;
+  line-height: 1.65;
+}
+
+#map-tooltip .tt-row + .tt-row,
+#scatter-tooltip .tt-row + .tt-row {
+  margin-top: 2px;
 }
 
 #map-tooltip .tt-label,
@@ -239,6 +223,15 @@ main {
 #scatter-tooltip .tt-value {
   font-weight: 600;
   color: #f1f5f9;
+}
+
+#map-tooltip .tt-hint {
+  display: block;
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+  font-size: 0.75rem;
+  color: #64748b;
 }
 
 /* ============================================================
@@ -258,6 +251,12 @@ main {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+/* Outranks `.compare-empty { display: flex }` so the [hidden] attribute
+   actually hides the empty-state prompt once a marker has been clicked. */
+.compare-frame [hidden] {
+  display: none;
 }
 
 .compare-empty {
@@ -423,6 +422,14 @@ main {
   outline: none;
 }
 
+/* Spotlight effect: when a marker is hovered, the entire choropleth
+   base dims so the highlighted place's polygon (drawn on top in
+   gPlaceHL) reads at full saturation. */
+.g-county-base.dimmed {
+  opacity: 0.32;
+  transition: opacity 0.12s ease-out;
+}
+
 /* SVG outlines paint a tight rectangle around the bbox of the focused
    element — for a viewport-sized county that reads as "the whole map is
    highlighted blue". Use :focus-visible (keyboard only) and an inset SVG
@@ -459,17 +466,7 @@ main {
    Bar chart
    ============================================================ */
 .bar-group {
-  transition: opacity 0.15s;
-  cursor: pointer;
-}
-
-.bar-group.dimmed {
-  opacity: 0.2;
-}
-
-.bar-group.highlighted .density-bar {
-  stroke: #fff;
-  stroke-width: 2px;
+  cursor: default;
 }
 
 .bar-value {

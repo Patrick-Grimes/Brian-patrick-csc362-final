@@ -237,68 +237,43 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
   }
 
   /* ------------------------------------------------------------------ */
-  /* Three-zone highlight on hover                                       */
+  /* Spotlight highlight on hover                                        */
   /*                                                                     */
-  /* The blue place fill is clipped to the active county boundary so a   */
-  /* TIGER place polygon that sprawls (or has a stray ring) cannot paint */
-  /* outside its county. We also keep fill-opacity low and the stroke    */
-  /* prominent so the highlight reads as an outlined region — not a giant */
-  /* blue blob obscuring the county underneath.                          */
+  /* The whole base choropleth dims via a CSS class on gCountyBase, and  */
+  /* the hovered place's polygon is redrawn on top at the same density   */
+  /* color it would have inherited from its county — so it visually      */
+  /* "punches through" the dim layer. A white outline pins the silhouette */
+  /* without obscuring the underlying gradient.                          */
   /* ------------------------------------------------------------------ */
-  const PLACE_CLIP_ID = "place-clip";
-
   function highlightPlace(d) {
-    clearHighlights(false);
+    clearHighlights();
 
-    const countyFeat = countiesGeo.features.find(f => f.properties.name === d.county);
-
-    if (countyFeat) {
-      /* Zone 2: county in orange */
-      gCountyHL.append("path")
-        .attr("d", pathGen(countyFeat))
-        .attr("fill", "#f97316")
-        .attr("fill-opacity", 0.55)
-        .attr("stroke", "#fff")
-        .attr("stroke-width", 1 / currentK);
-
-      /* clipPath bound to the active county — placed inside gPlaceHL so it
-         inherits the same zoom transform as the blue path it clips. */
-      gPlaceHL.append("clipPath")
-        .attr("id", PLACE_CLIP_ID)
-        .append("path")
-        .attr("d", pathGen(countyFeat));
-    }
+    gCountyBase.classed("dimmed", true);
 
     const placeFeat = placeFeatByName.get(d.tigerName);
-    if (placeFeat) {
-      /* Zone 1: place polygon, clipped to its county */
-      gPlaceHL.append("path")
-        .attr("d", pathGen(placeFeat))
-        .attr("clip-path", countyFeat ? `url(#${PLACE_CLIP_ID})` : null)
-        .attr("fill", "#3b82f6")
-        .attr("fill-opacity", 0.40)
-        .attr("stroke", "#93c5fd")
-        .attr("stroke-width", 2 / currentK)
-        .attr("stroke-linejoin", "round");
-    }
+    if (!placeFeat) return;
 
-    /* Notify scatterplot */
-    if (window.AppState.onScatterHighlight) {
-      window.AppState.onScatterHighlight(d.city);
-    }
+    const cd = countyData[d.county];
+    const fill = cd ? colorScale(cd.storesPerTenK) : "#4b5563";
+
+    gPlaceHL.append("path")
+      .attr("d", pathGen(placeFeat))
+      .attr("fill", fill)
+      .attr("stroke", "#ffffff")
+      .attr("stroke-width", 2 / currentK)
+      .attr("stroke-linejoin", "round");
   }
 
-  function clearHighlights(notifyScatter = true) {
+  function clearHighlights() {
+    gCountyBase.classed("dimmed", false);
     gCountyHL.selectAll("*").remove();
     gPlaceHL .selectAll("*").remove();
-    if (notifyScatter && window.AppState.onScatterHighlight) {
-      window.AppState.onScatterHighlight(null);
-    }
   }
 
-  /* Called from scatterplot highlight */
+  /* External hook left in place so other modules could trigger a place
+     highlight by name; the rural/urban chart no longer uses it. */
   window.AppState.onMapHighlight = (cityName) => {
-    if (!cityName) { clearHighlights(false); return; }
+    if (!cityName) { clearHighlights(); return; }
     const d = placeByCity.get(cityName);
     if (d) highlightPlace(d);
   };
@@ -330,7 +305,7 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
       <div class="tt-row"><span class="tt-label">Place poverty</span><span class="tt-value">${(d.placePoverty * 100).toFixed(1)}%</span></div>
       <div class="tt-row"><span class="tt-label">Gap vs. county</span><span class="tt-value" style="color:${gapColor}">${formatGap(d)}</span></div>
       <div class="tt-row"><span class="tt-label">NC percentile</span><span class="tt-value">${formatPercentile(d)}</span></div>
-      <div style="font-size:0.72rem;color:#64748b;margin-top:4px">Click to load this place in the comparison panel</div>
+      <div class="tt-hint">Click to load this place in the comparison panel</div>
     `;
     moveTooltip(event, "#map-tooltip");
   }

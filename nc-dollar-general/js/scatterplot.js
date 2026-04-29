@@ -34,8 +34,6 @@ function initScatterplot(placeData) {
     };
   });
 
-  const classificationByCity = new Map(placeData.map(d => [d.city, d.classification]));
-
   /* ------------------------------------------------------------------ */
   /* Scales                                                              */
   /* ------------------------------------------------------------------ */
@@ -134,11 +132,11 @@ function initScatterplot(placeData) {
     .attr("dy", "1.55em")
     .text(d => `${d.placeCount} places, ${d.totalStores} stores`);
 
-  /* Interaction */
+  /* Interaction — tooltip only. The chart itself is intentionally static:
+     no highlight/dim on hover and no cross-linkage with the map markers. */
   bars
     .on("mouseover", (event, d) => {
       showBarTooltip(event, d);
-      highlightGroup(d.classification);
     })
     .on("mousemove", (event) => {
       const el = document.getElementById("scatter-tooltip");
@@ -154,42 +152,13 @@ function initScatterplot(placeData) {
     })
     .on("mouseout", () => {
       document.getElementById("scatter-tooltip").style.display = "none";
-      clearHighlight();
     })
     .on("keydown", (event, d) => {
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
         showBarTooltip(event, d);
-        highlightGroup(d.classification);
       }
     });
-
-  /* ------------------------------------------------------------------ */
-  /* Highlight / dim logic                                               */
-  /* ------------------------------------------------------------------ */
-  function highlightGroup(classification) {
-    bars.classed("dimmed", true)
-        .classed("highlighted", false);
-    bars.filter(d => d.classification === classification)
-        .classed("dimmed", false)
-        .classed("highlighted", true)
-        .raise();
-  }
-
-  function clearHighlight() {
-    bars.classed("dimmed", false)
-        .classed("highlighted", false);
-  }
-
-  /* Register callback so map.js can trigger bar highlights by place */
-  window.AppState.onScatterHighlight = (city) => {
-    if (!city) {
-      clearHighlight();
-      return;
-    }
-    const classification = classificationByCity.get(city);
-    if (classification) highlightGroup(classification);
-  };
 
   /* ------------------------------------------------------------------ */
   /* Tooltip                                                             */
