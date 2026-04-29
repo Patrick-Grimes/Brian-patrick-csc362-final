@@ -111,12 +111,13 @@ main {
    Map panel
    ============================================================ */
 .map-panel {
-  flex: 1 1 60%;
+  flex: 1 1 72%;
   min-width: 0;
 }
 
 .map-panel h2,
-.scatter-panel h2 {
+.compare-panel h2,
+.density-by-type h2 {
   font-size: 1.1rem;
   font-weight: 600;
   color: #cbd5e1;
@@ -241,100 +242,95 @@ main {
 }
 
 /* ============================================================
-   Popup (bar chart comparison)
+   Compare panel (right side — dynamic place vs. county)
    ============================================================ */
-#place-popup {
-  position: fixed;
+.compare-panel {
+  flex: 1 1 26%;
+  min-width: 0;
+}
+
+.compare-frame {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 16px;
-  z-index: 2000;
-  min-width: 280px;
-  max-width: 340px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.7);
-}
-
-#place-popup[hidden] {
-  display: none;
-}
-
-.popup-header {
+  border-radius: 8px;
+  padding: 14px;
+  min-height: 220px;
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 12px;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.popup-title {
+.compare-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  padding: 24px 8px;
+  line-height: 1.5;
+}
+
+.compare-empty-icon {
+  font-size: 1.6rem;
+  margin-bottom: 8px;
+  color: #0891b2;
+}
+
+#compare-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.compare-place-header {
+  margin-bottom: 4px;
+}
+
+.compare-place-title {
   font-size: 1rem;
   font-weight: 700;
   color: #f1f5f9;
 }
 
-.popup-county {
+.compare-place-sub {
   font-size: 0.8rem;
   font-weight: 400;
   color: var(--text-muted);
 }
 
-.popup-close {
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 0 4px;
-  line-height: 1;
-  border-radius: 4px;
-}
-
-.popup-close:hover,
-.popup-close:focus {
-  color: var(--text);
-  background: var(--border);
-  outline: 2px solid var(--accent-blue);
-}
-
-.popup-chart-area {
-  margin-bottom: 12px;
-}
-
-.popup-chart-area svg {
-  display: block;
-  width: 100%;
-}
-
-.popup-stats {
+.compare-stats {
   border-top: 1px solid var(--border);
   padding-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 4px;
   font-size: 0.82rem;
 }
 
-.popup-stat-row {
+.compare-stat-row {
   display: flex;
   justify-content: space-between;
   padding: 3px 0;
   color: var(--text-muted);
 }
 
-.popup-stat-row span:last-child {
+.compare-stat-row span:last-child {
   color: var(--text);
   font-weight: 600;
 }
 
-.popup-percentile {
-  margin-top: 4px;
+.compare-percentile {
+  margin-top: 8px;
 }
 
-.popup-percentile-label {
+.compare-percentile-label {
   font-size: 0.78rem;
   color: var(--text-muted);
   margin-bottom: 4px;
 }
 
-.popup-percentile-bar {
+.compare-percentile-bar {
   width: 100%;
   height: 6px;
   border-radius: 99px;
@@ -342,13 +338,13 @@ main {
   overflow: hidden;
 }
 
-.popup-percentile-fill {
+.compare-percentile-fill {
   height: 100%;
   background: linear-gradient(to right, #60a5fa, #f87171);
   border-radius: 99px;
 }
 
-.popup-percentile-value {
+.compare-percentile-value {
   font-size: 0.78rem;
   font-weight: 600;
   color: var(--text);
@@ -357,11 +353,11 @@ main {
 }
 
 /* ============================================================
-   Scatterplot panel
+   Density-by-type section (rural vs. urban — static, below)
    ============================================================ */
-.scatter-panel {
-  flex: 1 1 38%;
-  min-width: 0;
+.density-by-type {
+  margin-top: 2rem;
+  max-width: 720px;
 }
 
 .chart-caption {
@@ -447,7 +443,7 @@ main {
 
 .pin:hover circle,
 .pin:focus circle {
-  r: 10;
+  r: 7;
 }
 
 .pin:focus {
@@ -542,7 +538,7 @@ footer a {
   }
 
   .map-panel,
-  .scatter-panel {
+  .compare-panel {
     flex: 1 1 100%;
   }
 }

@@ -36,40 +36,57 @@
         <div class="map-frame" id="map-frame">
           <svg id="map"
             role="img"
-            aria-label="Choropleth map of North Carolina divided into 100 counties. Counties are shaded from light yellow to dark red based on Dollar General store density per 10,000 residents. Scroll to zoom in and reveal individual store location markers per community. Hover over a marker to highlight that community in blue against its county in orange. Click a marker to open a comparison popup.">
+            aria-label="Choropleth map of North Carolina divided into 100 counties. Counties are shaded from light yellow to dark red based on Dollar General store density per 10,000 residents. Scroll to zoom in and reveal individual store location markers per community. Hover over a marker to highlight that community in blue against its county in orange. Click a marker to update the comparison panel on the right.">
           </svg>
           <div id="map-legend" aria-label="Map color legend: light yellow indicates low store density, dark red indicates high store density"></div>
           <div id="map-tooltip" role="tooltip" aria-live="polite" aria-atomic="true"></div>
         </div>
-        <div id="place-popup" role="dialog" aria-modal="true" aria-label="Place vs. county comparison" tabindex="-1" hidden></div>
       </div>
 
-      <div class="scatter-panel">
-        <h2>Average Store Density by Community Type</h2>
+      <div class="compare-panel" aria-label="Place vs. county comparison panel" aria-live="polite">
+        <h2>Place vs. County Density</h2>
         <p class="chart-caption">
-          Rural and urban communities are compared by their average Dollar General
-          store density per 10,000 residents.
+          Click a marker on the map to compare that place's Dollar General
+          store density to its adjusted county density (county figure with
+          this place's stores removed).
         </p>
-        <div class="scatter-frame">
-          <svg id="scatterplot"
-            role="img"
-            aria-label="Horizontal bar chart comparing average Dollar General store density for rural and urban communities, where a community counts as Urban if at least 51 percent of its 2020 Census population lives in a Census-defined urban area.">
-          </svg>
+        <div class="compare-frame">
+          <div id="compare-empty" class="compare-empty">
+            <span class="compare-empty-icon" aria-hidden="true">↑</span>
+            <span>Zoom into a county and click a marker to see a comparison here.</span>
+          </div>
+          <div id="compare-place-header" class="compare-place-header" hidden></div>
+          <svg id="compare-chart" role="img" aria-label="Place vs. adjusted county store density comparison" hidden></svg>
+          <div id="compare-stats" class="compare-stats" hidden></div>
         </div>
-        <div class="scatter-legend" aria-label="Bar chart legend">
-          <span class="legend-item rural">
-            <svg width="14" height="14" aria-hidden="true"><rect x="2" y="3" width="10" height="8" rx="2" fill="#f87171"/></svg>
-            Rural (&lt; 51% urban share)
-          </span>
-          <span class="legend-item urban">
-            <svg width="14" height="14" aria-hidden="true"><rect x="2" y="3" width="10" height="8" rx="2" fill="#60a5fa"/></svg>
-            Urban (≥ 51% urban share)
-          </span>
-        </div>
-        <div id="scatter-tooltip" role="tooltip" aria-live="polite" aria-atomic="true"></div>
       </div>
 
     </div>
+
+    <section class="density-by-type" aria-label="Average store density by community type">
+      <h2>Average Store Density by Community Type</h2>
+      <p class="chart-caption">
+        Rural and urban communities are compared by their average Dollar General
+        store density per 10,000 residents.
+      </p>
+      <div class="scatter-frame">
+        <svg id="scatterplot"
+          role="img"
+          aria-label="Horizontal bar chart comparing average Dollar General store density for rural and urban communities, where a community counts as Urban if at least 51 percent of its 2020 Census population lives in a Census-defined urban area.">
+        </svg>
+      </div>
+      <div class="scatter-legend" aria-label="Bar chart legend">
+        <span class="legend-item rural">
+          <svg width="14" height="14" aria-hidden="true"><rect x="2" y="3" width="10" height="8" rx="2" fill="#f87171"/></svg>
+          Rural (&lt; 51% urban share)
+        </span>
+        <span class="legend-item urban">
+          <svg width="14" height="14" aria-hidden="true"><rect x="2" y="3" width="10" height="8" rx="2" fill="#60a5fa"/></svg>
+          Urban (≥ 51% urban share)
+        </span>
+      </div>
+      <div id="scatter-tooltip" role="tooltip" aria-live="polite" aria-atomic="true"></div>
+    </section>
 
     <p class="data-link">
       <a href="data-table.html" aria-label="View the full underlying dataset in an accessible HTML table">View underlying data table</a>
@@ -87,6 +104,7 @@
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="js/map.js"></script>
   <script src="js/scatterplot.js"></script>
+  <script src="js/compareChart.js"></script>
   <script src="js/main.js"></script>
 
 </body>

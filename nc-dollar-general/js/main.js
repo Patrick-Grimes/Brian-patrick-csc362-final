@@ -174,7 +174,10 @@
       /* Expose globally for debugging */
       window.AppData = { placeData, countyData, countiesGeo, placesGeo };
 
-      /* Boot both visualisations */
+      /* Boot all three visualisations. compareChart must be initialised
+         BEFORE the map so window.AppState.renderCompareChart exists when
+         the user clicks a marker. */
+      initCompareChart(placeData);
       initMap(placeData, countyData, countiesGeo, placesGeo);
       initScatterplot(placeData);
     })

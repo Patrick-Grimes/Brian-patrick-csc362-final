@@ -1,4 +1,5 @@
-/* map.js — interactive choropleth map with three-zone hover and popup */
+/* map.js — interactive choropleth map with three-zone hover. Marker
+   clicks delegate to compareChart.js (right-side comparison panel). */
 function initMap(placeData, countyData, countiesGeo, placesGeo) {
 
   /* ------------------------------------------------------------------ */
@@ -7,8 +8,8 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
   /* Each place carries `gap` (place stores/10k − adj. county stores/10k) */
   /* and `gapPercentile` (0..1, share of NC places ranking at-or-below). */
   /* Both are computed in main.js. Helpers below render them consistently */
-  /* in tooltip, popup, and aria-label so screen readers and sighted users */
-  /* see the same magnitude-aware signal.                                 */
+  /* in the hover tooltip and aria-label; the right-side comparison panel */
+  /* uses its own copies in compareChart.js.                              */
   /* ------------------------------------------------------------------ */
   const ordinal = n => {
     const s = ["th", "st", "nd", "rd"];
@@ -27,7 +28,7 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
   /* ------------------------------------------------------------------ */
   const frame   = document.getElementById("map-frame");
   const W       = frame.clientWidth  || 700;
-  const H       = Math.round(W * 0.62);
+  const H       = Math.round(W * 0.42);
 
   /* ------------------------------------------------------------------ */
   /* Color scale: yellow → dark red (county density)                     */
@@ -41,9 +42,10 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
   /* ------------------------------------------------------------------ */
   /* Projection & path generator                                         */
   /* ------------------------------------------------------------------ */
-  /* geoAlbersUsa correctly projects the WGS84 lon/lat coordinates that
-     both the county and TIGER place GeoJSON files use as input. */
-  const projection = d3.geoAlbersUsa().fitSize([W, H], countiesGeo);
+  /* Mercator keeps NC visually level (no diagonal tilt). At state scale
+     Mercator's distortion is negligible, and unlike geoAlbersUsa it does
+     not rotate the bounding rectangle of NC. */
+  const projection = d3.geoMercator().fitSize([W, H], countiesGeo);
   const pathGen    = d3.geoPath().projection(projection);
 
   /* ------------------------------------------------------------------ */
@@ -163,8 +165,12 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
       return px >= x0 && px <= x1 && py >= y0 && py <= y1;
     });
 
-    const pinR = Math.max(4, 9 / transform.k);
-    const fontSize = Math.max(7, 9 / transform.k);
+    /* Two-tier sizing: numberless single-store pins are smaller so they
+       don't crowd dense counties. Multi-store pins stay slightly larger
+       so the count digits remain readable. */
+    const pinRMulti  = Math.max(4,   7 / transform.k);
+    const pinRSingle = Math.max(2.5, 5 / transform.k);
+    const fontSize   = Math.max(7,   8 / transform.k);
 
     const pins = gPins.selectAll("g.pin")
       .data(visible, d => d.city);
@@ -194,19 +200,29 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
         clearHighlights();
         hideTooltip("#map-tooltip");
       })
-      .on("click",   (event, d) => { event.stopPropagation(); showPopup(d, event); })
+      .on("click", (event, d) => {
+        event.stopPropagation();
+        if (window.AppState.renderCompareChart) {
+          window.AppState.renderCompareChart(d);
+        }
+      })
       .on("keydown", (event, d) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
-          showPopup(d, event);
+          if (window.AppState.renderCompareChart) {
+            window.AppState.renderCompareChart(d);
+          }
         }
       });
 
+    /* Cyan-600 (#0891b2) clears WCAG 2 AA non-text contrast (~4.6:1 vs.
+       light yellow, ~4.2:1 vs. dark red) across the choropleth gradient,
+       and stays comfortable on the eyes vs. the bright green it replaces. */
     enter.append("circle")
-      .attr("r", pinR)
-      .attr("fill", "#22c55e")
+      .attr("r", d => d.storeCount > 1 ? pinRMulti : pinRSingle)
+      .attr("fill", "#0891b2")
       .attr("stroke", "#fff")
-      .attr("stroke-width", 0.8 / transform.k);
+      .attr("stroke-width", d => (d.storeCount > 1 ? 0.8 : 0.6) / transform.k);
 
     enter.append("text")
       .attr("text-anchor", "middle")
@@ -314,7 +330,7 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
       <div class="tt-row"><span class="tt-label">Place poverty</span><span class="tt-value">${(d.placePoverty * 100).toFixed(1)}%</span></div>
       <div class="tt-row"><span class="tt-label">Gap vs. county</span><span class="tt-value" style="color:${gapColor}">${formatGap(d)}</span></div>
       <div class="tt-row"><span class="tt-label">NC percentile</span><span class="tt-value">${formatPercentile(d)}</span></div>
-      <div style="font-size:0.72rem;color:#64748b;margin-top:4px">Click for full comparison</div>
+      <div style="font-size:0.72rem;color:#64748b;margin-top:4px">Click to load this place in the comparison panel</div>
     `;
     moveTooltip(event, "#map-tooltip");
   }
@@ -336,162 +352,6 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
     const el = document.querySelector(selector);
     if (el) el.style.display = "none";
   }
-
-  /* ------------------------------------------------------------------ */
-  /* Popup bar chart                                                     */
-  /* ------------------------------------------------------------------ */
-  function showPopup(d, event) {
-    const popup = document.getElementById("place-popup");
-    popup.removeAttribute("hidden");
-
-    const barW  = 260;
-    const barH  = 130;
-    const margin = { top: 20, right: 20, bottom: 36, left: 16 };
-    const innerW = barW - margin.left - margin.right;
-    const innerH = barH - margin.top  - margin.bottom;
-
-    const maxVal = Math.max(d.storesPerTenK, d.adjCountyDensity) * 1.25;
-    const xScale = d3.scaleLinear().domain([0, maxVal]).range([0, innerW]);
-
-    const bars = [
-      { label: "This Place",    value: d.storesPerTenK,    fill: "#3b82f6", textFill: "#93c5fd" },
-      { label: "Adj. County",   value: d.adjCountyDensity, fill: "#f97316", textFill: "#fdba74" },
-    ];
-
-    const yBand = d3.scaleBand()
-      .domain(bars.map(b => b.label))
-      .range([0, innerH])
-      .padding(0.35);
-
-    popup.innerHTML = `
-      <div class="popup-header">
-        <div>
-          <div class="popup-title">${d.city}</div>
-          <div class="popup-county">${d.county} County &nbsp;·&nbsp; ${d.storeCount} store${d.storeCount !== 1 ? "s" : ""}</div>
-        </div>
-        <button class="popup-close" aria-label="Close comparison popup" id="popup-close-btn">×</button>
-      </div>
-
-      <div class="popup-chart-area">
-        <svg viewBox="0 0 ${barW} ${barH}" role="img"
-          aria-label="Bar chart comparing ${d.city} store density of ${d.storesPerTenK.toFixed(2)} to adjusted county density of ${d.adjCountyDensity.toFixed(2)} stores per 10,000 residents">
-          <g transform="translate(${margin.left},${margin.top})">
-          </g>
-        </svg>
-      </div>
-
-      <div class="popup-stats">
-        <div class="popup-stat-row">
-          <span>Place poverty rate</span>
-          <span>${(d.placePoverty * 100).toFixed(1)}%</span>
-        </div>
-        <div class="popup-stat-row">
-          <span>County poverty rate</span>
-          <span>${(d.countyPoverty * 100).toFixed(1)}%</span>
-        </div>
-        <div class="popup-stat-row">
-          <span>Place classification</span>
-          <span>${d.classification} (${(d.urbanShare * 100).toFixed(0)}% urban)</span>
-        </div>
-        <div class="popup-stat-row">
-          <span>Density gap vs. adj. county</span>
-          <span style="color:${d.gap >= 0 ? '#fca5a5' : '#86efac'}">${formatGap(d)}</span>
-        </div>
-      </div>
-
-      <div class="popup-percentile">
-        <div class="popup-percentile-label">Statewide gap percentile</div>
-        <div class="popup-percentile-bar" aria-hidden="true">
-          <div class="popup-percentile-fill" style="width:${(d.gapPercentile * 100).toFixed(1)}%"></div>
-        </div>
-        <div class="popup-percentile-value">
-          ${formatPercentile(d)} of ${placeData.length} NC places
-        </div>
-      </div>
-    `;
-
-    /* Draw bars with D3 into the SVG group */
-    const svg2 = d3.select(popup).select("svg g");
-
-    svg2.selectAll("rect.bar")
-      .data(bars)
-      .join("rect")
-      .attr("class", "bar")
-      .attr("y", b => yBand(b.label))
-      .attr("x", 0)
-      .attr("height", yBand.bandwidth())
-      .attr("width", b => xScale(b.value))
-      .attr("fill", b => b.fill)
-      .attr("rx", 3);
-
-    svg2.selectAll("text.bar-val")
-      .data(bars)
-      .join("text")
-      .attr("class", "bar-val")
-      .attr("y", b => yBand(b.label) + yBand.bandwidth() / 2)
-      .attr("x", b => xScale(b.value) + 4)
-      .attr("dy", "0.35em")
-      .attr("font-size", 11)
-      .attr("fill", b => b.textFill)
-      .attr("font-family", "var(--font, sans-serif)")
-      .attr("font-weight", "600")
-      .text(b => b.value.toFixed(2));
-
-    svg2.selectAll("text.bar-label")
-      .data(bars)
-      .join("text")
-      .attr("class", "bar-label")
-      .attr("y", b => yBand(b.label) + yBand.bandwidth() / 2)
-      .attr("x", -2)
-      .attr("text-anchor", "end")
-      .attr("dy", "0.35em")
-      .attr("font-size", 10)
-      .attr("fill", "#94a3b8")
-      .attr("font-family", "var(--font, sans-serif)")
-      .text(b => b.label);
-
-    /* X-axis */
-    const xAxis = d3.axisBottom(xScale).ticks(4).tickSize(3);
-    svg2.append("g")
-      .attr("class", "axis")
-      .attr("transform", `translate(0,${innerH})`)
-      .call(xAxis)
-      .append("text")
-        .attr("x", innerW / 2)
-        .attr("y", 28)
-        .attr("text-anchor", "middle")
-        .attr("font-size", 10)
-        .attr("fill", "#64748b")
-        .attr("font-family", "var(--font, sans-serif)")
-        .text("Stores per 10,000 residents");
-
-    /* Position popup near click, clamped to viewport */
-    positionPopup(popup, event.clientX, event.clientY);
-
-    /* Close button */
-    document.getElementById("popup-close-btn").addEventListener("click", () => {
-      popup.setAttribute("hidden", "");
-    });
-
-    /* Trap focus */
-    popup.focus();
-  }
-
-  function positionPopup(el, cx, cy) {
-    el.style.position = "fixed";
-    const pw = 340, ph = 360;
-    let left = cx + 16;
-    let top  = cy + 16;
-    if (left + pw > window.innerWidth)  left = cx - pw - 16;
-    if (top  + ph > window.innerHeight) top  = cy - ph - 16;
-    el.style.left = Math.max(8, left) + "px";
-    el.style.top  = Math.max(8, top)  + "px";
-  }
-
-  /* Click anywhere on SVG background → close popup & clear highlights */
-  svg.on("click", () => {
-    document.getElementById("place-popup").setAttribute("hidden", "");
-  });
 
   /* ------------------------------------------------------------------ */
   /* Legend                                                              */
