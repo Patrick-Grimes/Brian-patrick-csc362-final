@@ -394,6 +394,29 @@ main {
   gap: 6px;
 }
 
+.scatter-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin-top: 6px;
+  font-size: 0.82rem;
+}
+
+.scatter-count {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+}
+
+.scatter-count-label {
+  color: var(--text-muted);
+}
+
+.scatter-count-value {
+  color: #f1f5f9;
+  font-weight: 600;
+}
+
 /* ============================================================
    Axis & chart text
    ============================================================ */

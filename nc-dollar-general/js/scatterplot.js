@@ -125,12 +125,17 @@ function initScatterplot(placeData) {
     .attr("dy", "0.35em")
     .text(d => `${d.avgDensity.toFixed(2)}/10k`);
 
-  bars.append("text")
-    .attr("class", "bar-subtext")
-    .attr("x", 8)
-    .attr("y", yScale.bandwidth() / 2)
-    .attr("dy", "1.55em")
-    .text(d => `${d.placeCount} places, ${d.totalStores} stores`);
+  const countsEl = d3.select("#scatter-counts");
+  if (!countsEl.empty()) {
+    countsEl.selectAll(".scatter-count")
+      .data(grouped, d => d.classification)
+      .join("div")
+      .attr("class", d => `scatter-count ${d.label.toLowerCase()}`)
+      .html(d => `
+        <span class="scatter-count-label">${d.label}</span>
+        <span class="scatter-count-value">${d.placeCount} places, ${d.totalStores} stores</span>
+      `);
+  }
 
   /* Interaction — tooltip only. The chart itself is intentionally static:
      no highlight/dim on hover and no cross-linkage with the map markers. */
