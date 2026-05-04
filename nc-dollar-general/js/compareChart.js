@@ -17,6 +17,51 @@ function initCompareChart(placeData) {
   const formatPercentile = d =>
     `${ordinal(Math.round(d.gapPercentile * 100))} statewide percentile`;
 
+  const escapeHtml = s =>
+    String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+
+  function buildCompareNarrativeHtml(d) {
+    const p = escapeHtml(d.city);
+    const c = escapeHtml(`${d.county} County`);
+    const sPl = d.storesPerTenK;
+    const sCo = d.adjCountyDensity;
+    const povPl = d.placePoverty;
+    const povCo = d.countyPoverty;
+    const epsD = 0.005;
+    const epsP = 0.0005;
+
+    const sameStores = Math.abs(sPl - sCo) < epsD;
+    const samePov = Math.abs(povPl - povCo) < epsP;
+    const moreOrFewer = sPl >= sCo ? "more" : "fewer";
+    const higherOrLower = povPl >= povCo ? "higher" : "lower";
+    const aligned = (sPl >= sCo) === (povPl >= povCo);
+    const conjunction = aligned ? "and also has a" : "but has a";
+
+    if (sameStores && samePov) {
+      return `<strong>${p}</strong> matches <strong>${c}</strong> on store density ` +
+        `(${sPl.toFixed(2)} per 10k) and poverty rate (${(povPl * 100).toFixed(1)}%).`;
+    }
+    if (sameStores) {
+      const link = povPl >= povCo ? "but" : "and";
+      return `<strong>${p}</strong> has the same store density as <strong>${c}</strong> ` +
+        `(${sPl.toFixed(2)} per 10k) ${link} a ${higherOrLower} poverty rate ` +
+        `(${(povPl * 100).toFixed(1)}% vs ${(povCo * 100).toFixed(1)}%).`;
+    }
+    if (samePov) {
+      return `<strong>${p}</strong> has ${moreOrFewer} Dollar General stores per 10,000 residents ` +
+        `than <strong>${c}</strong> (${sPl.toFixed(2)} vs ${sCo.toFixed(2)}), ` +
+        `with the same poverty rate (${(povPl * 100).toFixed(1)}%).`;
+    }
+
+    return `<strong>${p}</strong> has ${moreOrFewer} Dollar General stores per 10,000 residents ` +
+      `than <strong>${c}</strong> (${sPl.toFixed(2)} vs ${sCo.toFixed(2)}) ${conjunction} ` +
+      `${higherOrLower} poverty rate (${(povPl * 100).toFixed(1)}% vs ${(povCo * 100).toFixed(1)}%).`;
+  }
+
   /* ------------------------------------------------------------------ */
   /* DOM hooks                                                           */
   /* ------------------------------------------------------------------ */
@@ -24,6 +69,8 @@ function initCompareChart(placeData) {
   const chartEl = document.getElementById("compare-chart");
   const statsEl = document.getElementById("compare-stats");
   const headerEl = document.getElementById("compare-place-header");
+
+  let legendEl = document.getElementById("compare-metric-legend");
 
   /* ------------------------------------------------------------------ */
   /* Render — called by map.js on marker click                          */
@@ -34,116 +81,189 @@ function initCompareChart(placeData) {
       if (chartEl) chartEl.setAttribute("hidden", "");
       if (statsEl) statsEl.setAttribute("hidden", "");
       if (headerEl) headerEl.setAttribute("hidden", "");
+      if (legendEl) legendEl.setAttribute("hidden", "");
       return;
+    }
+
+    if (!legendEl && chartEl && chartEl.parentNode) {
+      legendEl = document.createElement("div");
+      legendEl.id = "compare-metric-legend";
+      legendEl.className = "compare-metric-legend";
+      legendEl.setAttribute("aria-label", "Chart colors: blue for stores per 10k, orange for poverty rate");
+      chartEl.insertAdjacentElement("afterend", legendEl);
     }
 
     if (empty)    empty.setAttribute("hidden", "");
     if (chartEl)  chartEl.removeAttribute("hidden");
     if (statsEl)  statsEl.removeAttribute("hidden");
     if (headerEl) headerEl.removeAttribute("hidden");
+    if (legendEl) legendEl.removeAttribute("hidden");
 
-    /* Header (place name + county/store count) */
+    const storeLabel =
+      `${d.storeCount} Dollar General store${d.storeCount !== 1 ? "s" : ""}` +
+      ` &nbsp;·&nbsp; ${escapeHtml(d.county)} County`;
+
     if (headerEl) {
       headerEl.innerHTML = `
-        <div class="compare-place-title">${d.city}</div>
-        <div class="compare-place-sub">${d.county} County &nbsp;·&nbsp; ${d.storeCount} store${d.storeCount !== 1 ? "s" : ""}</div>
+        <div class="compare-place-title">${escapeHtml(d.city)}</div>
+        <div class="compare-place-sub">${storeLabel}</div>
       `;
     }
 
-    /* ---------------- Bar chart -------------------------------------- */
+    if (legendEl) {
+      legendEl.innerHTML = `
+        <span class="compare-metric-legend-item">
+          <svg width="14" height="14" aria-hidden="true"><rect x="2" y="3" width="10" height="8" rx="2" fill="#3b82f6"/></svg>
+          Stores per 10k
+        </span>
+        <span class="compare-metric-legend-item">
+          <svg width="14" height="14" aria-hidden="true"><rect x="2" y="3" width="10" height="8" rx="2" fill="#f97316"/></svg>
+          Poverty rate
+        </span>
+      `;
+    }
+
+    /* ---------------- Bar chart (stores + poverty × 2 entities) ----- */
     const barW = 280;
-    const barH = 140;
-    const margin = { top: 18, right: 22, bottom: 36, left: 90 };
+    const barH = 220;
+    const margin = { top: 36, right: 28, bottom: 44, left: 92 };
     const innerW = barW - margin.left - margin.right;
-    const innerH = barH - margin.top  - margin.bottom;
+    const innerH = barH - margin.top - margin.bottom;
 
-    const maxVal = Math.max(d.storesPerTenK, d.adjCountyDensity) * 1.25 || 1;
-    const xScale = d3.scaleLinear().domain([0, maxVal]).range([0, innerW]);
+    const plotTop = 18;
+    const plotBottom = innerH - 20;
 
-    const bars = [
-      { label: "This Place",  value: d.storesPerTenK,    fill: "#3b82f6", textFill: "#93c5fd" },
-      { label: "Adj. County", value: d.adjCountyDensity, fill: "#f97316", textFill: "#fdba74" },
-    ];
+    const maxStores = Math.max(d.storesPerTenK, d.adjCountyDensity, 0) * 1.25 || 1;
+    const maxPov = Math.max(d.placePoverty, d.countyPoverty, 0) * 1.25 || 0.01;
+
+    const xStores = d3.scaleLinear().domain([0, maxStores]).range([0, innerW]);
+    const xPoverty = d3.scaleLinear().domain([0, maxPov]).range([0, innerW]);
 
     const yBand = d3.scaleBand()
-      .domain(bars.map(b => b.label))
-      .range([0, innerH])
-      .padding(0.35);
+      .domain(["This Place", "Adj. County"])
+      .range([plotTop, plotBottom])
+      .padding(0.24);
+
+    const subGap = 3;
+    const subH = (yBand.bandwidth() - subGap) / 2;
+
+    const rows = [
+      { entity: "This Place", stores: d.storesPerTenK, poverty: d.placePoverty },
+      { entity: "Adj. County", stores: d.adjCountyDensity, poverty: d.countyPoverty },
+    ];
+
+    const aria =
+      `Comparison for ${d.city}. Store density per 10,000: this place ${d.storesPerTenK.toFixed(2)}, ` +
+      `adjusted county ${d.adjCountyDensity.toFixed(2)}. Poverty rate: place ` +
+      `${(d.placePoverty * 100).toFixed(1)} percent, county ${(d.countyPoverty * 100).toFixed(1)} percent.`;
 
     const svg = d3.select(chartEl)
       .attr("viewBox", `0 0 ${barW} ${barH}`)
-      .attr("aria-label",
-        `Bar chart comparing ${d.city} store density of ${d.storesPerTenK.toFixed(2)} ` +
-        `to adjusted county density of ${d.adjCountyDensity.toFixed(2)} stores per 10,000 residents`);
+      .attr("aria-label", aria);
 
     svg.selectAll("*").remove();
 
     const g = svg.append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    g.selectAll("rect.bar")
-      .data(bars)
+    const gTop = g.append("g").attr("transform", `translate(0,${plotTop - 2})`);
+    gTop.call(d3.axisTop(xPoverty).ticks(4).tickSize(3).tickFormat(t => `${(t * 100).toFixed(0)}%`));
+    gTop.selectAll("text").attr("fill", "#fdba74").attr("font-size", 10);
+    gTop.selectAll("line, path").attr("stroke", "#f97316");
+
+    gTop.append("text")
+      .attr("x", innerW / 2)
+      .attr("y", -20)
+      .attr("text-anchor", "middle")
+      .attr("font-size", 10)
+      .attr("fill", "#fdba74")
+      .attr("font-family", "var(--font, sans-serif)")
+      .text("Poverty rate");
+
+    const barData = rows.flatMap(r => {
+      const y0 = yBand(r.entity);
+      return [
+        {
+          entity: r.entity,
+          kind: "stores",
+          value: r.stores,
+          y: y0,
+          h: subH,
+          xScale: xStores,
+          fill: "#3b82f6",
+          textFill: "#93c5fd",
+          fmt: v => v.toFixed(2),
+        },
+        {
+          entity: r.entity,
+          kind: "poverty",
+          value: r.poverty,
+          y: y0 + subH + subGap,
+          h: subH,
+          xScale: xPoverty,
+          fill: "#f97316",
+          textFill: "#fdba74",
+          fmt: v => `${(v * 100).toFixed(1)}%`,
+        },
+      ];
+    });
+
+    g.selectAll("rect.bar-metric")
+      .data(barData)
       .join("rect")
-      .attr("class", "bar")
-      .attr("y", b => yBand(b.label))
+      .attr("class", "bar-metric")
+      .attr("y", b => b.y)
       .attr("x", 0)
-      .attr("height", yBand.bandwidth())
-      .attr("width", b => xScale(b.value))
+      .attr("height", b => b.h)
+      .attr("width", b => b.xScale(b.value))
       .attr("fill", b => b.fill)
       .attr("rx", 3);
 
-    g.selectAll("text.bar-val")
-      .data(bars)
+    g.selectAll("text.bar-metric-val")
+      .data(barData)
       .join("text")
-      .attr("class", "bar-val")
-      .attr("y", b => yBand(b.label) + yBand.bandwidth() / 2)
-      .attr("x", b => xScale(b.value) + 4)
+      .attr("class", "bar-metric-val")
+      .attr("y", b => b.y + b.h / 2)
+      .attr("x", b => b.xScale(b.value) + 4)
       .attr("dy", "0.35em")
-      .attr("font-size", 11)
+      .attr("font-size", 10)
       .attr("fill", b => b.textFill)
       .attr("font-family", "var(--font, sans-serif)")
       .attr("font-weight", "600")
-      .text(b => b.value.toFixed(2));
+      .text(b => b.fmt(b.value));
 
-    g.selectAll("text.bar-label")
-      .data(bars)
+    g.selectAll("text.entity-label")
+      .data(rows)
       .join("text")
-      .attr("class", "bar-label")
-      .attr("y", b => yBand(b.label) + yBand.bandwidth() / 2)
+      .attr("class", "entity-label")
+      .attr("y", r => yBand(r.entity) + yBand.bandwidth() / 2)
       .attr("x", -6)
       .attr("text-anchor", "end")
       .attr("dy", "0.35em")
       .attr("font-size", 10)
       .attr("fill", "#94a3b8")
       .attr("font-family", "var(--font, sans-serif)")
-      .text(b => b.label);
+      .text(r => r.entity);
 
-    const xAxis = d3.axisBottom(xScale).ticks(4).tickSize(3);
-    g.append("g")
-      .attr("class", "axis")
-      .attr("transform", `translate(0,${innerH})`)
-      .call(xAxis)
-      .append("text")
-        .attr("x", innerW / 2)
-        .attr("y", 28)
-        .attr("text-anchor", "middle")
-        .attr("font-size", 10)
-        .attr("fill", "#64748b")
-        .attr("font-family", "var(--font, sans-serif)")
-        .text("Stores per 10,000 residents");
+    const gBot = g.append("g").attr("transform", `translate(0,${plotBottom + 2})`);
+    gBot.call(d3.axisBottom(xStores).ticks(4).tickSize(3));
+    gBot.selectAll("text").attr("fill", "#93c5fd").attr("font-size", 10);
+    gBot.selectAll("line, path").attr("stroke", "#3b82f6");
+
+    gBot.append("text")
+      .attr("x", innerW / 2)
+      .attr("y", 36)
+      .attr("text-anchor", "middle")
+      .attr("font-size", 10)
+      .attr("fill", "#93c5fd")
+      .attr("font-family", "var(--font, sans-serif)")
+      .text("Stores per 10,000 residents");
 
     /* ---------------- Stats + percentile ----------------------------- */
     const gapColor = d.gap >= 0 ? "#fca5a5" : "#86efac";
 
     statsEl.innerHTML = `
-      <div class="compare-stat-row">
-        <span>Place poverty rate</span>
-        <span>${(d.placePoverty * 100).toFixed(1)}%</span>
-      </div>
-      <div class="compare-stat-row">
-        <span>County poverty rate</span>
-        <span>${(d.countyPoverty * 100).toFixed(1)}%</span>
-      </div>
+      <p class="compare-narrative">${buildCompareNarrativeHtml(d)}</p>
       <div class="compare-stat-row">
         <span>Place classification</span>
         <span>${d.classification} (${(d.urbanShare * 100).toFixed(0)}% urban)</span>
