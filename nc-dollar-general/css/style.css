@@ -495,12 +495,28 @@ main {
    Pin styles
    ============================================================ */
 .pin circle {
-  transition: r 0.15s;
+  fill-opacity: 1;
+  transition: r 0.15s, fill-opacity 0.12s ease-out;
 }
 
+.pin text {
+  opacity: 1;
+  transition: opacity 0.12s ease-out;
+}
+
+/* Fade marker fill so the highlighted place polygon (below in gPlaceHL)
+   shows through; stroke ring stays for hover/focus affordance. */
 .pin:hover circle,
-.pin:focus circle {
+.pin:focus circle,
+.pin:active circle {
   r: 7;
+  fill-opacity: 0.4;
+}
+
+.pin:hover text,
+.pin:focus text,
+.pin:active text {
+  opacity: 0.92;
 }
 
 .pin:focus {
