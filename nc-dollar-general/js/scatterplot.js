@@ -22,13 +22,18 @@ function initScatterplot(placeData) {
 
   const grouped = GROUP_ORDER.map(classification => {
     const rows = placeData.filter(d => d.classification === classification);
+    const rowsWithPov = rows.filter(
+      d => d.placePoverty != null && Number.isFinite(d.placePoverty)
+    );
     return {
       classification,
       label: groupMeta[classification].label,
       fill: groupMeta[classification].fill,
       stroke: groupMeta[classification].stroke,
       avgDensity: d3.mean(rows, d => d.storesPerTenK) || 0,
-      avgPoverty: d3.mean(rows, d => d.placePoverty) || 0,
+      avgPoverty: rowsWithPov.length
+        ? d3.mean(rowsWithPov, d => d.placePoverty)
+        : null,
       placeCount: rows.length,
       totalStores: d3.sum(rows, d => d.storeCount),
     };
@@ -174,7 +179,7 @@ function initScatterplot(placeData) {
     el.innerHTML = `
       <div class="tt-title">${d.label} Communities</div>
       <div class="tt-row"><span class="tt-label">Avg. density</span><span class="tt-value">${d.avgDensity.toFixed(2)}/10k</span></div>
-      <div class="tt-row"><span class="tt-label">Avg. poverty</span><span class="tt-value">${(d.avgPoverty * 100).toFixed(1)}%</span></div>
+      <div class="tt-row"><span class="tt-label">Avg. poverty</span><span class="tt-value">${d.avgPoverty == null ? "N/A" : `${(d.avgPoverty * 100).toFixed(1)}%`}</span></div>
       <div class="tt-row"><span class="tt-label">Places</span><span class="tt-value">${d.placeCount}</span></div>
       <div class="tt-row"><span class="tt-label">Stores</span><span class="tt-value">${d.totalStores}</span></div>
     `;

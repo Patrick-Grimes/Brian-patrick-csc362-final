@@ -24,6 +24,15 @@ function initCompareChart(placeData) {
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;");
 
+  function formatPovertyPct(v) {
+    if (v == null || !Number.isFinite(v)) return "N/A";
+    return `${(v * 100).toFixed(1)}%`;
+  }
+
+  function povertyFinite(v) {
+    return v != null && Number.isFinite(v);
+  }
+
   function buildCompareNarrativeHtml(d) {
     const p = escapeHtml(d.city);
     const c = escapeHtml(`${d.county} County`);
@@ -31,12 +40,31 @@ function initCompareChart(placeData) {
     const sCo = d.adjCountyDensity;
     const povPl = d.placePoverty;
     const povCo = d.countyPoverty;
+    const plOk = povertyFinite(povPl);
+    const coOk = povertyFinite(povCo);
     const epsD = 0.005;
     const epsP = 0.0005;
 
+    const moreOrFewer = sPl >= sCo ? "more" : "fewer";
+    const densityPhrase =
+      `${moreOrFewer} Dollar General stores per 10,000 residents than <strong>${c}</strong> ` +
+      `(${sPl.toFixed(2)} vs ${sCo.toFixed(2)})`;
+
+    if (!plOk && !coOk) {
+      return `<strong>${p}</strong> has ${densityPhrase}. ` +
+        `Poverty rates for the place and adjusted county are not available in the dataset.`;
+    }
+    if (!plOk && coOk) {
+      return `<strong>${p}</strong> has ${densityPhrase}. ` +
+        `Place poverty rate is not available; adjusted county poverty is ${(povCo * 100).toFixed(1)}%.`;
+    }
+    if (plOk && !coOk) {
+      return `<strong>${p}</strong> has ${densityPhrase}. ` +
+        `County poverty rate is not available; place poverty is ${(povPl * 100).toFixed(1)}%.`;
+    }
+
     const sameStores = Math.abs(sPl - sCo) < epsD;
     const samePov = Math.abs(povPl - povCo) < epsP;
-    const moreOrFewer = sPl >= sCo ? "more" : "fewer";
     const higherOrLower = povPl >= povCo ? "higher" : "lower";
     const aligned = (sPl >= sCo) === (povPl >= povCo);
     const conjunction = aligned ? "and also has a" : "but has a";
@@ -126,15 +154,24 @@ function initCompareChart(placeData) {
     /* ---------------- Bar chart (stores + poverty × 2 entities) ----- */
     const barW = 280;
     const barH = 220;
-    const margin = { top: 36, right: 28, bottom: 44, left: 92 };
+    const povNums = [d.placePoverty, d.countyPoverty].filter(povertyFinite);
+    const showPovAxis = povNums.length > 0;
+    const margin = {
+      top: showPovAxis ? 36 : 22,
+      right: 28,
+      bottom: 44,
+      left: 92,
+    };
     const innerW = barW - margin.left - margin.right;
     const innerH = barH - margin.top - margin.bottom;
 
-    const plotTop = 18;
+    const plotTop = showPovAxis ? 18 : 10;
     const plotBottom = innerH - 20;
 
     const maxStores = Math.max(d.storesPerTenK, d.adjCountyDensity, 0) * 1.25 || 1;
-    const maxPov = Math.max(d.placePoverty, d.countyPoverty, 0) * 1.25 || 0.01;
+    const maxPov = showPovAxis
+      ? Math.max(...povNums, 0) * 1.25 || 0.01
+      : 0.01;
 
     const xStores = d3.scaleLinear().domain([0, maxStores]).range([0, innerW]);
     const xPoverty = d3.scaleLinear().domain([0, maxPov]).range([0, innerW]);
@@ -155,7 +192,7 @@ function initCompareChart(placeData) {
     const aria =
       `Comparison for ${d.city}. Store density per 10,000: this place ${d.storesPerTenK.toFixed(2)}, ` +
       `adjusted county ${d.adjCountyDensity.toFixed(2)}. Poverty rate: place ` +
-      `${(d.placePoverty * 100).toFixed(1)} percent, county ${(d.countyPoverty * 100).toFixed(1)} percent.`;
+      `${formatPovertyPct(d.placePoverty)}, county ${formatPovertyPct(d.countyPoverty)}.`;
 
     const svg = d3.select(chartEl)
       .attr("viewBox", `0 0 ${barW} ${barH}`)
@@ -166,71 +203,96 @@ function initCompareChart(placeData) {
     const g = svg.append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    const gTop = g.append("g").attr("transform", `translate(0,${plotTop - 2})`);
-    gTop.call(d3.axisTop(xPoverty).ticks(4).tickSize(3).tickFormat(t => `${(t * 100).toFixed(0)}%`));
-    gTop.selectAll("text").attr("fill", "#fdba74").attr("font-size", 10);
-    gTop.selectAll("line, path").attr("stroke", "#f97316");
+    if (showPovAxis) {
+      const gTop = g.append("g").attr("transform", `translate(0,${plotTop - 2})`);
+      gTop.call(d3.axisTop(xPoverty).ticks(4).tickSize(3).tickFormat(t => `${(t * 100).toFixed(0)}%`));
+      gTop.selectAll("text").attr("fill", "#fdba74").attr("font-size", 10);
+      gTop.selectAll("line, path").attr("stroke", "#f97316");
 
-    gTop.append("text")
-      .attr("x", innerW / 2)
-      .attr("y", -20)
-      .attr("text-anchor", "middle")
-      .attr("font-size", 10)
-      .attr("fill", "#fdba74")
-      .attr("font-family", "var(--font, sans-serif)")
-      .text("Poverty rate");
+      gTop.append("text")
+        .attr("x", innerW / 2)
+        .attr("y", -20)
+        .attr("text-anchor", "middle")
+        .attr("font-size", 10)
+        .attr("fill", "#fdba74")
+        .attr("font-family", "var(--font, sans-serif)")
+        .text("Poverty rate");
+    }
 
-    const barData = rows.flatMap(r => {
-      const y0 = yBand(r.entity);
-      return [
-        {
-          entity: r.entity,
-          kind: "stores",
-          value: r.stores,
-          y: y0,
-          h: subH,
-          xScale: xStores,
-          fill: "#3b82f6",
-          textFill: "#93c5fd",
-          fmt: v => v.toFixed(2),
-        },
-        {
-          entity: r.entity,
-          kind: "poverty",
-          value: r.poverty,
-          y: y0 + subH + subGap,
-          h: subH,
-          xScale: xPoverty,
-          fill: "#f97316",
-          textFill: "#fdba74",
-          fmt: v => `${(v * 100).toFixed(1)}%`,
-        },
-      ];
-    });
+    const storeBarData = rows.map(r => ({
+      entity: r.entity,
+      y: yBand(r.entity),
+      h: subH,
+      value: r.stores,
+    }));
 
-    g.selectAll("rect.bar-metric")
-      .data(barData)
+    g.selectAll("rect.bar-stores")
+      .data(storeBarData)
       .join("rect")
-      .attr("class", "bar-metric")
+      .attr("class", "bar-stores")
       .attr("y", b => b.y)
       .attr("x", 0)
       .attr("height", b => b.h)
-      .attr("width", b => b.xScale(b.value))
-      .attr("fill", b => b.fill)
+      .attr("width", b => xStores(b.value))
+      .attr("fill", "#3b82f6")
       .attr("rx", 3);
 
-    g.selectAll("text.bar-metric-val")
-      .data(barData)
+    g.selectAll("text.bar-stores-val")
+      .data(storeBarData)
       .join("text")
-      .attr("class", "bar-metric-val")
+      .attr("class", "bar-stores-val")
       .attr("y", b => b.y + b.h / 2)
-      .attr("x", b => b.xScale(b.value) + 4)
+      .attr("x", b => xStores(b.value) + 4)
       .attr("dy", "0.35em")
       .attr("font-size", 10)
-      .attr("fill", b => b.textFill)
+      .attr("fill", "#93c5fd")
       .attr("font-family", "var(--font, sans-serif)")
       .attr("font-weight", "600")
-      .text(b => b.fmt(b.value));
+      .text(b => b.value.toFixed(2));
+
+    const povertyRows = rows.map(r => ({
+      entity: r.entity,
+      y: yBand(r.entity) + subH + subGap,
+      h: subH,
+      poverty: r.poverty,
+    }));
+
+    g.selectAll("rect.bar-poverty")
+      .data(povertyRows.filter(b => povertyFinite(b.poverty)))
+      .join("rect")
+      .attr("class", "bar-poverty")
+      .attr("y", b => b.y)
+      .attr("x", 0)
+      .attr("height", b => b.h)
+      .attr("width", b => xPoverty(b.poverty))
+      .attr("fill", "#f97316")
+      .attr("rx", 3);
+
+    g.selectAll("text.bar-poverty-val")
+      .data(povertyRows.filter(b => povertyFinite(b.poverty)))
+      .join("text")
+      .attr("class", "bar-poverty-val")
+      .attr("y", b => b.y + b.h / 2)
+      .attr("x", b => xPoverty(b.poverty) + 4)
+      .attr("dy", "0.35em")
+      .attr("font-size", 10)
+      .attr("fill", "#fdba74")
+      .attr("font-family", "var(--font, sans-serif)")
+      .attr("font-weight", "600")
+      .text(b => `${(b.poverty * 100).toFixed(1)}%`);
+
+    g.selectAll("text.bar-poverty-na")
+      .data(povertyRows.filter(b => !povertyFinite(b.poverty)))
+      .join("text")
+      .attr("class", "bar-poverty-na")
+      .attr("y", b => b.y + b.h / 2)
+      .attr("x", 4)
+      .attr("dy", "0.35em")
+      .attr("font-size", 10)
+      .attr("fill", "#94a3b8")
+      .attr("font-family", "var(--font, sans-serif)")
+      .attr("font-weight", "600")
+      .text("N/A");
 
     g.selectAll("text.entity-label")
       .data(rows)

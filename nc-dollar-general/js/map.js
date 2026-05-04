@@ -22,6 +22,8 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
   };
   const formatPercentile = d =>
     `${ordinal(Math.round(d.gapPercentile * 100))} statewide percentile`;
+  const formatPovertyPct = v =>
+    v == null || !Number.isFinite(v) ? "N/A" : `${(v * 100).toFixed(1)}%`;
 
   /* ------------------------------------------------------------------ */
   /* Dimensions                                                          */
@@ -98,7 +100,7 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
     .attr("aria-label", d => {
       const cd = countyData[d.properties.name];
       if (!cd) return `${d.properties.name} County`;
-      return `${d.properties.name} County: ${cd.storesPerTenK.toFixed(2)} stores per 10,000, poverty rate ${(cd.povertyRate * 100).toFixed(1)}%`;
+      return `${d.properties.name} County: ${cd.storesPerTenK.toFixed(2)} stores per 10,000, poverty rate ${formatPovertyPct(cd.povertyRate)}`;
     })
     .on("mouseover", (event, d) => showCountyTooltip(event, d))
     .on("mousemove", (event) => moveTooltip(event, "#map-tooltip"))
@@ -187,7 +189,7 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
       .attr("aria-label", d =>
         `${d.city}, ${d.county} County. ${d.storeCount} stores. ` +
         `Density: ${d.storesPerTenK.toFixed(2)} per 10,000. ` +
-        `Poverty rate: ${(d.placePoverty * 100).toFixed(1)}%. ` +
+        `Poverty rate: ${formatPovertyPct(d.placePoverty)}. ` +
         `Density gap versus adjusted county: ${formatGap(d)}, ` +
         `${formatPercentile(d)} of all North Carolina places.`
       )
@@ -289,7 +291,7 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
     el.innerHTML = `
       <div class="tt-title">${d.properties.name} County</div>
       <div class="tt-row"><span class="tt-label">Stores per 10k</span><span class="tt-value">${cd.storesPerTenK.toFixed(2)}</span></div>
-      <div class="tt-row"><span class="tt-label">Poverty rate</span><span class="tt-value">${(cd.povertyRate * 100).toFixed(1)}%</span></div>
+      <div class="tt-row"><span class="tt-label">Poverty rate</span><span class="tt-value">${formatPovertyPct(cd.povertyRate)}</span></div>
     `;
     moveTooltip(event, "#map-tooltip");
   }
@@ -302,7 +304,7 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
       <div class="tt-title">${d.city} <span style="font-weight:400;color:#94a3b8">(${d.county} Co.)</span></div>
       <div class="tt-row"><span class="tt-label">Place density</span><span class="tt-value">${d.storesPerTenK.toFixed(2)}/10k</span></div>
       <div class="tt-row"><span class="tt-label">Adj. county density</span><span class="tt-value">${d.adjCountyDensity.toFixed(2)}/10k</span></div>
-      <div class="tt-row"><span class="tt-label">Place poverty</span><span class="tt-value">${(d.placePoverty * 100).toFixed(1)}%</span></div>
+      <div class="tt-row"><span class="tt-label">Place poverty</span><span class="tt-value">${formatPovertyPct(d.placePoverty)}</span></div>
       <div class="tt-row"><span class="tt-label">Gap vs. county</span><span class="tt-value" style="color:${gapColor}">${formatGap(d)}</span></div>
       <div class="tt-row"><span class="tt-label">NC percentile</span><span class="tt-value">${formatPercentile(d)}</span></div>
       <div class="tt-hint">Click to load this place in the comparison panel</div>

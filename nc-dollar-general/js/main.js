@@ -37,16 +37,23 @@
   /* ------------------------------------------------------------------ */
   const NUM_COLS = [
     "Place Stores per 10,000",
-    "Place Poverty Rate %",
     "County Stores per 10,000",
     "Adjusted County Density (excl. Place)",
-    "County Poverty Rate %",
     "Place Population",
     "Place Store Count",
     "Place Urban Population Share",
     "Latitude",
     "Longitude",
   ];
+
+  /** Blank or non-numeric CSV cells become null; literal 0 stays 0. */
+  function parseOptionalNumber(raw) {
+    if (raw == null || raw === "") return null;
+    const t = String(raw).trim();
+    if (t === "") return null;
+    const n = +t;
+    return Number.isFinite(n) ? n : null;
+  }
 
   function ringArea(ring) {
     let area = 0;
@@ -110,6 +117,8 @@
           const raw = r[col];
           r[col] = raw === "" || raw == null ? 0 : +raw;
         });
+        r["Place Poverty Rate %"] = parseOptionalNumber(r["Place Poverty Rate %"]);
+        r["County Poverty Rate %"] = parseOptionalNumber(r["County Poverty Rate %"]);
       });
 
       /* --- Per-place deduplication ----------------------------------- */
