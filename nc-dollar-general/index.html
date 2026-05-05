@@ -53,14 +53,10 @@
         <div id="compare-expand-backdrop" class="compare-expand-backdrop" hidden aria-hidden="true"></div>
         <div class="compare-heading-row">
           <h2 id="compare-panel-heading">Place vs. County Density</h2>
-          <div class="compare-toolbar" role="toolbar" aria-label="Comparison chart display options">
+          <div class="compare-toolbar">
             <button type="button" id="compare-expand-btn" class="compare-tool-btn"
               aria-expanded="false" aria-controls="compare-panel-region">
               Expand chart
-            </button>
-            <button type="button" id="compare-readable-btn" class="compare-tool-btn compare-readable-toggle"
-              aria-pressed="false" aria-label="Larger text and spacing for the comparison panel">
-              Larger text
             </button>
           </div>
         </div>
@@ -73,7 +69,9 @@
             <span>Zoom into a county and click a marker to see a comparison here.</span>
           </div>
           <div id="compare-place-header" class="compare-place-header" hidden></div>
-          <svg id="compare-chart" focusable="false" role="img" aria-label="Place vs. adjusted county store density comparison" hidden></svg>
+          <div class="compare-chart-stage">
+            <svg id="compare-chart" focusable="false" role="img" aria-label="Place vs. adjusted county store density comparison" hidden></svg>
+          </div>
           <div id="compare-stats" class="compare-stats" hidden></div>
         </div>
       </div>

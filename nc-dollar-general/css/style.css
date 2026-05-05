@@ -380,6 +380,14 @@ main {
   flex: 1 1 35%;
   min-width: 24rem;
   position: relative;
+  /* Unified typography scale for panel chrome (former “readable” is baseline) */
+  --compare-fs-title: clamp(1.05rem, 0.95rem + 0.6vw, 1.2rem);
+  --compare-fs-sub: clamp(0.875rem, 0.8rem + 0.35vw, 0.95rem);
+  --compare-fs-caption: clamp(0.9rem, 0.84rem + 0.22vw, 0.98rem);
+  --compare-fs-body: clamp(0.95rem, 0.88rem + 0.35vw, 1.05rem);
+  --compare-fs-stat: clamp(0.9rem, 0.82rem + 0.3vw, 1rem);
+  --compare-fs-small: clamp(0.8125rem, 0.76rem + 0.25vw, 0.9rem);
+  transition: box-shadow 0.28s ease, transform 0.28s ease;
 }
 
 .compare-heading-row {
@@ -429,14 +437,8 @@ main {
   box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent-blue);
 }
 
-.compare-tool-btn[aria-pressed="true"] {
-  border-color: var(--accent-blue);
-  background: rgba(59, 130, 246, 0.18);
-  color: #93c5fd;
-}
-
 .compare-panel .chart-caption {
-  font-size: clamp(0.875rem, 0.82rem + 0.2vw, 0.95rem);
+  font-size: var(--compare-fs-caption);
   margin-bottom: 0.65rem;
 }
 
@@ -449,6 +451,13 @@ main {
   border: none;
   padding: 0;
   margin: 0;
+  opacity: 0;
+  transition: opacity 0.28s ease;
+}
+
+.compare-panel.compare-panel--expanded .compare-expand-backdrop {
+  display: block;
+  opacity: 1;
 }
 
 .compare-panel.compare-panel--expanded .compare-expand-backdrop {
@@ -461,17 +470,17 @@ main {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: min(56rem, calc(100vw - 1.5rem));
+  width: min(58rem, calc(100vw - 1.5rem));
   max-width: 100%;
-  max-height: min(calc(100vh - 1.5rem), 900px);
+  max-height: min(calc(100vh - 1.5rem), 940px);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   min-width: 0;
-  padding: 1rem 1.25rem 1.25rem;
+  padding: clamp(1.25rem, 3vw, 1.75rem) clamp(1.35rem, 3.5vw, 2rem) clamp(1.35rem, 3vw, 1.85rem);
   background: var(--bg);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 14px;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
 }
 
@@ -480,51 +489,52 @@ main {
   flex-shrink: 0;
 }
 
+.compare-panel.compare-panel--expanded .compare-heading-row {
+  margin-bottom: 0.5rem;
+}
+
 .compare-panel.compare-panel--expanded .compare-frame {
   flex: 1 1 auto;
   min-height: 0;
   max-height: none;
+  padding: clamp(1rem, 2.5vw, 1.65rem);
+  gap: 1.15rem;
 }
 
-.compare-panel.compare-panel--readable .compare-frame {
-  padding: clamp(16px, 2.5vw, 22px);
-  gap: 14px;
+.compare-panel.compare-panel--expanded .compare-chart-stage {
+  min-height: min(52vh, 560px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.compare-panel.compare-panel--readable .compare-place-title {
-  font-size: clamp(1.05rem, 0.95rem + 0.6vw, 1.2rem);
+.compare-panel.compare-panel--expanded .compare-stats {
+  margin-top: 0.35rem;
+  padding-top: 1rem;
 }
 
-.compare-panel.compare-panel--readable .compare-place-sub,
-.compare-panel.compare-panel--readable .compare-metric-legend {
-  font-size: clamp(0.875rem, 0.8rem + 0.35vw, 0.95rem);
-}
+@media (prefers-reduced-motion: reduce) {
+  .compare-panel {
+    transition: none;
+  }
 
-.compare-panel.compare-panel--readable .compare-narrative {
-  font-size: clamp(0.95rem, 0.88rem + 0.35vw, 1.05rem);
-}
-
-.compare-panel.compare-panel--readable .compare-stats {
-  font-size: clamp(0.9rem, 0.82rem + 0.35vw, 1rem);
-}
-
-.compare-panel.compare-panel--readable .compare-percentile-label,
-.compare-panel.compare-panel--readable .compare-percentile-value {
-  font-size: clamp(0.875rem, 0.8rem + 0.3vw, 0.95rem);
+  .compare-expand-backdrop {
+    transition: none;
+  }
 }
 
 .compare-frame {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: clamp(14px, 1.8vw, 20px);
+  padding: clamp(16px, 2.2vw, 22px);
   min-height: 340px;
   max-height: min(72vh, 680px);
   overflow-x: hidden;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .compare-frame:focus-visible {
@@ -557,13 +567,22 @@ main {
   color: #0891b2;
 }
 
-/* Match viewBox in js/compareChart.js (CHART_VIEW_W / CHART_VIEW_H). */
+/* viewBox / aspect-ratio: sync with js/compareChart.js */
+.compare-chart-stage {
+  width: 100%;
+  flex-shrink: 0;
+}
+
 #compare-chart {
   display: block;
   width: 100%;
   height: auto;
   flex-shrink: 0;
-  aspect-ratio: 560 / 460;
+  aspect-ratio: 560 / 510;
+}
+
+.compare-panel.compare-panel--expanded #compare-chart {
+  aspect-ratio: 560 / 650;
 }
 
 .compare-place-header {
@@ -571,13 +590,13 @@ main {
 }
 
 .compare-place-title {
-  font-size: clamp(1rem, 0.92rem + 0.35vw, 1.15rem);
+  font-size: var(--compare-fs-title);
   font-weight: 700;
   color: #f1f5f9;
 }
 
 .compare-place-sub {
-  font-size: clamp(0.8125rem, 0.75rem + 0.3vw, 0.9rem);
+  font-size: var(--compare-fs-sub);
   font-weight: 400;
   color: var(--text-muted);
 }
@@ -586,7 +605,7 @@ main {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem 1.25rem;
-  font-size: clamp(0.8125rem, 0.76rem + 0.25vw, 0.9rem);
+  font-size: var(--compare-fs-sub);
   color: var(--text-muted);
   margin-top: 0.2rem;
   flex-shrink: 0;
@@ -599,7 +618,7 @@ main {
 }
 
 .compare-narrative {
-  font-size: clamp(0.875rem, 0.82rem + 0.2vw, 0.95rem);
+  font-size: var(--compare-fs-body);
   line-height: 1.5;
   color: var(--text);
   margin: 0 0 8px;
@@ -614,7 +633,7 @@ main {
   border-top: 1px solid var(--border);
   padding-top: 12px;
   margin-top: 6px;
-  font-size: clamp(0.875rem, 0.8rem + 0.25vw, 0.95rem);
+  font-size: var(--compare-fs-stat);
 }
 
 .compare-stat-row {
@@ -630,7 +649,7 @@ main {
 }
 
 .compare-gap-legend {
-  font-size: 0.76rem;
+  font-size: var(--compare-fs-small);
   color: var(--text-muted);
   line-height: 1.45;
   margin: 6px 0 0;
@@ -645,7 +664,7 @@ main {
 }
 
 .compare-percentile-label {
-  font-size: clamp(0.8125rem, 0.76rem + 0.2vw, 0.88rem);
+  font-size: var(--compare-fs-sub);
   color: var(--text-muted);
   margin-bottom: 4px;
 }
@@ -665,7 +684,7 @@ main {
 }
 
 .compare-percentile-value {
-  font-size: clamp(0.8125rem, 0.76rem + 0.2vw, 0.9rem);
+  font-size: var(--compare-fs-sub);
   font-weight: 600;
   color: var(--text);
   margin-top: 4px;
