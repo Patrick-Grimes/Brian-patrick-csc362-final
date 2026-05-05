@@ -100,6 +100,31 @@ function initCompareChart(placeData) {
 
   let legendEl = document.getElementById("compare-metric-legend");
 
+  /* Must stay in sync with #compare-chart aspect-ratio in css/style.css */
+  const CHART_VIEW_W = 380;
+  const CHART_VIEW_H = 310;
+
+  function syncCompareChartPixelSize() {
+    if (!chartEl || chartEl.hasAttribute("hidden")) return;
+    const parent = chartEl.parentElement;
+    if (!parent) return;
+    const cs = getComputedStyle(parent);
+    const padX =
+      (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0);
+    const w = Math.max(0, parent.clientWidth - padX);
+    if (!(w > 0)) return;
+    const h = Math.round((w * CHART_VIEW_H) / CHART_VIEW_W);
+    chartEl.setAttribute("width", String(w));
+    chartEl.setAttribute("height", String(h));
+  }
+
+  const compareFrameEl = chartEl && chartEl.closest(".compare-frame");
+  if (compareFrameEl && typeof ResizeObserver !== "undefined") {
+    new ResizeObserver(() => {
+      syncCompareChartPixelSize();
+    }).observe(compareFrameEl);
+  }
+
   /* ------------------------------------------------------------------ */
   /* Render — called by map.js on marker click                          */
   /* ------------------------------------------------------------------ */
@@ -152,8 +177,8 @@ function initCompareChart(placeData) {
     }
 
     /* ---------------- Bar chart (stores + poverty × 2 entities) ----- */
-    const barW = 380;
-    const barH = 310;
+    const barW = CHART_VIEW_W;
+    const barH = CHART_VIEW_H;
     const povNums = [d.placePoverty, d.countyPoverty].filter(povertyFinite);
     const showPovAxis = povNums.length > 0;
     const margin = {
@@ -346,6 +371,10 @@ function initCompareChart(placeData) {
         </div>
       </div>
     `;
+
+    requestAnimationFrame(() => {
+      syncCompareChartPixelSize();
+    });
   }
 
   /* Expose for map.js to call on marker click */

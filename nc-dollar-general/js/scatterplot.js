@@ -106,9 +106,9 @@ function initScatterplot(placeData) {
     .attr("class", d => `bar-group ${d.label.toLowerCase()}`)
     .attr("transform", d => `translate(0,${yScale(d.label)})`)
     .attr("tabindex", "0")
-    .attr("role", "listitem")
+    .attr("role", "button")
     .attr("aria-label", d =>
-      `${d.label} communities average ${d.avgDensity.toFixed(2)} Dollar General stores per 10,000 residents across ${d.placeCount} communities.`
+      `${d.label} communities average ${d.avgDensity.toFixed(2)} Dollar General stores per 10,000 residents across ${d.placeCount} communities. Activate to show details.`
     );
 
   bars.append("rect")
@@ -146,34 +146,47 @@ function initScatterplot(placeData) {
      no highlight/dim on hover and no cross-linkage with the map markers. */
   bars
     .on("mouseover", (event, d) => {
-      showBarTooltip(event, d);
+      showBarTooltip(d, { x: event.clientX, y: event.clientY });
     })
     .on("mousemove", (event) => {
       const el = document.getElementById("scatter-tooltip");
-      if (el) {
-        let left = event.clientX + 14;
-        let top  = event.clientY + 14;
-        const rect = el.getBoundingClientRect();
-        if (left + rect.width  > window.innerWidth)  left = event.clientX - rect.width  - 14;
-        if (top  + rect.height > window.innerHeight) top  = event.clientY - rect.height - 14;
-        el.style.left = left + "px";
-        el.style.top  = top  + "px";
+      if (el && el.style.display !== "none") {
+        positionScatterTooltip(el, event.clientX, event.clientY);
       }
     })
     .on("mouseout", () => {
       document.getElementById("scatter-tooltip").style.display = "none";
     })
+    .on("focus", (event, d) => {
+      const r = event.currentTarget.getBoundingClientRect();
+      showBarTooltip(d, { x: r.right, y: r.top + r.height / 2 });
+    })
+    .on("blur", () => {
+      document.getElementById("scatter-tooltip").style.display = "none";
+    })
     .on("keydown", (event, d) => {
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
-        showBarTooltip(event, d);
+        const r = event.currentTarget.getBoundingClientRect();
+        showBarTooltip(d, { x: r.right, y: r.top + r.height / 2 });
       }
     });
 
   /* ------------------------------------------------------------------ */
   /* Tooltip                                                             */
   /* ------------------------------------------------------------------ */
-  function showBarTooltip(event, d) {
+  function positionScatterTooltip(el, x, y) {
+    const offset = 14;
+    let left = x + offset;
+    let top  = y + offset;
+    const rect = el.getBoundingClientRect();
+    if (left + rect.width  > window.innerWidth)  left = x - rect.width  - offset;
+    if (top  + rect.height > window.innerHeight) top  = y - rect.height - offset;
+    el.style.left = left + "px";
+    el.style.top  = top  + "px";
+  }
+
+  function showBarTooltip(d, point) {
     const el = document.getElementById("scatter-tooltip");
     el.style.display = "block";
     el.innerHTML = `
@@ -183,9 +196,6 @@ function initScatterplot(placeData) {
       <div class="tt-row"><span class="tt-label">Places</span><span class="tt-value">${d.placeCount}</span></div>
       <div class="tt-row"><span class="tt-label">Stores</span><span class="tt-value">${d.totalStores}</span></div>
     `;
-    let left = event.clientX + 14;
-    let top  = event.clientY + 14;
-    el.style.left = left + "px";
-    el.style.top  = top  + "px";
+    positionScatterTooltip(el, point.x, point.y);
   }
 }

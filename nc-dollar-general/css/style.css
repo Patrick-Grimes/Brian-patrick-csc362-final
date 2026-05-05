@@ -420,10 +420,13 @@ main {
   color: #0891b2;
 }
 
+/* Match viewBox in js/compareChart.js (CHART_VIEW_W / CHART_VIEW_H). */
 #compare-chart {
   display: block;
   width: 100%;
   height: auto;
+  flex-shrink: 0;
+  aspect-ratio: 380 / 310;
 }
 
 .compare-place-header {
@@ -449,6 +452,7 @@ main {
   font-size: 0.78rem;
   color: var(--text-muted);
   margin-top: 2px;
+  flex-shrink: 0;
 }
 
 .compare-metric-legend-item {

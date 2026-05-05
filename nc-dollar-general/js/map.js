@@ -96,17 +96,23 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
     .attr("stroke", "#fff")
     .attr("stroke-width", 0.85)
     .attr("tabindex", "0")
-    .attr("role", "listitem")
+    .attr("role", "button")
     .attr("aria-label", d => {
       const cd = countyData[d.properties.name];
-      if (!cd) return `${d.properties.name} County`;
-      return `${d.properties.name} County: ${cd.storesPerTenK.toFixed(2)} stores per 10,000, poverty rate ${formatPovertyPct(cd.povertyRate)}`;
+      if (!cd) return `${d.properties.name} County. Activate to zoom in.`;
+      return `${d.properties.name} County: ${cd.storesPerTenK.toFixed(2)} stores per 10,000, poverty rate ${formatPovertyPct(cd.povertyRate)}. Activate to zoom in.`;
     })
     .on("mouseover", (event, d) => showCountyTooltip(event, d))
     .on("mousemove", (event) => moveTooltip(event, "#map-tooltip"))
     .on("mouseout",  () => hideTooltip("#map-tooltip"))
     .on("focus",     (event, d) => showCountyTooltip(event, d))
-    .on("blur",      () => hideTooltip("#map-tooltip"));
+    .on("blur",      () => hideTooltip("#map-tooltip"))
+    .on("keydown", (event, d) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        zoomToCountyFeature(d);
+      }
+    });
 
   /* ------------------------------------------------------------------ */
   /* Legend                                                              */
@@ -249,13 +255,14 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
       .append("g")
       .attr("class", "pin")
       .attr("tabindex", "0")
-      .attr("role", "listitem")
+      .attr("role", "button")
       .attr("aria-label", d =>
         `${d.city}, ${d.county} County. ${d.storeCount} stores. ` +
         `Density: ${d.storesPerTenK.toFixed(2)} per 10,000. ` +
         `Poverty rate: ${formatPovertyPct(d.placePoverty)}. ` +
         `Density gap versus adjusted county: ${formatGap(d)}, ` +
-        `${formatPercentile(d)} of all North Carolina places.`
+        `${formatPercentile(d)} of all North Carolina places. ` +
+        `Activate to open comparison panel.`
       )
       .on("mouseover", (event, d) => {
         highlightPlace(d);
@@ -302,7 +309,8 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
       `Density: ${d.storesPerTenK.toFixed(2)} per 10,000. ` +
       `Poverty rate: ${formatPovertyPct(d.placePoverty)}. ` +
       `Density gap versus adjusted county: ${formatGap(d)}, ` +
-      `${formatPercentile(d)} of all North Carolina places.`
+      `${formatPercentile(d)} of all North Carolina places. ` +
+      `Activate to open comparison panel.`
     );
     merged.select("circle")
       .attr("r", pinR)
@@ -310,6 +318,16 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
     merged.select("text")
       .attr("font-size", fontSize)
       .text(d => String(d.storeCount));
+
+    merged
+      .on("focus", (event, d) => {
+        highlightPlace(d);
+        showPlaceTooltip(event, d);
+      })
+      .on("blur", () => {
+        clearHighlights();
+        hideTooltip("#map-tooltip");
+      });
 
     pins.exit().remove();
   }
@@ -392,11 +410,31 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
     const el = document.querySelector(selector);
     if (!el || el.style.display === "none") return;
     const offset = 14;
-    let left = event.clientX + offset;
-    let top  = event.clientY + offset;
-    const rect = el.getBoundingClientRect();
-    if (left + rect.width  > window.innerWidth)  left = event.clientX - rect.width  - offset;
-    if (top  + rect.height > window.innerHeight) top  = event.clientY - rect.height - offset;
+    let left;
+    let top;
+    const useAnchor =
+      (event.type === "focus" || event.type === "focusin") &&
+      event.currentTarget &&
+      typeof event.currentTarget.getBoundingClientRect === "function";
+    if (useAnchor) {
+      const r = event.currentTarget.getBoundingClientRect();
+      left = r.right + offset;
+      top = r.top + r.height / 2;
+      const rect = el.getBoundingClientRect();
+      if (left + rect.width > window.innerWidth) {
+        left = r.left - rect.width - offset;
+      }
+      if (top + rect.height > window.innerHeight) {
+        top = window.innerHeight - rect.height - offset;
+      }
+      if (top < offset) top = offset;
+    } else {
+      left = event.clientX + offset;
+      top  = event.clientY + offset;
+      const rect = el.getBoundingClientRect();
+      if (left + rect.width  > window.innerWidth)  left = event.clientX - rect.width  - offset;
+      if (top  + rect.height > window.innerHeight) top  = event.clientY - rect.height - offset;
+    }
     el.style.left = left + "px";
     el.style.top  = top  + "px";
   }

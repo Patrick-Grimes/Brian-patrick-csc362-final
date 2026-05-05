@@ -133,7 +133,7 @@
     <div class="help-dialog-body">
       <h3>Keyboard</h3>
       <ul>
-        <li>Use <strong>Tab</strong> to move focus; <strong>Enter</strong> activates the Help button, map markers, and zoom. <strong>Escape</strong> closes this dialog when open. The map is primarily pointer-based; full geographic pan is not keyboard-complete.</li>
+        <li>Use <strong>Tab</strong> to move focus; <strong>Enter</strong> or <strong>Space</strong> activates the Help button when focus is on the page background, zooms into a focused <strong>county</strong>, opens the comparison panel for a focused <strong>marker</strong>, and shows details on the <strong>community-type</strong> bars. The +/− controls are standard buttons. <strong>Escape</strong> closes this dialog when open. The map is primarily pointer-based; full geographic pan is not keyboard-complete.</li>
       </ul>
 
       <h3>How to navigate</h3>
@@ -213,6 +213,26 @@
           btn.focus();
         }
       });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key !== "Enter" || e.repeat) return;
+        if (dlg.open) return;
+        const el = document.activeElement;
+        if (el === btn) return;
+        if (el && el.closest && el.closest("#site-help")) return;
+        if (el) {
+          const tag = el.tagName;
+          if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+          if (el.isContentEditable) return;
+        }
+        const onBackground =
+          el == null ||
+          el === document.body ||
+          el === document.documentElement;
+        if (!onBackground) return;
+        e.preventDefault();
+        btn.click();
+      });
     })();
   </script>
   <script>
@@ -229,6 +249,12 @@
       }
       if (btn) btn.addEventListener("click", dismiss);
       if (link) link.addEventListener("click", dismiss);
+      document.addEventListener("keydown", (e) => {
+        if (e.key !== "Escape" || toast.hidden) return;
+        const helpDlg = document.getElementById("site-help");
+        if (helpDlg && helpDlg.open) return;
+        dismiss();
+      });
     })();
   </script>
 
