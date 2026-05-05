@@ -101,8 +101,8 @@ function initCompareChart(placeData) {
   let legendEl = document.getElementById("compare-metric-legend");
 
   /* Must stay in sync with #compare-chart aspect-ratio in css/style.css */
-  const CHART_VIEW_W = 380;
-  const CHART_VIEW_H = 310;
+  const CHART_VIEW_W = 480;
+  const CHART_VIEW_H = 400;
 
   function syncCompareChartPixelSize() {
     if (!chartEl || chartEl.hasAttribute("hidden")) return;
@@ -182,16 +182,16 @@ function initCompareChart(placeData) {
     const povNums = [d.placePoverty, d.countyPoverty].filter(povertyFinite);
     const showPovAxis = povNums.length > 0;
     const margin = {
-      top: showPovAxis ? 40 : 26,
-      right: 32,
-      bottom: 52,
-      left: 124,
+      top: showPovAxis ? 44 : 28,
+      right: 34,
+      bottom: 56,
+      left: 132,
     };
     const innerW = barW - margin.left - margin.right;
     const innerH = barH - margin.top - margin.bottom;
 
-    const plotTop = showPovAxis ? 22 : 12;
-    const plotBottom = innerH - 24;
+    const plotTop = showPovAxis ? 24 : 14;
+    const plotBottom = innerH - 26;
 
     const maxStores = Math.max(d.storesPerTenK, d.adjCountyDensity, 0) * 1.25 || 1;
     const maxPov = showPovAxis
@@ -221,6 +221,7 @@ function initCompareChart(placeData) {
 
     const svg = d3.select(chartEl)
       .attr("viewBox", `0 0 ${barW} ${barH}`)
+      .attr("focusable", "false")
       .attr("aria-label", aria);
 
     svg.selectAll("*").remove();
@@ -231,14 +232,14 @@ function initCompareChart(placeData) {
     if (showPovAxis) {
       const gTop = g.append("g").attr("transform", `translate(0,${plotTop - 2})`);
       gTop.call(d3.axisTop(xPoverty).ticks(4).tickSize(3).tickFormat(t => `${(t * 100).toFixed(0)}%`));
-      gTop.selectAll("text").attr("fill", "#fdba74").attr("font-size", 11);
+      gTop.selectAll("text").attr("fill", "#fdba74").attr("font-size", 13);
       gTop.selectAll("line, path").attr("stroke", "#f97316");
 
       gTop.append("text")
         .attr("x", innerW / 2)
-        .attr("y", -22)
+        .attr("y", -26)
         .attr("text-anchor", "middle")
-        .attr("font-size", 11)
+        .attr("font-size", 13)
         .attr("fill", "#fdba74")
         .attr("font-family", "var(--font, sans-serif)")
         .text("Poverty rate");
@@ -269,7 +270,7 @@ function initCompareChart(placeData) {
       .attr("y", b => b.y + b.h / 2)
       .attr("x", b => xStores(b.value) + 4)
       .attr("dy", "0.35em")
-      .attr("font-size", 11)
+      .attr("font-size", 13)
       .attr("fill", "#93c5fd")
       .attr("font-family", "var(--font, sans-serif)")
       .attr("font-weight", "600")
@@ -300,7 +301,7 @@ function initCompareChart(placeData) {
       .attr("y", b => b.y + b.h / 2)
       .attr("x", b => xPoverty(b.poverty) + 4)
       .attr("dy", "0.35em")
-      .attr("font-size", 11)
+      .attr("font-size", 13)
       .attr("fill", "#fdba74")
       .attr("font-family", "var(--font, sans-serif)")
       .attr("font-weight", "600")
@@ -313,7 +314,7 @@ function initCompareChart(placeData) {
       .attr("y", b => b.y + b.h / 2)
       .attr("x", 4)
       .attr("dy", "0.35em")
-      .attr("font-size", 11)
+      .attr("font-size", 13)
       .attr("fill", "#94a3b8")
       .attr("font-family", "var(--font, sans-serif)")
       .attr("font-weight", "600")
@@ -327,21 +328,21 @@ function initCompareChart(placeData) {
       .attr("x", -6)
       .attr("text-anchor", "end")
       .attr("dy", "0.35em")
-      .attr("font-size", 11)
+      .attr("font-size", 13)
       .attr("fill", "#94a3b8")
       .attr("font-family", "var(--font, sans-serif)")
       .text(r => r.entity);
 
     const gBot = g.append("g").attr("transform", `translate(0,${plotBottom + 2})`);
     gBot.call(d3.axisBottom(xStores).ticks(4).tickSize(3));
-    gBot.selectAll("text").attr("fill", "#93c5fd").attr("font-size", 11);
+    gBot.selectAll("text").attr("fill", "#93c5fd").attr("font-size", 13);
     gBot.selectAll("line, path").attr("stroke", "#3b82f6");
 
     gBot.append("text")
       .attr("x", innerW / 2)
-      .attr("y", 40)
+      .attr("y", 44)
       .attr("text-anchor", "middle")
-      .attr("font-size", 11)
+      .attr("font-size", 13)
       .attr("fill", "#93c5fd")
       .attr("font-family", "var(--font, sans-serif)")
       .text("Stores per 10,000 residents");
@@ -374,6 +375,9 @@ function initCompareChart(placeData) {
 
     requestAnimationFrame(() => {
       syncCompareChartPixelSize();
+      if (compareFrameEl && typeof compareFrameEl.focus === "function") {
+        compareFrameEl.focus({ preventScroll: true });
+      }
     });
   }
 

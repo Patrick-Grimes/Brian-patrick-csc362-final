@@ -377,8 +377,8 @@ main {
    Compare panel (right side — dynamic place vs. county)
    ============================================================ */
 .compare-panel {
-  flex: 1 1 26%;
-  min-width: 17.5rem;
+  flex: 1 1 32%;
+  min-width: 21rem;
 }
 
 .compare-frame {
@@ -393,6 +393,11 @@ main {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.compare-frame:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 2px;
 }
 
 /* Outranks `.compare-empty { display: flex }` so the [hidden] attribute
@@ -426,7 +431,7 @@ main {
   width: 100%;
   height: auto;
   flex-shrink: 0;
-  aspect-ratio: 380 / 310;
+  aspect-ratio: 480 / 400;
 }
 
 .compare-place-header {

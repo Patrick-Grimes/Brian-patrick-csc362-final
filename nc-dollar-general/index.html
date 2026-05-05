@@ -50,17 +50,17 @@
       </div>
 
       <div class="compare-panel" aria-label="Place vs. county comparison panel" aria-live="polite">
-        <h2>Place vs. County Density</h2>
-        <p class="chart-caption">
+        <h2 id="compare-panel-heading">Place vs. County Density</h2>
+        <p class="chart-caption" id="compare-panel-desc">
           Click a marker on the map to compare that place's Dollar General density to its adjusted county density. All densities are stores per 10,000 residents.
         </p>
-        <div class="compare-frame">
+        <div class="compare-frame" tabindex="0" role="region" aria-labelledby="compare-panel-heading" aria-describedby="compare-panel-desc">
           <div id="compare-empty" class="compare-empty">
             <span class="compare-empty-icon" aria-hidden="true">↑</span>
             <span>Zoom into a county and click a marker to see a comparison here.</span>
           </div>
           <div id="compare-place-header" class="compare-place-header" hidden></div>
-          <svg id="compare-chart" role="img" aria-label="Place vs. adjusted county store density comparison" hidden></svg>
+          <svg id="compare-chart" focusable="false" role="img" aria-label="Place vs. adjusted county store density comparison" hidden></svg>
           <div id="compare-stats" class="compare-stats" hidden></div>
         </div>
       </div>
@@ -134,6 +134,7 @@
       <h3>Keyboard</h3>
       <ul>
         <li>Use <strong>Tab</strong> to move focus; <strong>Enter</strong> or <strong>Space</strong> activates the Help button when focus is on the page background, zooms into a focused <strong>county</strong>, opens the comparison panel for a focused <strong>marker</strong>, and shows details on the <strong>community-type</strong> bars. The +/− controls are standard buttons. <strong>Escape</strong> closes this dialog when open. The map is primarily pointer-based; full geographic pan is not keyboard-complete.</li>
+        <li>After you load a place in the comparison panel, focus moves to that <strong>comparison card</strong> (or <strong>Tab</strong> to it). When the card is focused, use <strong>Arrow keys</strong>, <strong>Page Up</strong>/<strong>Page Down</strong>, <strong>Home</strong>, and <strong>End</strong> to scroll if the content is taller than the panel.</li>
       </ul>
 
       <h3>How to navigate</h3>
