@@ -205,6 +205,7 @@
       initCompareChart(placeData);
       initMap(placeData, countyData, countiesGeo, placesGeo);
       initScatterplot(placeData);
+      initRuralPovertySummary(placeData);
     })
     .catch(err => {
       console.error("Data load error:", err);

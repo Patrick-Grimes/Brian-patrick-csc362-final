@@ -142,7 +142,7 @@ function initCompareChart(placeData) {
       legendEl.innerHTML = `
         <span class="compare-metric-legend-item">
           <svg width="14" height="14" aria-hidden="true"><rect x="2" y="3" width="10" height="8" rx="2" fill="#3b82f6"/></svg>
-          Stores per 10k
+          Stores per 10,000 residents
         </span>
         <span class="compare-metric-legend-item">
           <svg width="14" height="14" aria-hidden="true"><rect x="2" y="3" width="10" height="8" rx="2" fill="#f97316"/></svg>
@@ -334,6 +334,7 @@ function initCompareChart(placeData) {
         <span>Density gap vs. adjusted county</span>
         <span style="color:${gapColor}">${formatGap(d)}</span>
       </div>
+      <p class="compare-gap-legend">Units are <strong>stores per 10,000 residents</strong> (population-based, not land area). <span style="color:#fca5a5;font-weight:600">Coral</span> = more DG stores per 10k here than the adjusted county; <span style="color:#86efac;font-weight:600">Green</span> = fewer.</p>
 
       <div class="compare-percentile">
         <div class="compare-percentile-label">Statewide gap percentile</div>

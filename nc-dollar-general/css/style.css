@@ -13,7 +13,7 @@
   --surface-2: #263346;
   --border: #334155;
   --text: #e2e8f0;
-  --text-muted: #94a3b8;
+  --text-muted: #a8b7d0;
   --accent-blue: #3b82f6;
   --accent-orange: #f97316;
   --accent-green: #22c55e;
@@ -34,6 +34,25 @@ body {
   min-height: 100vh;
 }
 
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  z-index: 9999;
+  padding: 0.5rem 1rem;
+  background: var(--accent-blue);
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
 /* ============================================================
    Header
    ============================================================ */
@@ -45,25 +64,23 @@ body {
 
 .header-brand {
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  align-items: flex-start;
+  justify-content: flex-start;
   flex-wrap: wrap;
-}
-
-.site-logo-wrap {
-  flex-shrink: 0;
-}
-
-.site-logo {
-  display: block;
-  max-height: 2.25rem;
-  width: auto;
-  object-fit: contain;
-  opacity: 0.95;
+  width: 100%;
 }
 
 .header-titles {
   min-width: 0;
+  flex: 1 1 auto;
+}
+
+.hypothesis-line {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+  max-width: 52rem;
+  line-height: 1.45;
 }
 
 .site-banner h1 {
@@ -127,20 +144,25 @@ main {
 
 .map-help-btn {
   flex-shrink: 0;
-  width: 2rem;
-  height: 2rem;
-  padding: 0;
-  border-radius: 50%;
-  border: 1px solid var(--border);
-  background: var(--surface-2);
-  color: var(--accent-blue);
-  font-size: 1.1rem;
+  min-height: 2.75rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid var(--accent-blue);
+  background: rgba(59, 130, 246, 0.12);
+  color: #93c5fd;
+  font-size: 0.9rem;
   font-weight: 700;
-  line-height: 1;
+  line-height: 1.2;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.35rem;
+}
+
+.map-help-btn .map-help-icon {
+  font-size: 1.25rem;
+  line-height: 1;
 }
 
 .map-help-btn:hover,
@@ -154,17 +176,16 @@ main {
   box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent-blue);
 }
 
-.vis-scroll-cue-wrap {
-  max-width: 1600px;
-  margin-left: auto;
-  margin-right: auto;
+.map-panel .vis-scroll-cue-wrap {
+  margin-top: 0.65rem;
 }
 
 .vis-scroll-cue {
-  padding: 0 2rem 0.85rem;
+  padding: 0;
   font-size: 0.82rem;
   color: var(--text-muted);
-  text-align: center;
+  text-align: left;
+  margin: 0;
 }
 
 .vis-scroll-cue a {
@@ -479,6 +500,17 @@ main {
   font-weight: 600;
 }
 
+.compare-gap-legend {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+  margin: 6px 0 0;
+  padding: 8px 10px;
+  background: var(--surface-2);
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+
 .compare-percentile {
   margin-top: 8px;
 }
@@ -575,6 +607,146 @@ main {
 .scatter-count-value {
   color: #f1f5f9;
   font-weight: 600;
+}
+
+/* ============================================================
+   Rural poverty vs county (summary bar)
+   ============================================================ */
+.rural-poverty-summary {
+  margin-top: 2.5rem;
+  max-width: 720px;
+}
+
+.rural-poverty-frame {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px 16px;
+}
+
+#rural-poverty-bar {
+  display: block;
+  width: 100%;
+  max-width: 640px;
+  height: auto;
+}
+
+.rural-poverty-axis {
+  font-size: 0.75rem;
+  fill: var(--text-muted);
+  font-family: var(--font);
+}
+
+.rural-poverty-stats {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+.rural-poverty-stats li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.rural-poverty-stats li:last-child {
+  border-bottom: none;
+}
+
+.rural-poverty-stats strong {
+  color: #e2e8f0;
+}
+
+.rural-poverty-note {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 10px;
+}
+
+/* ============================================================
+   First-visit scroll toast
+   ============================================================ */
+.first-visit-toast {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  z-index: 900;
+  max-width: min(22rem, calc(100vw - 2rem));
+  padding: 0.75rem 2.25rem 0.75rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  font-size: 0.88rem;
+  color: var(--text);
+}
+
+.first-visit-toast p {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.first-visit-toast a {
+  color: var(--accent-blue);
+  font-weight: 600;
+}
+
+.first-visit-toast-dismiss {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.35rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.first-visit-toast-dismiss:hover,
+.first-visit-toast-dismiss:focus-visible {
+  background: var(--surface-2);
+  color: var(--text);
+  outline: none;
+}
+
+/* Tutorial figures inside help dialog */
+.help-tutorial-figure {
+  margin: 12px 0 0;
+}
+
+.help-tutorial-figure img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  display: block;
+}
+
+.help-tutorial-caption {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+.help-tutorial-figure.help-tutorial-miss img {
+  display: none;
+}
+
+.help-tutorial-figure.help-tutorial-miss .help-tutorial-missing {
+  display: block;
+}
+
+.help-tutorial-figure .help-tutorial-missing {
+  display: none;
 }
 
 /* ============================================================
@@ -743,7 +915,7 @@ footer a {
   }
 }
 
-@media (max-width: 600px) {
+  @media (max-width: 600px) {
   .site-banner {
     padding: 1rem;
   }
@@ -756,9 +928,9 @@ footer a {
     font-size: 1.2rem;
   }
 
-  .vis-scroll-cue {
-    padding-left: 1rem;
-    padding-right: 1rem;
+  .first-visit-toast {
+    right: 0.75rem;
+    bottom: 0.75rem;
   }
 }
 
@@ -785,13 +957,17 @@ footer a {
 }
 
 /* ============================================================
-   Site help dialog
+   Site help dialog (closed = no layout — do not override UA display:none)
    ============================================================ */
+dialog.help-dialog:not([open]) {
+  display: none;
+}
+
 .help-dialog::backdrop {
   background: rgba(0, 0, 0, 0.55);
 }
 
-.help-dialog {
+.help-dialog[open] {
   margin: auto;
   max-width: min(36rem, 92vw);
   max-height: min(85vh, 34rem);

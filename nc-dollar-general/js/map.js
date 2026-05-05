@@ -94,7 +94,7 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
       return cd ? colorScale(cd.storesPerTenK) : "#4b5563";
     })
     .attr("stroke", "#fff")
-    .attr("stroke-width", 0.5)
+    .attr("stroke-width", 0.85)
     .attr("tabindex", "0")
     .attr("role", "listitem")
     .attr("aria-label", d => {
@@ -207,7 +207,7 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
     gPins      .attr("transform", t);
 
     /* Scale strokes to stay visually consistent */
-    gCountyBase.selectAll(".county-path").attr("stroke-width", 0.5 / t.k);
+    gCountyBase.selectAll(".county-path").attr("stroke-width", 0.85 / t.k);
     gCountyHL  .selectAll("path").attr("stroke-width", 1 / t.k);
     gPlaceHL   .selectAll("path").attr("stroke-width", 1.5 / t.k);
 
@@ -366,7 +366,7 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
     el.style.display = "block";
     el.innerHTML = `
       <div class="tt-title">${d.properties.name} County</div>
-      <div class="tt-row"><span class="tt-label">Stores per 10k</span><span class="tt-value">${cd.storesPerTenK.toFixed(2)}</span></div>
+      <div class="tt-row"><span class="tt-label">Stores per 10,000 residents</span><span class="tt-value">${cd.storesPerTenK.toFixed(2)}</span></div>
       <div class="tt-row"><span class="tt-label">Poverty rate</span><span class="tt-value">${formatPovertyPct(cd.povertyRate)}</span></div>
     `;
     moveTooltip(event, "#map-tooltip");
@@ -378,10 +378,10 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
     const gapColor = d.gap >= 0 ? "#fca5a5" : "#86efac";
     el.innerHTML = `
       <div class="tt-title">${d.city} <span style="font-weight:400;color:#94a3b8">(${d.county} Co.)</span></div>
-      <div class="tt-row"><span class="tt-label">Place density</span><span class="tt-value">${d.storesPerTenK.toFixed(2)}/10k</span></div>
-      <div class="tt-row"><span class="tt-label">Adjusted county density</span><span class="tt-value">${d.adjCountyDensity.toFixed(2)}/10k</span></div>
+      <div class="tt-row"><span class="tt-label">Place density</span><span class="tt-value">${d.storesPerTenK.toFixed(2)} <span style="font-weight:500;color:#cbd5e1">stores per 10,000 residents</span></span></div>
+      <div class="tt-row"><span class="tt-label">Adjusted county density</span><span class="tt-value">${d.adjCountyDensity.toFixed(2)} <span style="font-weight:500;color:#cbd5e1">stores per 10,000 residents</span></span></div>
       <div class="tt-row"><span class="tt-label">Place poverty</span><span class="tt-value">${formatPovertyPct(d.placePoverty)}</span></div>
-      <div class="tt-row"><span class="tt-label">Gap vs. adjusted county</span><span class="tt-value" style="color:${gapColor}">${formatGap(d)}</span></div>
+      <div class="tt-row"><span class="tt-label">Gap vs. adjusted county</span><span class="tt-value" style="color:${gapColor}">${formatGap(d)} <span style="font-weight:500;color:#cbd5e1">(difference in stores per 10,000 residents)</span></span></div>
       <div class="tt-row"><span class="tt-label">Statewide gap percentile</span><span class="tt-value">${formatPercentile(d)}</span></div>
       <div class="tt-hint">Click to load this place in the comparison panel</div>
     `;
