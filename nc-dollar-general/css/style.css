@@ -37,13 +37,36 @@ body {
 /* ============================================================
    Header
    ============================================================ */
-header {
+.site-banner {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
   padding: 1.25rem 2rem;
 }
 
-header h1 {
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.site-logo-wrap {
+  flex-shrink: 0;
+}
+
+.site-logo {
+  display: block;
+  max-height: 2.25rem;
+  width: auto;
+  object-fit: contain;
+  opacity: 0.95;
+}
+
+.header-titles {
+  min-width: 0;
+}
+
+.site-banner h1 {
   font-size: 1.6rem;
   font-weight: 700;
   color: #f1f5f9;
@@ -54,21 +77,6 @@ header h1 {
   font-size: 0.95rem;
   color: var(--text-muted);
   margin-top: 0.25rem;
-}
-
-/* ============================================================
-   Instructions
-   ============================================================ */
-.instructions {
-  background: var(--surface-2);
-  border-left: 3px solid var(--accent-blue);
-  padding: 0.75rem 2rem;
-  font-size: 0.9rem;
-  color: var(--text-muted);
-}
-
-.instructions strong {
-  color: var(--text);
 }
 
 /* ============================================================
@@ -101,6 +109,74 @@ main {
   font-weight: 600;
   color: #cbd5e1;
   margin-bottom: 0.5rem;
+}
+
+.map-panel .map-heading-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.map-panel .map-heading-row h2 {
+  margin-bottom: 0;
+  flex: 1 1 auto;
+  min-width: 12rem;
+}
+
+.map-help-btn {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--accent-blue);
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map-help-btn:hover,
+.map-help-btn:focus-visible {
+  background: rgba(59, 130, 246, 0.12);
+  border-color: var(--accent-blue);
+  outline: none;
+}
+
+.map-help-btn:focus-visible {
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent-blue);
+}
+
+.vis-scroll-cue-wrap {
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.vis-scroll-cue {
+  padding: 0 2rem 0.85rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.vis-scroll-cue a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.vis-scroll-cue a:hover,
+.vis-scroll-cue a:focus-visible {
+  text-decoration: underline;
+  outline: none;
 }
 
 .unit {
@@ -137,6 +213,7 @@ main {
   position: absolute;
   bottom: 12px;
   right: 12px;
+  z-index: 2;
   background: rgba(15, 23, 42, 0.85);
   border: 1px solid var(--border);
   border-radius: 6px;
@@ -144,6 +221,47 @@ main {
   font-size: 0.75rem;
   color: var(--text-muted);
   pointer-events: none;
+}
+
+.map-zoom-controls {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px;
+  pointer-events: auto;
+}
+
+.map-zoom-btn {
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 4px;
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  font-family: var(--font, sans-serif);
+}
+
+.map-zoom-btn:hover,
+.map-zoom-btn:focus-visible {
+  background: rgba(59, 130, 246, 0.2);
+  outline: none;
+}
+
+.map-zoom-btn:focus-visible {
+  box-shadow: 0 0 0 2px var(--accent-blue);
 }
 
 #map-legend .legend-title {
@@ -242,12 +360,27 @@ main {
   min-width: 0;
 }
 
+.ref-poverty-line {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin: 0 0 0.4rem;
+  line-height: 1.45;
+}
+
+.ref-poverty-line strong {
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
 .compare-frame {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 14px;
   min-height: 320px;
+  max-height: min(72vh, 640px);
+  overflow-x: hidden;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -509,8 +642,12 @@ main {
 .pin:hover circle,
 .pin:focus circle,
 .pin:active circle {
-  r: 7;
   fill-opacity: 0.4;
+}
+
+.pin:hover circle,
+.pin:focus-visible circle {
+  stroke: var(--accent-blue);
 }
 
 .pin:hover text,
@@ -607,7 +744,7 @@ footer a {
 }
 
 @media (max-width: 600px) {
-  header {
+  .site-banner {
     padding: 1rem;
   }
 
@@ -615,8 +752,13 @@ footer a {
     padding: 1rem;
   }
 
-  header h1 {
+  .site-banner h1 {
     font-size: 1.2rem;
+  }
+
+  .vis-scroll-cue {
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 }
 
@@ -640,4 +782,105 @@ footer a {
 
 .zoom-hint.hidden {
   opacity: 0;
+}
+
+/* ============================================================
+   Site help dialog
+   ============================================================ */
+.help-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.help-dialog {
+  margin: auto;
+  max-width: min(36rem, 92vw);
+  max-height: min(85vh, 34rem);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  padding: 0;
+  font-family: var(--font);
+}
+
+.help-dialog header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.85rem 2.75rem 0.85rem 1rem;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  background: var(--surface);
+  isolation: isolate;
+}
+
+.help-dialog-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.help-dialog-close {
+  position: absolute;
+  top: 50%;
+  right: 0.65rem;
+  transform: translateY(-50%);
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: 6px;
+  background: var(--surface-2);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.help-dialog-close:hover,
+.help-dialog-close:focus-visible {
+  color: var(--text);
+  outline: none;
+}
+
+.help-dialog-close:focus-visible {
+  box-shadow: 0 0 0 2px var(--accent-blue);
+}
+
+.help-dialog-body {
+  padding: 0.85rem 1rem 1.1rem;
+  overflow-y: auto;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+.help-dialog-body h3 {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #cbd5e1;
+  margin: 0.85rem 0 0.4rem;
+}
+
+.help-dialog-body h3:first-child {
+  margin-top: 0;
+}
+
+.help-dialog-body ul {
+  padding-left: 1.25rem;
+  margin: 0;
+}
+
+.help-dialog-body li + li {
+  margin-top: 0.45rem;
+}
+
+.help-dialog-body dfn {
+  font-style: normal;
+  font-weight: 600;
+  color: #e2e8f0;
 }

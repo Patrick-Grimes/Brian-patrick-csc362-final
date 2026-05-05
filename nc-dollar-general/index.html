@@ -8,28 +8,36 @@
 </head>
 <body>
 
-  <header role="banner">
-    <h1>NC Dollar General Saturation Analysis</h1>
-    <p class="subtitle">Investigating whether Dollar General targets the poorest pockets within North Carolina counties</p>
+  <header role="banner" class="site-banner">
+    <div class="header-brand">
+      <div class="site-logo-wrap">
+        <img
+          src="img/dg-wordmark.svg"
+          alt="Dollar General"
+          width="180"
+          height="32"
+          class="site-logo">
+      </div>
+      <div class="header-titles">
+        <h1>NC Dollar General Saturation Analysis</h1>
+        <p class="subtitle">Investigating whether Dollar General targets the poorest pockets within North Carolina counties</p>
+      </div>
+    </div>
   </header>
-
-  <section class="instructions" aria-label="How to use this visualization">
-    <p>
-      <strong>Scroll or pinch to zoom</strong> into a county — store location markers will appear.
-      <strong>Hover</strong> over a place marker to see it highlighted against its county.
-      <strong>Click</strong> a place marker to compare its density and poverty rate against the adjusted county average.
-    </p>
-  </section>
 
   <main>
     <div class="vis-wrapper">
 
       <div class="map-panel">
-        <h2>Store Density by County <span class="unit">(stores per 10,000 residents)</span></h2>
+        <div class="map-heading-row">
+          <h2>Store Density by County <span class="unit">(stores per 10,000 residents)</span></h2>
+          <button type="button" id="site-help-trigger" class="map-help-btn"
+            aria-label="Help: how to use this page and glossary" aria-expanded="false" aria-controls="site-help">?</button>
+        </div>
         <div class="map-frame" id="map-frame">
           <svg id="map"
             role="img"
-            aria-label="Choropleth map of North Carolina divided into 100 counties. Counties are shaded from light yellow to dark red based on Dollar General store density per 10,000 residents. Scroll to zoom in and reveal individual store location markers per community. Hover over a marker to highlight that community in blue against its county in orange. Click a marker to update the comparison panel on the right.">
+            aria-label="Choropleth map of North Carolina counties shaded by Dollar General store density per 10,000 residents. Use Plus and Minus on the map corner, scroll, or pinch to zoom. Place markers appear at roughly three-times zoom or higher. Click a county to zoom into it; click a marker to open the comparison panel. Open the Help button for definitions.">
           </svg>
           <div id="map-legend" aria-label="Map color legend: light yellow indicates low store density, dark red indicates high store density"></div>
           <div id="map-tooltip" role="tooltip" aria-live="polite" aria-atomic="true"></div>
@@ -38,6 +46,7 @@
 
       <div class="compare-panel" aria-label="Place vs. county comparison panel" aria-live="polite">
         <h2>Place vs. County Density</h2>
+        <p class="ref-poverty-line" id="ref-poverty-line" aria-live="polite"></p>
         <p class="chart-caption">
           Click a marker on the map to compare that place's Dollar General
           store density to its adjusted county density (county figure with
@@ -56,7 +65,14 @@
 
     </div>
 
-    <section class="density-by-type" aria-label="Average store density by community type">
+    <div class="vis-scroll-cue-wrap" aria-hidden="false">
+      <p class="vis-scroll-cue">
+        More below —
+        <a href="#density-by-type">average store density by community type<span aria-hidden="true"> ↓</span></a>
+      </p>
+    </div>
+
+    <section class="density-by-type" id="density-by-type" aria-label="Average store density by community type">
       <h2>Average Store Density by Community Type</h2>
       <p class="chart-caption">
         Rural and urban communities are compared by their average Dollar General
@@ -95,11 +111,67 @@
     </p>
   </footer>
 
+  <dialog id="site-help" class="help-dialog" aria-labelledby="site-help-title">
+    <header>
+      <h2 id="site-help-title" class="help-dialog-title">Using this visualization</h2>
+      <button type="button" class="help-dialog-close" id="site-help-close" aria-label="Close help">×</button>
+    </header>
+    <div class="help-dialog-body">
+      <h3>How to navigate</h3>
+      <ul>
+        <li>Zoom the map using the + and − controls (lower left), the scroll wheel or trackpad, or pinch-to-zoom on touch devices.</li>
+        <li>Click anywhere on a county to zoom deeper into it.</li>
+        <li>When zoom reaches about <strong>3×</strong> or higher, place markers appear. Each marker shows how many Dollar General stores are grouped at that Census place (<strong>1</strong>, <strong>2</strong>, etc.).</li>
+        <li><strong>Hover</strong> a marker to outline that community on top of its county shading. <strong>Click</strong> a marker to load the comparison charts and narrative in the panel on the right.</li>
+        <li>To compare averages for rural versus urban communities, scroll to <strong>average store density by community type</strong> further down this page.</li>
+      </ul>
+
+      <h3>What the metrics mean</h3>
+      <ul>
+        <li><dfn>Place density</dfn>: Dollar General stores per 10,000 residents for that Census place (CDP/incorporated area).</li>
+        <li><dfn>Adjusted county density</dfn>: the county-wide stores-per-10k figure after excluding this place's stores — so you're comparing how saturated the broader county is versus that specific community.</li>
+        <li><dfn>Density gap vs. adjusted county</dfn>:
+          place density minus adjusted county density. A <strong>+</strong> number means the place has more stores per 10k than the adjusted county; a <strong>−</strong> number means fewer.</li>
+        <li><dfn>Statewide gap percentile</dfn>: where this place's gap ranks among all North Carolina places in the dataset. A higher percentile means a larger gap (more stores in the place relative to its adjusted county) compared with other places.</li>
+        <li><dfn>Urban vs. rural</dfn>: a place is <strong>Urban</strong> if at least 51% of its 2020 Census population lives in a Census-defined urban area; otherwise it is <strong>Rural</strong>.</li>
+      </ul>
+    </div>
+  </dialog>
+
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="js/map.js"></script>
   <script src="js/scatterplot.js"></script>
   <script src="js/compareChart.js"></script>
   <script src="js/main.js"></script>
+  <script>
+    (function () {
+      const dlg = document.getElementById("site-help");
+      const btn = document.getElementById("site-help-trigger");
+      const closeBtn = document.getElementById("site-help-close");
+      if (!dlg || !btn) return;
+      btn.addEventListener("click", () => {
+        if (typeof dlg.showModal === "function") {
+          dlg.showModal();
+        } else {
+          dlg.setAttribute("open", "");
+        }
+        btn.setAttribute("aria-expanded", "true");
+      });
+      dlg.addEventListener("close", () => {
+        btn.setAttribute("aria-expanded", "false");
+        btn.focus();
+      });
+      closeBtn.addEventListener("click", () => {
+        if (typeof dlg.close === "function") {
+          dlg.close();
+        } else {
+          dlg.removeAttribute("open");
+          btn.setAttribute("aria-expanded", "false");
+          btn.focus();
+        }
+      });
+    })();
+  </script>
 
 </body>
 </html>

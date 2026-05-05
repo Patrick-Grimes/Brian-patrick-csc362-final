@@ -125,6 +125,78 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
 
   svg.call(zoom);
 
+  /* Bottom-left zoom buttons (+ / −) */
+  const zoomFactor = 1.35;
+  const zoomControls = d3.select("#map-frame")
+    .append("div")
+    .attr("class", "map-zoom-controls");
+
+  zoomControls
+    .append("button")
+    .attr("type", "button")
+    .attr("class", "map-zoom-btn")
+    .attr("aria-label", "Zoom map in")
+    .text("+")
+    .on("click", (event) => {
+      event.stopPropagation();
+      svg.transition().duration(150).call(zoom.scaleBy, zoomFactor);
+    });
+
+  zoomControls
+    .append("button")
+    .attr("type", "button")
+    .attr("class", "map-zoom-btn")
+    .attr("aria-label", "Zoom map out")
+    .text("−")
+    .on("click", (event) => {
+      event.stopPropagation();
+      svg.transition().duration(150).call(zoom.scaleBy, 1 / zoomFactor);
+    });
+
+  /* County click → zoom (only if pointer barely moved — not a pan) */
+  let pointerDownClient = null;
+  frame.addEventListener(
+    "pointerdown",
+    (e) => {
+      if (e.button !== 0) return;
+      pointerDownClient = { x: e.clientX, y: e.clientY };
+    },
+    true
+  );
+
+  function zoomToCountyFeature(feat) {
+    const b = pathGen.bounds(feat);
+    const dx = b[1][0] - b[0][0];
+    const dy = b[1][1] - b[0][1];
+    if (!Number.isFinite(dx) || !Number.isFinite(dy) || dx < 1e-6 || dy < 1e-6) {
+      return;
+    }
+    const cx = (b[0][0] + b[1][0]) / 2;
+    const cy = (b[0][1] + b[1][1]) / 2;
+    const pad = 28;
+    const innerW = Math.max(1, W - 2 * pad);
+    const innerH = Math.max(1, H - 2 * pad);
+    const scale = Math.min(
+      20,
+      Math.max(1, 0.92 / Math.max(dx / innerW, dy / innerH))
+    );
+    const translate = [W / 2 - scale * cx, H / 2 - scale * cy];
+    svg.transition().duration(650).call(
+      zoom.transform,
+      d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale)
+    );
+  }
+
+  svg.on("click.countyzoom", (event) => {
+    const pathEl = event.target.closest?.(".county-path");
+    const pd = pointerDownClient;
+    pointerDownClient = null;
+    if (!pathEl || !pd) return;
+    const moved = Math.hypot(event.clientX - pd.x, event.clientY - pd.y);
+    if (moved > 8) return;
+    zoomToCountyFeature(d3.select(pathEl).datum());
+  });
+
   function onZoom(event) {
     const t = event.transform;
     currentK = t.k;
@@ -167,12 +239,8 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
       return px >= x0 && px <= x1 && py >= y0 && py <= y1;
     });
 
-    /* Two-tier sizing: numberless single-store pins are smaller so they
-       don't crowd dense counties. Multi-store pins stay slightly larger
-       so the count digits remain readable. */
-    const pinRMulti  = Math.max(4,   7 / transform.k);
-    const pinRSingle = Math.max(2.5, 5 / transform.k);
-    const fontSize   = Math.max(7,   8 / transform.k);
+    const pinR       = Math.max(4, 7 / transform.k);
+    const fontSize   = Math.max(7, 8 / transform.k);
 
     const pins = gPins.selectAll("g.pin")
       .data(visible, d => d.city);
@@ -180,10 +248,6 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
     const enter = pins.enter()
       .append("g")
       .attr("class", "pin")
-      .attr("transform", d => {
-        const [x, y] = projection([d.lng, d.lat]);
-        return `translate(${x},${y})`;
-      })
       .attr("tabindex", "0")
       .attr("role", "listitem")
       .attr("aria-label", d =>
@@ -217,23 +281,35 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
         }
       });
 
-    /* Cyan-600 (#0891b2) clears WCAG 2 AA non-text contrast (~4.6:1 vs.
-       light yellow, ~4.2:1 vs. dark red) across the choropleth gradient,
-       and stays comfortable on the eyes vs. the bright green it replaces. */
     enter.append("circle")
-      .attr("r", d => d.storeCount > 1 ? pinRMulti : pinRSingle)
       .attr("fill", "#0891b2")
-      .attr("stroke", "#fff")
-      .attr("stroke-width", d => (d.storeCount > 1 ? 0.8 : 0.6) / transform.k);
+      .attr("stroke", "#fff");
 
     enter.append("text")
       .attr("text-anchor", "middle")
       .attr("dy", "0.35em")
-      .attr("font-size", fontSize)
       .attr("fill", "#fff")
       .attr("font-weight", "700")
-      .attr("pointer-events", "none")
-      .text(d => d.storeCount > 1 ? d.storeCount : "");
+      .attr("pointer-events", "none");
+
+    const merged = pins.merge(enter);
+    merged.attr("transform", d => {
+      const [x, y] = projection([d.lng, d.lat]);
+      return `translate(${x},${y})`;
+    });
+    merged.attr("aria-label", d =>
+      `${d.city}, ${d.county} County. ${d.storeCount} stores. ` +
+      `Density: ${d.storesPerTenK.toFixed(2)} per 10,000. ` +
+      `Poverty rate: ${formatPovertyPct(d.placePoverty)}. ` +
+      `Density gap versus adjusted county: ${formatGap(d)}, ` +
+      `${formatPercentile(d)} of all North Carolina places.`
+    );
+    merged.select("circle")
+      .attr("r", pinR)
+      .attr("stroke-width", 0.75 / transform.k);
+    merged.select("text")
+      .attr("font-size", fontSize)
+      .text(d => String(d.storeCount));
 
     pins.exit().remove();
   }
@@ -303,10 +379,10 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
     el.innerHTML = `
       <div class="tt-title">${d.city} <span style="font-weight:400;color:#94a3b8">(${d.county} Co.)</span></div>
       <div class="tt-row"><span class="tt-label">Place density</span><span class="tt-value">${d.storesPerTenK.toFixed(2)}/10k</span></div>
-      <div class="tt-row"><span class="tt-label">Adj. county density</span><span class="tt-value">${d.adjCountyDensity.toFixed(2)}/10k</span></div>
+      <div class="tt-row"><span class="tt-label">Adjusted county density</span><span class="tt-value">${d.adjCountyDensity.toFixed(2)}/10k</span></div>
       <div class="tt-row"><span class="tt-label">Place poverty</span><span class="tt-value">${formatPovertyPct(d.placePoverty)}</span></div>
-      <div class="tt-row"><span class="tt-label">Gap vs. county</span><span class="tt-value" style="color:${gapColor}">${formatGap(d)}</span></div>
-      <div class="tt-row"><span class="tt-label">NC percentile</span><span class="tt-value">${formatPercentile(d)}</span></div>
+      <div class="tt-row"><span class="tt-label">Gap vs. adjusted county</span><span class="tt-value" style="color:${gapColor}">${formatGap(d)}</span></div>
+      <div class="tt-row"><span class="tt-label">Statewide gap percentile</span><span class="tt-value">${formatPercentile(d)}</span></div>
       <div class="tt-hint">Click to load this place in the comparison panel</div>
     `;
     moveTooltip(event, "#map-tooltip");

@@ -160,7 +160,7 @@ function initCompareChart(placeData) {
       top: showPovAxis ? 36 : 22,
       right: 28,
       bottom: 44,
-      left: 92,
+      left: 112,
     };
     const innerW = barW - margin.left - margin.right;
     const innerH = barH - margin.top - margin.bottom;
@@ -177,7 +177,7 @@ function initCompareChart(placeData) {
     const xPoverty = d3.scaleLinear().domain([0, maxPov]).range([0, innerW]);
 
     const yBand = d3.scaleBand()
-      .domain(["This Place", "Adj. County"])
+      .domain(["This Place", "Adjusted county"])
       .range([plotTop, plotBottom])
       .padding(0.24);
 
@@ -186,7 +186,7 @@ function initCompareChart(placeData) {
 
     const rows = [
       { entity: "This Place", stores: d.storesPerTenK, poverty: d.placePoverty },
-      { entity: "Adj. County", stores: d.adjCountyDensity, poverty: d.countyPoverty },
+      { entity: "Adjusted county", stores: d.adjCountyDensity, poverty: d.countyPoverty },
     ];
 
     const aria =
@@ -331,7 +331,7 @@ function initCompareChart(placeData) {
         <span>${d.classification} (${(d.urbanShare * 100).toFixed(0)}% urban)</span>
       </div>
       <div class="compare-stat-row">
-        <span>Density gap vs. adj. county</span>
+        <span>Density gap vs. adjusted county</span>
         <span style="color:${gapColor}">${formatGap(d)}</span>
       </div>
 
