@@ -30,6 +30,7 @@
   window.AppState = {
     onScatterHighlight: null,  // set by scatterplot.js; called by map
     onMapHighlight:     null,  // set by map.js; called by scatterplot
+    lastCompareSelection: null, // current place in compare panel — set by compareChart.js
   };
 
   /* ------------------------------------------------------------------ */

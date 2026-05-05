@@ -115,7 +115,7 @@ main {
    Map panel
    ============================================================ */
 .map-panel {
-  flex: 1 1 72%;
+  flex: 1 1 65%;
   min-width: 0;
 }
 
@@ -377,22 +377,154 @@ main {
    Compare panel (right side — dynamic place vs. county)
    ============================================================ */
 .compare-panel {
-  flex: 1 1 32%;
-  min-width: 21rem;
+  flex: 1 1 35%;
+  min-width: 24rem;
+  position: relative;
+}
+
+.compare-heading-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.35rem;
+}
+
+.compare-heading-row h2 {
+  margin-bottom: 0;
+  flex: 1 1 12rem;
+  min-width: 0;
+}
+
+.compare-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.5rem;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.compare-tool-btn {
+  min-height: 2.5rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: clamp(0.8125rem, 0.75rem + 0.35vw, 0.9rem);
+  font-weight: 600;
+  font-family: var(--font);
+  cursor: pointer;
+  line-height: 1.2;
+}
+
+.compare-tool-btn:hover {
+  border-color: var(--accent-blue);
+  color: #f1f5f9;
+}
+
+.compare-tool-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent-blue);
+}
+
+.compare-tool-btn[aria-pressed="true"] {
+  border-color: var(--accent-blue);
+  background: rgba(59, 130, 246, 0.18);
+  color: #93c5fd;
+}
+
+.compare-panel .chart-caption {
+  font-size: clamp(0.875rem, 0.82rem + 0.2vw, 0.95rem);
+  margin-bottom: 0.65rem;
+}
+
+.compare-expand-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  background: rgba(15, 23, 42, 0.72);
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.compare-panel.compare-panel--expanded .compare-expand-backdrop {
+  display: block;
+}
+
+.compare-panel.compare-panel--expanded {
+  position: fixed;
+  z-index: 910;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(56rem, calc(100vw - 1.5rem));
+  max-width: 100%;
+  max-height: min(calc(100vh - 1.5rem), 900px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 1rem 1.25rem 1.25rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
+}
+
+.compare-panel.compare-panel--expanded .compare-heading-row,
+.compare-panel.compare-panel--expanded .chart-caption {
+  flex-shrink: 0;
+}
+
+.compare-panel.compare-panel--expanded .compare-frame {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+}
+
+.compare-panel.compare-panel--readable .compare-frame {
+  padding: clamp(16px, 2.5vw, 22px);
+  gap: 14px;
+}
+
+.compare-panel.compare-panel--readable .compare-place-title {
+  font-size: clamp(1.05rem, 0.95rem + 0.6vw, 1.2rem);
+}
+
+.compare-panel.compare-panel--readable .compare-place-sub,
+.compare-panel.compare-panel--readable .compare-metric-legend {
+  font-size: clamp(0.875rem, 0.8rem + 0.35vw, 0.95rem);
+}
+
+.compare-panel.compare-panel--readable .compare-narrative {
+  font-size: clamp(0.95rem, 0.88rem + 0.35vw, 1.05rem);
+}
+
+.compare-panel.compare-panel--readable .compare-stats {
+  font-size: clamp(0.9rem, 0.82rem + 0.35vw, 1rem);
+}
+
+.compare-panel.compare-panel--readable .compare-percentile-label,
+.compare-panel.compare-panel--readable .compare-percentile-value {
+  font-size: clamp(0.875rem, 0.8rem + 0.3vw, 0.95rem);
 }
 
 .compare-frame {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 14px;
-  min-height: 320px;
-  max-height: min(72vh, 640px);
+  padding: clamp(14px, 1.8vw, 20px);
+  min-height: 340px;
+  max-height: min(72vh, 680px);
   overflow-x: hidden;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .compare-frame:focus-visible {
@@ -414,7 +546,7 @@ main {
   justify-content: center;
   text-align: center;
   color: var(--text-muted);
-  font-size: 0.85rem;
+  font-size: clamp(0.875rem, 0.8rem + 0.25vw, 0.95rem);
   padding: 24px 8px;
   line-height: 1.5;
 }
@@ -431,21 +563,21 @@ main {
   width: 100%;
   height: auto;
   flex-shrink: 0;
-  aspect-ratio: 480 / 400;
+  aspect-ratio: 560 / 460;
 }
 
 .compare-place-header {
-  margin-bottom: 4px;
+  margin-bottom: 0.35rem;
 }
 
 .compare-place-title {
-  font-size: 1rem;
+  font-size: clamp(1rem, 0.92rem + 0.35vw, 1.15rem);
   font-weight: 700;
   color: #f1f5f9;
 }
 
 .compare-place-sub {
-  font-size: 0.8rem;
+  font-size: clamp(0.8125rem, 0.75rem + 0.3vw, 0.9rem);
   font-weight: 400;
   color: var(--text-muted);
 }
@@ -454,9 +586,9 @@ main {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem 1.25rem;
-  font-size: 0.78rem;
+  font-size: clamp(0.8125rem, 0.76rem + 0.25vw, 0.9rem);
   color: var(--text-muted);
-  margin-top: 2px;
+  margin-top: 0.2rem;
   flex-shrink: 0;
 }
 
@@ -467,8 +599,8 @@ main {
 }
 
 .compare-narrative {
-  font-size: 0.85rem;
-  line-height: 1.45;
+  font-size: clamp(0.875rem, 0.82rem + 0.2vw, 0.95rem);
+  line-height: 1.5;
   color: var(--text);
   margin: 0 0 8px;
 }
@@ -480,9 +612,9 @@ main {
 
 .compare-stats {
   border-top: 1px solid var(--border);
-  padding-top: 10px;
-  margin-top: 4px;
-  font-size: 0.82rem;
+  padding-top: 12px;
+  margin-top: 6px;
+  font-size: clamp(0.875rem, 0.8rem + 0.25vw, 0.95rem);
 }
 
 .compare-stat-row {
@@ -513,7 +645,7 @@ main {
 }
 
 .compare-percentile-label {
-  font-size: 0.78rem;
+  font-size: clamp(0.8125rem, 0.76rem + 0.2vw, 0.88rem);
   color: var(--text-muted);
   margin-bottom: 4px;
 }
@@ -533,7 +665,7 @@ main {
 }
 
 .compare-percentile-value {
-  font-size: 0.78rem;
+  font-size: clamp(0.8125rem, 0.76rem + 0.2vw, 0.9rem);
   font-weight: 600;
   color: var(--text);
   margin-top: 4px;
@@ -715,37 +847,6 @@ main {
   outline: none;
 }
 
-/* Tutorial figures inside help dialog */
-.help-tutorial-figure {
-  margin: 12px 0 0;
-}
-
-.help-tutorial-figure img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  display: block;
-}
-
-.help-tutorial-caption {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  margin-top: 6px;
-}
-
-.help-tutorial-figure.help-tutorial-miss img {
-  display: none;
-}
-
-.help-tutorial-figure.help-tutorial-miss .help-tutorial-missing {
-  display: block;
-}
-
-.help-tutorial-figure .help-tutorial-missing {
-  display: none;
-}
-
 /* ============================================================
    Axis & chart text
    ============================================================ */
@@ -901,7 +1002,7 @@ footer a {
 /* ============================================================
    Responsive
    ============================================================ */
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
   .vis-wrapper {
     flex-direction: column;
   }
@@ -909,6 +1010,11 @@ footer a {
   .map-panel,
   .compare-panel {
     flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  .compare-panel {
+    max-width: 100%;
   }
 }
 

@@ -49,12 +49,25 @@
         </div>
       </div>
 
-      <div class="compare-panel" aria-label="Place vs. county comparison panel" aria-live="polite">
-        <h2 id="compare-panel-heading">Place vs. County Density</h2>
+      <div id="compare-panel" class="compare-panel" aria-label="Place vs. county comparison panel" aria-live="polite">
+        <div id="compare-expand-backdrop" class="compare-expand-backdrop" hidden aria-hidden="true"></div>
+        <div class="compare-heading-row">
+          <h2 id="compare-panel-heading">Place vs. County Density</h2>
+          <div class="compare-toolbar" role="toolbar" aria-label="Comparison chart display options">
+            <button type="button" id="compare-expand-btn" class="compare-tool-btn"
+              aria-expanded="false" aria-controls="compare-panel-region">
+              Expand chart
+            </button>
+            <button type="button" id="compare-readable-btn" class="compare-tool-btn compare-readable-toggle"
+              aria-pressed="false" aria-label="Larger text and spacing for the comparison panel">
+              Larger text
+            </button>
+          </div>
+        </div>
         <p class="chart-caption" id="compare-panel-desc">
           Click a marker on the map to compare that place's Dollar General density to its adjusted county density. All densities are stores per 10,000 residents.
         </p>
-        <div class="compare-frame" tabindex="0" role="region" aria-labelledby="compare-panel-heading" aria-describedby="compare-panel-desc">
+        <div id="compare-panel-region" class="compare-frame" tabindex="0" role="region" aria-labelledby="compare-panel-heading" aria-describedby="compare-panel-desc">
           <div id="compare-empty" class="compare-empty">
             <span class="compare-empty-icon" aria-hidden="true">↑</span>
             <span>Zoom into a county and click a marker to see a comparison here.</span>
@@ -133,41 +146,19 @@
     <div class="help-dialog-body">
       <h3>Keyboard</h3>
       <ul>
-        <li>Use <strong>Tab</strong> to move focus; <strong>Enter</strong> or <strong>Space</strong> activates the Help button when focus is on the page background, zooms into a focused <strong>county</strong>, opens the comparison panel for a focused <strong>marker</strong>, and shows details on the <strong>community-type</strong> bars. The +/− controls are standard buttons. <strong>Escape</strong> closes this dialog when open. The map is primarily pointer-based; full geographic pan is not keyboard-complete.</li>
+        <li>Use <strong>Tab</strong> to move focus; <strong>Enter</strong> or <strong>Space</strong> activates the Help button when focus is on the page background, zooms into a focused <strong>county</strong>, opens the comparison panel for a focused <strong>marker</strong>, and shows or refreshes the details tooltip on the <strong>community-type</strong> bars (tooltips also appear when you tab onto a bar). The +/− controls are standard buttons. <strong>Escape</strong> closes this dialog when open, and dismisses the first-visit banner at the bottom when the dialog is closed. The map is primarily pointer-based; full geographic pan is not keyboard-complete.</li>
+        <li>Place markers are only in the <strong>Tab</strong> order after zoom is high enough for them to appear on the map (about <strong>3×</strong>).</li>
         <li>After you load a place in the comparison panel, focus moves to that <strong>comparison card</strong> (or <strong>Tab</strong> to it). When the card is focused, use <strong>Arrow keys</strong>, <strong>Page Up</strong>/<strong>Page Down</strong>, <strong>Home</strong>, and <strong>End</strong> to scroll if the content is taller than the panel.</li>
       </ul>
 
       <h3>How to navigate</h3>
       <ul>
         <li>Zoom the map using the + and − controls (lower left), the scroll wheel or trackpad, or pinch-to-zoom on touch devices.</li>
-        <li>Click anywhere on a county to zoom deeper into it.</li>
+        <li>Click anywhere on a county to zoom deeper into it. With the keyboard, <strong>Tab</strong> to a county, then <strong>Enter</strong> or <strong>Space</strong>.</li>
         <li>When zoom reaches about <strong>3×</strong> or higher, place markers appear. Each marker shows how many <strong>banner Dollar General</strong> stores are grouped at that Census place (<strong>1</strong>, <strong>2</strong>, etc.). This project does not include other chains (e.g. Dollar Tree) or formats absent from the dataset.</li>
-        <li><strong>Hover</strong> a marker to outline that community on top of its county shading. <strong>Click</strong> a marker to load the comparison charts and narrative in the panel on the right.</li>
-        <li>To compare averages for rural versus urban communities, scroll to <strong>average store density by community type</strong> further down this page.</li>
+        <li><strong>Hover</strong> a marker to outline that community on top of its county shading. <strong>Click</strong> a marker to load the comparison charts and narrative in the panel on the right. With the keyboard, <strong>Tab</strong> to a marker (same highlight as hover), then <strong>Enter</strong> or <strong>Space</strong>.</li>
+        <li>To compare averages for rural versus urban communities, scroll to <strong>average store density by community type</strong> further down this page. <strong>Tab</strong> to each bar for a tooltip; <strong>Enter</strong> or <strong>Space</strong> also shows it.</li>
       </ul>
-
-      <h3>Visual walkthrough</h3>
-
-      <figure class="help-tutorial-figure" data-tutorial="1">
-        <img src="img/tutorial/01-map-zoom.png" alt="Step 1: Map of North Carolina with zoom controls and county shading" width="560" loading="lazy"
-          onerror="this.closest('figure').classList.add('help-tutorial-miss')">
-        <p class="help-tutorial-missing">Image not found: add <code>img/tutorial/01-map-zoom.png</code></p>
-        <figcaption class="help-tutorial-caption"><strong>1.</strong> Use zoom controls or scroll; click a county to zoom in.</figcaption>
-      </figure>
-
-      <figure class="help-tutorial-figure" data-tutorial="2">
-        <img src="img/tutorial/02-markers.png" alt="Step 2: Place markers with store counts on the map" width="560" loading="lazy"
-          onerror="this.closest('figure').classList.add('help-tutorial-miss')">
-        <p class="help-tutorial-missing">Image not found: add <code>img/tutorial/02-markers.png</code></p>
-        <figcaption class="help-tutorial-caption"><strong>2.</strong> Zoom until markers appear; the number is the count of stores at that place.</figcaption>
-      </figure>
-
-      <figure class="help-tutorial-figure" data-tutorial="3">
-        <img src="img/tutorial/03-compare-panel.png" alt="Step 3: Comparison panel with bars for place and adjusted county" width="560" loading="lazy"
-          onerror="this.closest('figure').classList.add('help-tutorial-miss')">
-        <p class="help-tutorial-missing">Image not found: add <code>img/tutorial/03-compare-panel.png</code></p>
-        <figcaption class="help-tutorial-caption"><strong>3.</strong> Click a marker to compare this place to its adjusted county in the right panel.</figcaption>
-      </figure>
 
       <h3>What the metrics mean</h3>
       <ul>
