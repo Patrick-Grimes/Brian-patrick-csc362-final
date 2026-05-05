@@ -381,18 +381,6 @@ main {
   min-width: 0;
 }
 
-.ref-poverty-line {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-  margin: 0 0 0.4rem;
-  line-height: 1.45;
-}
-
-.ref-poverty-line strong {
-  font-weight: 600;
-  color: #cbd5e1;
-}
-
 .compare-frame {
   background: var(--surface);
   border: 1px solid var(--border);

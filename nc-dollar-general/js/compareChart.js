@@ -334,7 +334,7 @@ function initCompareChart(placeData) {
         <span>Density gap vs. adjusted county</span>
         <span style="color:${gapColor}">${formatGap(d)}</span>
       </div>
-      <p class="compare-gap-legend">Units are <strong>stores per 10,000 residents</strong> (population-based, not land area). <span style="color:#fca5a5;font-weight:600">Coral</span> = more DG stores per 10k here than the adjusted county; <span style="color:#86efac;font-weight:600">Green</span> = fewer.</p>
+      <p class="compare-gap-legend"><span style="color:#fca5a5;font-weight:600">Coral</span> = more Dollar General per 10k here than the adjusted county; <span style="color:#86efac;font-weight:600">Green</span> = fewer.</p>
 
       <div class="compare-percentile">
         <div class="compare-percentile-label">Statewide gap percentile</div>

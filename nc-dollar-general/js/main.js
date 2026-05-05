@@ -105,14 +105,8 @@
     d3.csv("data/nc_dg_data.csv"),
     d3.json("data/nc_counties.json"),
     d3.json("data/nc_places.json"),
-    d3.json("data/reference_rates.json").catch(() => ({
-      vintage: "2023 ACS 5-year",
-      table: "S1701_C03_001E — percent below poverty level",
-      ncPercentBelowPoverty: 13.2,
-      usPercentBelowPoverty: 12.4,
-    })),
   ])
-    .then(([rawRows, rawCountiesGeo, rawPlacesGeo, referenceRates]) => {
+    .then(([rawRows, rawCountiesGeo, rawPlacesGeo]) => {
       const countiesGeo = rewindFeatureCollection(rawCountiesGeo);
       const placesGeo   = rewindFeatureCollection(rawPlacesGeo);
 
@@ -188,16 +182,6 @@
 
       /* Expose globally for debugging */
       window.AppData = { placeData, countyData, countiesGeo, placesGeo };
-
-      const refEl = document.getElementById("ref-poverty-line");
-      if (refEl && referenceRates) {
-        const nc = referenceRates.ncPercentBelowPoverty;
-        const us = referenceRates.usPercentBelowPoverty;
-        const v = referenceRates.vintage || "2023 ACS 5-year";
-        refEl.textContent =
-          `Context (${v}): NC ${nc}% · US ${us}% of people below the poverty level ` +
-          `(${referenceRates.table || "ACS Table S1701"}). Same survey family as county/place poverty in this viz.`;
-      }
 
       /* Boot all three visualisations. compareChart must be initialised
          BEFORE the map so window.AppState.renderCompareChart exists when
