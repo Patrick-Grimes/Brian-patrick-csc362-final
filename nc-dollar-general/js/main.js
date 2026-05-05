@@ -105,8 +105,14 @@
     d3.csv("data/nc_dg_data.csv"),
     d3.json("data/nc_counties.json"),
     d3.json("data/nc_places.json"),
+    d3.json("data/reference_rates.json").catch(() => ({
+      vintage: "2023 ACS 5-year",
+      table: "S1701_C03_001E — percent below poverty level",
+      ncPercentBelowPoverty: 13.2,
+      usPercentBelowPoverty: 12.4,
+    })),
   ])
-    .then(([rawRows, rawCountiesGeo, rawPlacesGeo]) => {
+    .then(([rawRows, rawCountiesGeo, rawPlacesGeo, referenceRates]) => {
       const countiesGeo = rewindFeatureCollection(rawCountiesGeo);
       const placesGeo   = rewindFeatureCollection(rawPlacesGeo);
 
@@ -182,6 +188,17 @@
 
       /* Expose globally for debugging */
       window.AppData = { placeData, countyData, countiesGeo, placesGeo };
+
+      const ncEl = document.getElementById("header-nc-poverty-pct");
+      const usEl = document.getElementById("header-us-poverty-pct");
+      if (referenceRates && ncEl && usEl) {
+        const ncPct = referenceRates.ncPercentBelowPoverty;
+        const usPct = referenceRates.usPercentBelowPoverty;
+        ncEl.textContent =
+          ncPct != null && Number.isFinite(+ncPct) ? `${+ncPct}%` : "—";
+        usEl.textContent =
+          usPct != null && Number.isFinite(+usPct) ? `${+usPct}%` : "—";
+      }
 
       /* Boot all three visualisations. compareChart must be initialised
          BEFORE the map so window.AppState.renderCompareChart exists when
