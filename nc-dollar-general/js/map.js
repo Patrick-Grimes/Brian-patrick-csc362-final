@@ -2,26 +2,6 @@
    clicks delegate to compareChart.js (right-side comparison panel). */
 function initMap(placeData, countyData, countiesGeo, placesGeo) {
 
-  /* ------------------------------------------------------------------ */
-  /* Place-vs-county gap formatting                                      */
-  /*                                                                     */
-  /* Each place carries `gap` (place stores/10k − adj. county stores/10k) */
-  /* and `gapPercentile` (0..1, share of NC places ranking at-or-below). */
-  /* Both are computed in main.js. Helpers below render them consistently */
-  /* in the hover tooltip and aria-label; the right-side comparison panel */
-  /* uses its own copies in compareChart.js.                              */
-  /* ------------------------------------------------------------------ */
-  const ordinal = n => {
-    const s = ["th", "st", "nd", "rd"];
-    const v = n % 100;
-    return n + (s[(v - 20) % 10] || s[v] || s[0]);
-  };
-  const formatGap = d => {
-    const sign = d.gap >= 0 ? "+" : "−";
-    return `${sign}${Math.abs(d.gap).toFixed(2)}/10k`;
-  };
-  const formatPercentile = d =>
-    `${ordinal(Math.round(d.gapPercentile * 100))} statewide percentile`;
   const formatPovertyPct = v =>
     v == null || !Number.isFinite(v) ? "N/A" : `${(v * 100).toFixed(1)}%`;
 
@@ -100,7 +80,7 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
     .attr("aria-label", d => {
       const cd = countyData[d.properties.name];
       if (!cd) return `${d.properties.name} County. Activate to zoom in.`;
-      return `${d.properties.name} County: ${cd.storesPerTenK.toFixed(2)} stores per 10,000, poverty rate ${formatPovertyPct(cd.povertyRate)}. Activate to zoom in.`;
+      return `${d.properties.name} County: ${cd.storesPerTenK.toFixed(2)} stores per 10,000, full-county poverty rate ${formatPovertyPct(cd.povertyRate)}. Activate to zoom in.`;
     })
     .on("mouseover", (event, d) => showCountyTooltip(event, d))
     .on("mousemove", (event) => moveTooltip(event, "#map-tooltip"))
@@ -258,10 +238,8 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
       .attr("role", "button")
       .attr("aria-label", d =>
         `${d.city}, ${d.county} County. ${d.storeCount} stores. ` +
-        `Density: ${d.storesPerTenK.toFixed(2)} per 10,000. ` +
+        `Place store density: ${d.storesPerTenK.toFixed(2)} stores per 10,000 residents. ` +
         `Poverty rate: ${formatPovertyPct(d.placePoverty)}. ` +
-        `Density gap versus adjusted county: ${formatGap(d)}, ` +
-        `${formatPercentile(d)} of all North Carolina places. ` +
         `Activate to open comparison panel.`
       )
       .on("mouseover", (event, d) => {
@@ -306,10 +284,8 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
     });
     merged.attr("aria-label", d =>
       `${d.city}, ${d.county} County. ${d.storeCount} stores. ` +
-      `Density: ${d.storesPerTenK.toFixed(2)} per 10,000. ` +
+      `Place store density: ${d.storesPerTenK.toFixed(2)} stores per 10,000 residents. ` +
       `Poverty rate: ${formatPovertyPct(d.placePoverty)}. ` +
-      `Density gap versus adjusted county: ${formatGap(d)}, ` +
-      `${formatPercentile(d)} of all North Carolina places. ` +
       `Activate to open comparison panel.`
     );
     merged.select("circle")
@@ -385,7 +361,7 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
     el.innerHTML = `
       <div class="tt-title">${d.properties.name} County</div>
       <div class="tt-row"><span class="tt-label">Stores per 10,000 residents</span><span class="tt-value">${cd.storesPerTenK.toFixed(2)}</span></div>
-      <div class="tt-row"><span class="tt-label">Poverty rate</span><span class="tt-value">${formatPovertyPct(cd.povertyRate)}</span></div>
+      <div class="tt-row"><span class="tt-label">Poverty rate</span><span class="tt-value">${formatPovertyPct(cd.povertyRate)} <span style="font-weight:500;color:#cbd5e1">(full county)</span></span></div>
     `;
     moveTooltip(event, "#map-tooltip");
   }
@@ -393,15 +369,11 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
   function showPlaceTooltip(event, d) {
     const el = document.getElementById("map-tooltip");
     el.style.display = "block";
-    const gapColor = d.gap >= 0 ? "#fca5a5" : "#86efac";
     el.innerHTML = `
       <div class="tt-title">${d.city} <span style="font-weight:400;color:#94a3b8">(${d.county} Co.)</span></div>
-      <div class="tt-row"><span class="tt-label">Place density</span><span class="tt-value">${d.storesPerTenK.toFixed(2)} <span style="font-weight:500;color:#cbd5e1">stores per 10,000 residents</span></span></div>
-      <div class="tt-row"><span class="tt-label">Adjusted county density</span><span class="tt-value">${d.adjCountyDensity.toFixed(2)} <span style="font-weight:500;color:#cbd5e1">stores per 10,000 residents</span></span></div>
+      <div class="tt-row"><span class="tt-label">Place store density</span><span class="tt-value">${d.storesPerTenK.toFixed(2)} <span style="font-weight:500;color:#cbd5e1">stores per 10,000 residents</span></span></div>
       <div class="tt-row"><span class="tt-label">Place poverty</span><span class="tt-value">${formatPovertyPct(d.placePoverty)}</span></div>
-      <div class="tt-row"><span class="tt-label">Gap vs. adjusted county</span><span class="tt-value" style="color:${gapColor}">${formatGap(d)} <span style="font-weight:500;color:#cbd5e1">(difference in stores per 10,000 residents)</span></span></div>
-      <div class="tt-row"><span class="tt-label">Statewide gap percentile</span><span class="tt-value">${formatPercentile(d)}</span></div>
-      <div class="tt-hint">Click to load this place in the comparison panel</div>
+      <div class="tt-hint">Click for adjusted county comparison</div>
     `;
     moveTooltip(event, "#map-tooltip");
   }
@@ -478,7 +450,7 @@ function initMap(placeData, countyData, countiesGeo, placesGeo) {
     rect.setAttribute("fill", `url(#${gradId})`);
     svgEl.appendChild(rect);
 
-    legendDiv.innerHTML = `<div class="legend-title">Stores per 10,000</div>`;
+    legendDiv.innerHTML = `<div class="legend-title">Stores per 10K people</div>`;
     legendDiv.appendChild(svgEl);
     legendDiv.innerHTML += `
       <div class="legend-labels">

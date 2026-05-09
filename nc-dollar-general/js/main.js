@@ -56,6 +56,31 @@
     return Number.isFinite(n) ? n : null;
   }
 
+  /**
+   * Poverty rate for the county remainder after removing this place:
+   * (county below poverty − place below poverty) / (county pop − place pop).
+   * Null when inputs are missing or inconsistent.
+   */
+  function adjustedCountyPovertyFromRow(r) {
+    const cPop = r["County Total Population (ACS 2023)"];
+    const pPop = r["Place Population"];
+    const cPov = r["County Poverty Count (ACS 2023)"];
+    const pPov = r["Place Poverty Count"];
+    if (
+      cPop == null || pPop == null || cPov == null || pPov == null ||
+      !Number.isFinite(cPop) || !Number.isFinite(pPop) ||
+      !Number.isFinite(cPov) || !Number.isFinite(pPov)
+    ) {
+      return null;
+    }
+    const den = cPop - pPop;
+    if (den <= 0) return null;
+    const num = cPov - pPov;
+    if (num < 0 || num > den) return null;
+    const rate = num / den;
+    return Number.isFinite(rate) && rate >= 0 && rate <= 1 ? rate : null;
+  }
+
   function ringArea(ring) {
     let area = 0;
     for (let i = 0; i < ring.length - 1; i++) {
@@ -126,6 +151,13 @@
         });
         r["Place Poverty Rate %"] = parseOptionalNumber(r["Place Poverty Rate %"]);
         r["County Poverty Rate %"] = parseOptionalNumber(r["County Poverty Rate %"]);
+        r["County Total Population (ACS 2023)"] = parseOptionalNumber(
+          r["County Total Population (ACS 2023)"]
+        );
+        r["Place Poverty Count"] = parseOptionalNumber(r["Place Poverty Count"]);
+        r["County Poverty Count (ACS 2023)"] = parseOptionalNumber(
+          r["County Poverty Count (ACS 2023)"]
+        );
       });
 
       /* --- Per-place deduplication ----------------------------------- */
@@ -144,8 +176,9 @@
           classification:   classifyPlace(urbanShare),
           storesPerTenK:    r["Place Stores per 10,000"],
           adjCountyDensity: r["Adjusted County Density (excl. Place)"],
-          placePoverty:     r["Place Poverty Rate %"],
-          countyPoverty:    r["County Poverty Rate %"],
+          placePoverty:       r["Place Poverty Rate %"],
+          countyPoverty:      r["County Poverty Rate %"],
+          adjCountyPoverty:   adjustedCountyPovertyFromRow(r),
           countyStoresPer10k: r["County Stores per 10,000"],
           storeCount:       r["Place Store Count"],
           population:       r["Place Population"],
@@ -168,23 +201,9 @@
         .filter(d => isFinite(d.lat) && isFinite(d.lng));
       const countyData = Object.fromEntries(countyMap);
 
-      /* --- Statewide percentile of the place-vs-adjusted-county gap --- */
-      /* The old "Place Density > Adjusted County Density" Yes/No flag    */
-      /* was Yes for 95% of places and conveyed almost no signal. We      */
-      /* replace it with a within-NC percentile so the magnitude of the   */
-      /* gap, not just its direction, is what users see.                  */
+      /* --- Place-vs-adjusted-county store density gap ----------------- */
       placeData.forEach(d => {
         d.gap = d.storesPerTenK - d.adjCountyDensity;
-      });
-      const sortedGaps = placeData.map(d => d.gap).sort((a, b) => a - b);
-      const lastIdx = Math.max(1, sortedGaps.length - 1);
-      placeData.forEach(d => {
-        let lo = 0, hi = sortedGaps.length;
-        while (lo < hi) {
-          const mid = (lo + hi) >>> 1;
-          if (sortedGaps[mid] < d.gap) lo = mid + 1; else hi = mid;
-        }
-        d.gapPercentile = lo / lastIdx;
       });
 
       /* Expose globally for debugging */
