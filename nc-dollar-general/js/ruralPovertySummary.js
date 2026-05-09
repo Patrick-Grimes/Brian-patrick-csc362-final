@@ -1,4 +1,4 @@
-/* ruralPovertySummary.js — store-weighted rural place poverty vs county */
+/* ruralPovertySummary.js — store-weighted rural place poverty vs adjusted county */
 function initRuralPovertySummary(placeData) {
   const svgEl = document.getElementById("rural-poverty-bar");
   const statsUl = document.getElementById("rural-poverty-stats");
@@ -17,13 +17,14 @@ function initRuralPovertySummary(placeData) {
 
   ruralWithStores.forEach(d => {
     const okPl = d.placePoverty != null && Number.isFinite(d.placePoverty);
-    const okCo = d.countyPoverty != null && Number.isFinite(d.countyPoverty);
-    if (!okPl || !okCo) {
+    const okAdj =
+      d.adjCountyPoverty != null && Number.isFinite(d.adjCountyPoverty);
+    if (!okPl || !okAdj) {
       excludedStores += d.storeCount;
       return;
     }
     const w = d.storeCount;
-    const diff = d.placePoverty - d.countyPoverty;
+    const diff = d.placePoverty - d.adjCountyPoverty;
     if (Math.abs(diff) < epsP) same += w;
     else if (diff > 0) higher += w;
     else lower += w;
@@ -38,16 +39,16 @@ function initRuralPovertySummary(placeData) {
   const pS = pct(same);
 
   statsUl.innerHTML = `
-    <li><span>Place poverty <strong>higher</strong> than county poverty <span class="rural-pct-def">(store share)</span></span><strong>${r0(pH)}%</strong></li>
-    <li><span>Place poverty <strong>lower</strong> than county poverty</span><strong>${r0(pL)}%</strong></li>
-    <li><span>Place poverty <strong>about the same</strong> as county poverty</span><strong>${r0(pS)}%</strong></li>
+    <li><span>Rural place poverty <strong>higher</strong> than adjusted county <span class="rural-pct-def">(store share)</span></span><strong>${r0(pH)}%</strong></li>
+    <li><span>Rural place poverty <strong>lower</strong> than adjusted county</span><strong>${r0(pL)}%</strong></li>
+    <li><span>Rural place poverty <strong>about the same</strong> as adjusted county</span><strong>${r0(pS)}%</strong></li>
   `;
 
   if (noteEl) {
     if (excludedStores > 0) {
       noteEl.textContent =
         `${excludedStores.toLocaleString()} Dollar General store locations in rural places ` +
-        `were excluded where place or county poverty was missing. Percentages use only locations with both rates.`;
+        `were excluded where place or adjusted county poverty was missing. Percentages use only locations with both rates.`;
       noteEl.hidden = false;
     } else {
       noteEl.textContent = "";
@@ -69,7 +70,7 @@ function initRuralPovertySummary(placeData) {
   d3s.selectAll("*").remove();
 
   const aria =
-    `Rural Dollar General store-weighted shares: ${r0(pH)} percent higher place poverty than county, ` +
+    `Rural Dollar General store-weighted shares: ${r0(pH)} percent higher place poverty than adjusted county, ` +
     `${r0(pL)} percent lower, ${r0(pS)} percent about the same.`;
   d3s.attr("aria-label", aria);
 
@@ -120,5 +121,5 @@ function initRuralPovertySummary(placeData) {
     .attr("text-anchor", "middle")
     .attr("fill", "#a8b7d0")
     .attr("font-size", "11px")
-    .text("Share of rural DG stores (by place poverty vs. county)");
+    .text("Share of rural DG stores (by place vs. adjusted county poverty)");
 }

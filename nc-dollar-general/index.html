@@ -15,7 +15,7 @@
       <div class="header-titles">
         <h1>NC Dollar General Saturation Analysis</h1>
         <p class="hypothesis-line">
-          In Census communities with higher Dollar General store density than their <strong>adjusted county</strong> average, is the <strong>place</strong> poverty rate higher than that <strong>county’s</strong> poverty rate? Store density and poverty are shown side by side. For reference, the poverty rate of North Carolina is <strong><span id="header-nc-poverty-pct"></span></strong> and the United States overall is <strong><span id="header-us-poverty-pct"></span></strong>.
+          In Census communities with higher Dollar General store density than their <strong>adjusted county</strong> benchmark (county minus this place), is the <strong>place</strong> poverty rate higher than the <strong>adjusted county poverty</strong> for the surrounding area (same subtraction)? County shading on the map still uses each county’s <strong>overall</strong> store density and poverty.
         </p>
       </div>
     </div>
@@ -41,18 +41,12 @@
           <div id="map-legend" aria-label="Map color legend: light yellow indicates low store density, dark red indicates high store density"></div>
           <div id="map-tooltip" role="tooltip" aria-live="polite" aria-atomic="true"></div>
         </div>
-        <div class="vis-scroll-cue-wrap" aria-hidden="false">
-          <p class="vis-scroll-cue">
-            More below —
-            <a href="#density-by-type">average store density by community type<span aria-hidden="true"> ↓</span></a>
-          </p>
-        </div>
       </div>
 
-      <div id="compare-panel" class="compare-panel" aria-label="Place vs. county comparison panel" aria-live="polite">
+      <div id="compare-panel" class="compare-panel" aria-label="Place versus adjusted county comparison panel" aria-live="polite">
         <div id="compare-expand-backdrop" class="compare-expand-backdrop" hidden aria-hidden="true"></div>
         <div class="compare-heading-row">
-          <h2 id="compare-panel-heading">Place vs. County Density</h2>
+          <h2 id="compare-panel-heading">Place vs. adjusted county</h2>
           <div class="compare-toolbar">
             <button type="button" id="compare-expand-btn" class="compare-tool-btn"
               aria-expanded="false" aria-controls="compare-panel-region">
@@ -61,7 +55,7 @@
           </div>
         </div>
         <p class="chart-caption" id="compare-panel-desc">
-          Click a marker on the map to compare that place's Dollar General density to its adjusted county density. All densities are stores per 10,000 residents.
+          Click a marker to compare this place’s Dollar General density and poverty rate to the <strong>adjusted county</strong> benchmarks (county totals minus this place). Densities are stores per 10,000 residents; poverty uses ACS counts for the same subtraction.
         </p>
         <div id="compare-panel-region" class="compare-frame" tabindex="0" role="region" aria-labelledby="compare-panel-heading" aria-describedby="compare-panel-desc">
           <div id="compare-empty" class="compare-empty">
@@ -70,7 +64,7 @@
           </div>
           <div id="compare-place-header" class="compare-place-header" hidden></div>
           <div class="compare-chart-stage">
-            <svg id="compare-chart" focusable="false" role="img" aria-label="Place vs. adjusted county store density comparison" hidden></svg>
+            <svg id="compare-chart" focusable="false" role="img" aria-label="Place versus adjusted county benchmarks for store density and poverty" hidden></svg>
           </div>
           <div id="compare-stats" class="compare-stats" hidden></div>
         </div>
@@ -104,12 +98,17 @@
       <div id="scatter-tooltip" role="tooltip" aria-live="polite" aria-atomic="true"></div>
     </section>
 
-    <section class="rural-poverty-summary" id="rural-poverty-summary" aria-label="Rural places poverty compared to county">
-      <h2>Rural places: poverty vs. county</h2>
+    <section class="rural-poverty-summary" id="rural-poverty-summary" aria-label="Rural places poverty compared to adjusted county">
+      <h2>Rural places: poverty vs. adjusted county</h2>
       <p class="chart-caption">
-        Among <strong>rural</strong> Census places only: share of <strong>Dollar General store locations</strong> where the place poverty rate is higher, lower, or about the same as that county’s poverty rate (weighted by store count). “About the same” uses a small tolerance for rounding.
+        Among <strong>rural</strong> Census places only: share of <strong>Dollar General store locations</strong> where the place poverty rate is higher, lower, or about the same as <strong>adjusted county poverty</strong> (county poor population minus place, divided by county population minus place) — weighted by store count. “About the same” uses a small tolerance for rounding.
       </p>
       <div class="rural-poverty-frame">
+        <div class="rural-poverty-legend" aria-label="Rural poverty summary legend">
+          <span><i class="legend-swatch legend-swatch-higher" aria-hidden="true"></i>Red: rural place poverty higher than adjusted county</span>
+          <span><i class="legend-swatch legend-swatch-same" aria-hidden="true"></i>Gray: about the same</span>
+          <span><i class="legend-swatch legend-swatch-lower" aria-hidden="true"></i>Green: rural place poverty lower than adjusted county</span>
+        </div>
         <svg id="rural-poverty-bar"></svg>
         <ul id="rural-poverty-stats" class="rural-poverty-stats"></ul>
         <p id="rural-poverty-note" class="rural-poverty-note" hidden></p>
@@ -133,7 +132,11 @@
 
   <div id="first-visit-scroll-toast" class="first-visit-toast" role="status" aria-live="polite" hidden>
     <button type="button" class="first-visit-toast-dismiss" aria-label="Dismiss notification">×</button>
-    <p>First time here? <a href="#density-by-type">Scroll for summary charts below</a>.</p>
+    <a href="#density-by-type" class="first-visit-toast-link">
+      <span class="first-visit-toast-kicker">More below</span>
+      <span class="first-visit-toast-main">Average store density by rural/urban community</span>
+      <span aria-hidden="true">↓</span>
+    </a>
   </div>
 
   <dialog id="site-help" class="help-dialog" aria-labelledby="site-help-title">
@@ -160,11 +163,12 @@
 
       <h3>What the metrics mean</h3>
       <ul>
-        <li><dfn>Place density</dfn>: Dollar General stores per <strong>10,000 residents</strong> for that Census place (people-based, not land area).</li>
-        <li><dfn>Adjusted county density</dfn>: the county-wide stores-per-10k figure after excluding this place's stores — so you're comparing how saturated the broader county is versus that specific community.</li>
-        <li><dfn>Density gap vs. adjusted county</dfn>:
-          place density minus adjusted county density, in <strong>stores per 10,000 residents</strong>. A <strong>+</strong> means more stores per 10k than the adjusted county; a <strong>−</strong> means fewer.</li>
-        <li><dfn>Statewide gap percentile</dfn>: where this place's gap ranks among all North Carolina places in the dataset. A higher percentile means a larger gap (more stores in the place relative to its adjusted county) compared with other places.</li>
+        <li><dfn>Place poverty</dfn>: share of people in this Census place whose poverty status is determined and who are below the poverty line.</li>
+        <li><dfn>Adjusted county poverty</dfn>: share of people below the poverty line in the county after removing this place — <strong>(county below poverty − place below poverty) / (county population − place population)</strong>. This matches the density adjustment: the place is not double-counted in the benchmark.</li>
+        <li><dfn>County map shading</dfn>: counties are still colored by <strong>overall store density</strong> and tooltips show the <strong>full-county</strong> poverty rate; only the place-level comparison panel and rural summary use the adjusted poverty benchmark.</li>
+        <li><dfn>Place store density</dfn>: Dollar General stores per <strong>10,000 residents</strong> for that Census place (people-based, not land area).</li>
+        <li><dfn>Adjusted county store density</dfn>: the county-wide stores-per-10k figure after excluding this place's stores — how saturated the rest of the county is versus that specific community.</li>
+        <li><dfn>Store density gap vs. adjusted county</dfn>: place store density minus adjusted county store density, in <strong>stores per 10,000 residents</strong>. A <strong>+</strong> means more stores per 10k in the place than the rest of the county; a <strong>−</strong> means fewer.</li>
         <li><dfn>Urban vs. rural</dfn>: a place is <strong>Urban</strong> if at least 51% of its 2020 Census population lives in a Census-defined urban area; otherwise it is <strong>Rural</strong>.</li>
       </ul>
     </div>
@@ -227,14 +231,12 @@
   </script>
   <script>
     (function () {
-      var key = "nc-dg-scroll-hint-seen";
       var toast = document.getElementById("first-visit-scroll-toast");
-      if (!toast || localStorage.getItem(key)) return;
+      if (!toast) return;
       var btn = toast.querySelector(".first-visit-toast-dismiss");
       var link = toast.querySelector("a");
       toast.hidden = false;
       function dismiss() {
-        localStorage.setItem(key, "1");
         toast.hidden = true;
       }
       if (btn) btn.addEventListener("click", dismiss);

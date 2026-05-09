@@ -5,17 +5,10 @@ function initCompareChart(placeData) {
   /* ------------------------------------------------------------------ */
   /* Shared formatting helpers                                           */
   /* ------------------------------------------------------------------ */
-  const ordinal = n => {
-    const s = ["th", "st", "nd", "rd"];
-    const v = n % 100;
-    return n + (s[(v - 20) % 10] || s[v] || s[0]);
-  };
   const formatGap = d => {
     const sign = d.gap >= 0 ? "+" : "−";
     return `${sign}${Math.abs(d.gap).toFixed(2)}/10k`;
   };
-  const formatPercentile = d =>
-    `${ordinal(Math.round(d.gapPercentile * 100))} statewide percentile`;
 
   const escapeHtml = s =>
     String(s)
@@ -39,55 +32,55 @@ function initCompareChart(placeData) {
     const sPl = d.storesPerTenK;
     const sCo = d.adjCountyDensity;
     const povPl = d.placePoverty;
-    const povCo = d.countyPoverty;
+    const povAdj = d.adjCountyPoverty;
     const plOk = povertyFinite(povPl);
-    const coOk = povertyFinite(povCo);
+    const adjOk = povertyFinite(povAdj);
     const epsD = 0.005;
     const epsP = 0.0005;
 
     const moreOrFewer = sPl >= sCo ? "more" : "fewer";
     const densityPhrase =
-      `${moreOrFewer} Dollar General stores per 10,000 residents than <strong>${c}</strong> ` +
+      `${moreOrFewer} Dollar General stores per 10,000 residents than the adjusted benchmark for <strong>${c}</strong> ` +
       `(${sPl.toFixed(2)} vs ${sCo.toFixed(2)})`;
 
-    if (!plOk && !coOk) {
+    if (!plOk && !adjOk) {
       return `<strong>${p}</strong> has ${densityPhrase}. ` +
         `Poverty rates for the place and adjusted county are not available in the dataset.`;
     }
-    if (!plOk && coOk) {
+    if (!plOk && adjOk) {
       return `<strong>${p}</strong> has ${densityPhrase}. ` +
-        `Place poverty rate is not available; adjusted county poverty is ${(povCo * 100).toFixed(1)}%.`;
+        `Place poverty rate is not available; adjusted county poverty (excluding this place) is ${(povAdj * 100).toFixed(1)}%.`;
     }
-    if (plOk && !coOk) {
+    if (plOk && !adjOk) {
       return `<strong>${p}</strong> has ${densityPhrase}. ` +
-        `County poverty rate is not available; place poverty is ${(povPl * 100).toFixed(1)}%.`;
+        `Adjusted county poverty (excluding this place) is not available; place poverty is ${(povPl * 100).toFixed(1)}%.`;
     }
 
     const sameStores = Math.abs(sPl - sCo) < epsD;
-    const samePov = Math.abs(povPl - povCo) < epsP;
-    const higherOrLower = povPl >= povCo ? "higher" : "lower";
-    const aligned = (sPl >= sCo) === (povPl >= povCo);
+    const samePov = Math.abs(povPl - povAdj) < epsP;
+    const higherOrLower = povPl >= povAdj ? "higher" : "lower";
+    const aligned = (sPl >= sCo) === (povPl >= povAdj);
     const conjunction = aligned ? "and also has a" : "but has a";
 
     if (sameStores && samePov) {
       return `<strong>${p}</strong> matches <strong>${c}</strong> on store density ` +
-        `(${sPl.toFixed(2)} per 10k) and poverty rate (${(povPl * 100).toFixed(1)}%).`;
+        `(${sPl.toFixed(2)} per 10k) and adjusted county poverty (${(povPl * 100).toFixed(1)}%).`;
     }
     if (sameStores) {
-      const link = povPl >= povCo ? "but" : "and";
-      return `<strong>${p}</strong> has the same store density as <strong>${c}</strong> ` +
+      const link = povPl >= povAdj ? "but" : "and";
+      return `<strong>${p}</strong> has the same store density as the adjusted benchmark for <strong>${c}</strong> ` +
         `(${sPl.toFixed(2)} per 10k) ${link} a ${higherOrLower} poverty rate ` +
-        `(${(povPl * 100).toFixed(1)}% vs ${(povCo * 100).toFixed(1)}%).`;
+        `(${(povPl * 100).toFixed(1)}% vs ${(povAdj * 100).toFixed(1)}%).`;
     }
     if (samePov) {
       return `<strong>${p}</strong> has ${moreOrFewer} Dollar General stores per 10,000 residents ` +
-        `than <strong>${c}</strong> (${sPl.toFixed(2)} vs ${sCo.toFixed(2)}), ` +
+        `than the adjusted benchmark for <strong>${c}</strong> (${sPl.toFixed(2)} vs ${sCo.toFixed(2)}), ` +
         `with the same poverty rate (${(povPl * 100).toFixed(1)}%).`;
     }
 
     return `<strong>${p}</strong> has ${moreOrFewer} Dollar General stores per 10,000 residents ` +
-      `than <strong>${c}</strong> (${sPl.toFixed(2)} vs ${sCo.toFixed(2)}) ${conjunction} ` +
-      `${higherOrLower} poverty rate (${(povPl * 100).toFixed(1)}% vs ${(povCo * 100).toFixed(1)}%).`;
+      `than the adjusted benchmark for <strong>${c}</strong> (${sPl.toFixed(2)} vs ${sCo.toFixed(2)}) ${conjunction} ` +
+      `${higherOrLower} poverty rate (${(povPl * 100).toFixed(1)}% vs ${(povAdj * 100).toFixed(1)}%).`;
   }
 
   /* ------------------------------------------------------------------ */
@@ -103,8 +96,8 @@ function initCompareChart(placeData) {
 
   /* viewBox width; compact vs expanded height — sync aspect-ratio in css/style.css */
   const CHART_VIEW_W = 560;
-  const CHART_VIEW_H_COMPACT = 510;
-  const CHART_VIEW_H_EXPANDED = 650;
+  const CHART_VIEW_H_COMPACT = 430;
+  const CHART_VIEW_H_EXPANDED = 560;
 
   const READABLE_BASE = 1.12;
 
@@ -335,28 +328,28 @@ function initCompareChart(placeData) {
 
     const barW = CHART_VIEW_W;
     const barH = getViewHeight();
-    const povNums = [d.placePoverty, d.countyPoverty].filter(povertyFinite);
+    const povNums = [d.placePoverty, d.adjCountyPoverty].filter(povertyFinite);
     const showPovAxis = povNums.length > 0;
 
-    const valueFont = 18 * typeScale;
-    const labelFont = 14.5 * typeScale;
-    const axisFont = 10 * typeScale;
-    const axisTitleFont = 10.75 * typeScale;
+    const valueFont = 18.5 * typeScale;
+    const labelFont = 13.5 * typeScale;
+    const axisFont = 11.5 * typeScale;
+    const axisTitleFont = 12 * typeScale;
     const naFont = 13 * typeScale;
 
-    const marginLeft = Math.round(154 * typeScale);
-    const marginRight = Math.round(20 * typeScale);
+    const marginLeft = Math.round(122 * typeScale);
+    const marginRight = Math.round(12 * typeScale);
     const margin = {
-      top: showPovAxis ? Math.round(48 * typeScale / READABLE_BASE) : Math.round(32 * typeScale / READABLE_BASE),
+      top: showPovAxis ? Math.round(46 * typeScale / READABLE_BASE) : Math.round(28 * typeScale / READABLE_BASE),
       right: marginRight,
-      bottom: Math.round(58 * typeScale / READABLE_BASE),
+      bottom: Math.round(52 * typeScale / READABLE_BASE),
       left: marginLeft,
     };
     const innerW = barW - margin.left - margin.right;
     const innerH = barH - margin.top - margin.bottom;
 
-    const plotTop = showPovAxis ? Math.round(28 * typeScale / READABLE_BASE) : Math.round(18 * typeScale / READABLE_BASE);
-    const plotBottom = innerH - Math.round(28 * typeScale / READABLE_BASE);
+    const plotTop = showPovAxis ? Math.round(34 * typeScale / READABLE_BASE) : Math.round(20 * typeScale / READABLE_BASE);
+    const plotBottom = innerH - Math.round(22 * typeScale / READABLE_BASE);
 
     const maxStores = Math.max(d.storesPerTenK, d.adjCountyDensity, 0) * 1.25 || 1;
     const maxPov = showPovAxis
@@ -367,22 +360,23 @@ function initCompareChart(placeData) {
     const xPoverty = d3.scaleLinear().domain([0, maxPov]).range([0, innerW]);
 
     const yBand = d3.scaleBand()
-      .domain(["This Place", "Adjusted county"])
+      .domain(["This Place", "Adj. county (excl. place)"])
       .range([plotTop, plotBottom])
-      .padding(0.40);
+      .padding(0.34);
 
     const subGap = Math.max(6, Math.round(7 * typeScale / READABLE_BASE));
     const subH = (yBand.bandwidth() - subGap) / 2;
 
     const rows = [
       { entity: "This Place", stores: d.storesPerTenK, poverty: d.placePoverty },
-      { entity: "Adjusted county", stores: d.adjCountyDensity, poverty: d.countyPoverty },
+      { entity: "Adj. county (excl. place)", stores: d.adjCountyDensity, poverty: d.adjCountyPoverty },
     ];
 
     const aria =
       `Comparison for ${d.city}. Store density per 10,000: this place ${d.storesPerTenK.toFixed(2)}, ` +
-      `adjusted county ${d.adjCountyDensity.toFixed(2)}. Poverty rate: place ` +
-      `${formatPovertyPct(d.placePoverty)}, county ${formatPovertyPct(d.countyPoverty)}.`;
+      `adjusted county excluding this place ${d.adjCountyDensity.toFixed(2)}. Poverty rate: place ` +
+      `${formatPovertyPct(d.placePoverty)}, adjusted county remainder ` +
+      `${formatPovertyPct(d.adjCountyPoverty)}.`;
 
     const fontFamily =
       getComputedStyle(chartEl).fontFamily || "'Segoe UI', system-ui, sans-serif";
@@ -561,30 +555,36 @@ function initCompareChart(placeData) {
       .attr("font-weight", "500")
       .text("Stores per 10,000 residents");
 
-    /* ---------------- Stats + percentile ----------------------------- */
+    /* ---------------- Stats ------------------------------------------ */
     const gapColor = d.gap >= 0 ? "#fca5a5" : "#86efac";
 
     statsEl.innerHTML = `
       <p class="compare-narrative">${buildCompareNarrativeHtml(d)}</p>
       <div class="compare-stat-row">
+        <span>Place store density</span>
+        <span>${d.storesPerTenK.toFixed(2)} per 10k</span>
+      </div>
+      <div class="compare-stat-row">
+        <span>Adjusted county store density</span>
+        <span>${d.adjCountyDensity.toFixed(2)} per 10k</span>
+      </div>
+      <div class="compare-stat-row">
+        <span>Place poverty</span>
+        <span>${formatPovertyPct(d.placePoverty)}</span>
+      </div>
+      <div class="compare-stat-row">
+        <span>Adjusted county poverty</span>
+        <span>${formatPovertyPct(d.adjCountyPoverty)}</span>
+      </div>
+      <div class="compare-stat-row">
         <span>Place classification</span>
         <span>${d.classification} (${(d.urbanShare * 100).toFixed(0)}% urban)</span>
       </div>
       <div class="compare-stat-row">
-        <span>Density gap vs. adjusted county</span>
+        <span>Store density gap vs. adjusted county</span>
         <span style="color:${gapColor}">${formatGap(d)}</span>
       </div>
-      <p class="compare-gap-legend"><span style="color:#fca5a5;font-weight:600">Coral</span> = more Dollar General per 10k here than the adjusted county; <span style="color:#86efac;font-weight:600">Green</span> = fewer.</p>
-
-      <div class="compare-percentile">
-        <div class="compare-percentile-label">Statewide gap percentile</div>
-        <div class="compare-percentile-bar" aria-hidden="true">
-          <div class="compare-percentile-fill" style="width:${(d.gapPercentile * 100).toFixed(1)}%"></div>
-        </div>
-        <div class="compare-percentile-value">
-          ${formatPercentile(d)} of ${placeData.length} NC places
-        </div>
-      </div>
+      <p class="compare-gap-legend"><span style="color:#fca5a5;font-weight:600">Coral</span> = more Dollar General stores per 10k here than the rest of the county; <span style="color:#86efac;font-weight:600">Green</span> = fewer.</p>
     `;
 
     requestAnimationFrame(() => {
