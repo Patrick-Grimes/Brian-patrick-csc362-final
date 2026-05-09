@@ -432,29 +432,24 @@ main {
   transition: opacity 0.28s ease;
 }
 
-.compare-panel.compare-panel--expanded .compare-expand-backdrop {
+.compare-expand-backdrop--open {
   display: block;
   opacity: 1;
-}
-
-.compare-panel.compare-panel--expanded .compare-expand-backdrop {
-  display: block;
 }
 
 .compare-panel.compare-panel--expanded {
   position: fixed;
   z-index: 910;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: min(62rem, calc(100vw - 1.5rem));
-  max-width: 100%;
-  max-height: min(calc(100vh - 1.5rem), 940px);
+  inset: clamp(0.75rem, 2.5vw, 1.5rem);
+  width: min(68rem, calc(100vw - clamp(1.5rem, 5vw, 3rem)));
+  max-width: none;
+  max-height: none;
+  margin: auto;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   min-width: 0;
-  padding: clamp(1.25rem, 3vw, 1.75rem) clamp(1.35rem, 3.5vw, 2rem) clamp(1.35rem, 3vw, 1.85rem);
+  padding: clamp(1rem, 2.6vw, 1.5rem) clamp(1rem, 3vw, 1.75rem);
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 14px;
@@ -474,15 +469,13 @@ main {
   flex: 1 1 auto;
   min-height: 0;
   max-height: none;
-  padding: clamp(1rem, 2.5vw, 1.65rem);
-  gap: 1.15rem;
+  padding: clamp(0.85rem, 2vw, 1.25rem);
+  gap: 0.85rem;
 }
 
 .compare-panel.compare-panel--expanded .compare-chart-stage {
-  min-height: min(44vh, 500px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  min-height: 0;
+  display: block;
 }
 
 .compare-panel.compare-panel--expanded .compare-stats {
@@ -548,6 +541,7 @@ main {
 .compare-chart-stage {
   width: 100%;
   flex-shrink: 0;
+  min-width: 0;
 }
 
 #compare-chart {
@@ -555,11 +549,11 @@ main {
   width: 100%;
   height: auto;
   flex-shrink: 0;
-  aspect-ratio: 560 / 430;
+  aspect-ratio: 640 / 390;
 }
 
 .compare-panel.compare-panel--expanded #compare-chart {
-  aspect-ratio: 560 / 560;
+  aspect-ratio: 640 / 470;
 }
 
 .compare-place-header {
@@ -582,9 +576,9 @@ main {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem 1.25rem;
-  font-size: var(--compare-fs-sub);
+  font-size: clamp(0.82rem, 0.78rem + 0.2vw, 0.92rem);
   color: var(--text-muted);
-  margin-top: 0.2rem;
+  margin-top: 0;
   flex-shrink: 0;
 }
 
@@ -616,11 +610,17 @@ main {
 .compare-stat-row {
   display: flex;
   justify-content: space-between;
+  gap: 1rem;
   padding: 3px 0;
   color: var(--text-muted);
 }
 
+.compare-stat-row span:first-child {
+  min-width: 0;
+}
+
 .compare-stat-row span:last-child {
+  text-align: right;
   color: var(--text);
   font-weight: 600;
 }
@@ -1091,8 +1091,8 @@ dialog.help-dialog:not([open]) {
 
 .help-dialog[open] {
   margin: auto;
-  max-width: min(36rem, 92vw);
-  max-height: min(85vh, 34rem);
+  max-width: min(54rem, 94vw);
+  max-height: min(88vh, 46rem);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -1181,4 +1181,39 @@ dialog.help-dialog:not([open]) {
   font-style: normal;
   font-weight: 600;
   color: #e2e8f0;
+}
+
+.help-nav-figures {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+  margin: 0.9rem 0 0.2rem;
+}
+
+.help-nav-figures figure {
+  margin: 0;
+  min-width: 0;
+}
+
+.help-nav-figures img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-2);
+}
+
+.help-nav-figures figcaption {
+  margin-top: 0.4rem;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+@media (max-width: 720px) {
+  .help-nav-figures {
+    grid-template-columns: 1fr;
+  }
 }

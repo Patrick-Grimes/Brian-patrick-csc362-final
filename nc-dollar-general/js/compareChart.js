@@ -95,15 +95,12 @@ function initCompareChart(placeData) {
   const comparePanelEl = document.getElementById("compare-panel");
 
   /* viewBox width; compact vs expanded height — sync aspect-ratio in css/style.css */
-  const CHART_VIEW_W = 560;
-  const CHART_VIEW_H_COMPACT = 430;
-  const CHART_VIEW_H_EXPANDED = 560;
-
-  const READABLE_BASE = 1.12;
-
-  function clamp(n, lo, hi) {
-    return Math.max(lo, Math.min(hi, n));
-  }
+  const CHART_VIEW_W = 640;
+  const CHART_VIEW_H_COMPACT = 390;
+  const CHART_VIEW_H_EXPANDED = 470;
+  const CHART_VIEW_W_NARROW = 360;
+  const CHART_VIEW_H_COMPACT_NARROW = 305;
+  const CHART_VIEW_H_EXPANDED_NARROW = 335;
 
   function isCompareExpanded() {
     return !!(comparePanelEl && comparePanelEl.classList.contains("compare-panel--expanded"));
@@ -113,11 +110,33 @@ function initCompareChart(placeData) {
     return isCompareExpanded() ? CHART_VIEW_H_EXPANDED : CHART_VIEW_H_COMPACT;
   }
 
-  /** Single scale for all SVG text + spacing (merged former “readable” + width + expanded). */
-  function computeTypeScale(innerPxWidth, expanded) {
-    const byWidth = clamp(innerPxWidth / 395, 0.98, 1.28);
-    const expandedBoost = expanded ? 1.06 : 1;
-    return READABLE_BASE * byWidth * expandedBoost;
+  function getViewSize(pixelWidth) {
+    const narrow = pixelWidth > 0 && pixelWidth < 430;
+    if (narrow) {
+      return {
+        w: CHART_VIEW_W_NARROW,
+        h: isCompareExpanded()
+          ? CHART_VIEW_H_EXPANDED_NARROW
+          : CHART_VIEW_H_COMPACT_NARROW,
+        narrow,
+      };
+    }
+    return {
+      w: CHART_VIEW_W,
+      h: getViewHeight(),
+      narrow,
+    };
+  }
+
+  function chartType(expanded) {
+    return {
+      value: expanded ? 17 : 16,
+      entity: expanded ? 14 : 13,
+      entitySub: expanded ? 12 : 11.5,
+      tick: expanded ? 13 : 12,
+      axisTitle: expanded ? 13.5 : 12.5,
+      na: expanded ? 13 : 12,
+    };
   }
 
   function measureSvgTextWidth(svgRoot, textStr, fontSize, fontWeight, fontFamily) {
@@ -181,8 +200,8 @@ function initCompareChart(placeData) {
       (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0);
     const w = Math.max(0, parent.clientWidth - padX);
     if (!(w > 0)) return;
-    const viewH = getViewHeight();
-    const h = Math.round((w * viewH) / CHART_VIEW_W);
+    const view = getViewSize(w);
+    const h = Math.round((w * view.h) / view.w);
     chartEl.setAttribute("width", String(w));
     chartEl.setAttribute("height", String(h));
   }
@@ -196,16 +215,22 @@ function initCompareChart(placeData) {
   if (compareFrameEl && typeof ResizeObserver !== "undefined") {
     new ResizeObserver(() => {
       syncCompareChartPixelSize();
-      if (window.AppState.lastCompareSelection) {
-        renderCompareChart(window.AppState.lastCompareSelection);
-      }
+      requestAnimationFrame(() => {
+        if (window.AppState.lastCompareSelection) {
+          renderCompareChart(window.AppState.lastCompareSelection);
+        }
+      });
     }).observe(compareFrameEl);
   }
 
   function setExpanded(open) {
     if (!comparePanelEl) return;
     comparePanelEl.classList.toggle("compare-panel--expanded", open);
+    if (compareFrameEl) {
+      compareFrameEl.scrollLeft = 0;
+    }
     if (expandBackdrop) {
+      expandBackdrop.classList.toggle("compare-expand-backdrop--open", open);
       if (open) {
         expandBackdrop.removeAttribute("hidden");
         expandBackdrop.setAttribute("aria-hidden", "false");
@@ -219,10 +244,12 @@ function initCompareChart(placeData) {
       expandBtn.textContent = open ? "Exit expanded view" : "Expand chart";
     }
     requestAnimationFrame(() => {
-      syncCompareChartPixelSize();
-      if (window.AppState.lastCompareSelection) {
-        renderCompareChart(window.AppState.lastCompareSelection);
-      }
+      requestAnimationFrame(() => {
+        syncCompareChartPixelSize();
+        if (window.AppState.lastCompareSelection) {
+          renderCompareChart(window.AppState.lastCompareSelection);
+        }
+      });
     });
   }
 
@@ -266,6 +293,9 @@ function initCompareChart(placeData) {
   /* ------------------------------------------------------------------ */
   function renderCompareChart(d) {
     window.AppState.lastCompareSelection = d || null;
+    if (compareFrameEl) {
+      compareFrameEl.scrollLeft = 0;
+    }
 
     if (!d) {
       if (empty)   empty.removeAttribute("hidden");
@@ -316,40 +346,36 @@ function initCompareChart(placeData) {
 
     syncCompareChartPixelSize();
 
-    const parent = chartEl.parentElement;
-    const cs = parent ? getComputedStyle(parent) : null;
-    const padX = cs
-      ? (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0)
-      : 0;
-    const innerPxW = Math.max(0, (parent && parent.clientWidth) ? parent.clientWidth - padX : CHART_VIEW_W);
-
     const expanded = isCompareExpanded();
-    const typeScale = computeTypeScale(innerPxW, expanded);
+    const type = chartType(expanded);
+    const parent = chartEl.parentElement;
+    const parentWidth = parent ? parent.clientWidth : 0;
+    const view = getViewSize(parentWidth);
 
-    const barW = CHART_VIEW_W;
-    const barH = getViewHeight();
+    const barW = view.w;
+    const barH = view.h;
     const povNums = [d.placePoverty, d.adjCountyPoverty].filter(povertyFinite);
     const showPovAxis = povNums.length > 0;
 
-    const valueFont = 18.5 * typeScale;
-    const labelFont = 13.5 * typeScale;
-    const axisFont = 11.5 * typeScale;
-    const axisTitleFont = 12 * typeScale;
-    const naFont = 13 * typeScale;
+    const valueFont = type.value;
+    const labelFont = type.entity;
+    const axisFont = type.tick;
+    const axisTitleFont = type.axisTitle;
+    const naFont = type.na;
 
-    const marginLeft = Math.round(122 * typeScale);
-    const marginRight = Math.round(12 * typeScale);
+    const marginLeft = view.narrow ? 112 : (expanded ? 168 : 156);
+    const marginRight = view.narrow ? 14 : (expanded ? 28 : 22);
     const margin = {
-      top: showPovAxis ? Math.round(46 * typeScale / READABLE_BASE) : Math.round(28 * typeScale / READABLE_BASE),
+      top: view.narrow ? (showPovAxis ? 50 : 30) : (showPovAxis ? 58 : 34),
       right: marginRight,
-      bottom: Math.round(52 * typeScale / READABLE_BASE),
+      bottom: view.narrow ? 54 : 58,
       left: marginLeft,
     };
     const innerW = barW - margin.left - margin.right;
     const innerH = barH - margin.top - margin.bottom;
 
-    const plotTop = showPovAxis ? Math.round(34 * typeScale / READABLE_BASE) : Math.round(20 * typeScale / READABLE_BASE);
-    const plotBottom = innerH - Math.round(22 * typeScale / READABLE_BASE);
+    const plotTop = view.narrow ? (showPovAxis ? 32 : 22) : (showPovAxis ? 38 : 24);
+    const plotBottom = innerH - (view.narrow ? 20 : 24);
 
     const maxStores = Math.max(d.storesPerTenK, d.adjCountyDensity, 0) * 1.25 || 1;
     const maxPov = showPovAxis
@@ -362,14 +388,14 @@ function initCompareChart(placeData) {
     const yBand = d3.scaleBand()
       .domain(["This Place", "Adj. county (excl. place)"])
       .range([plotTop, plotBottom])
-      .padding(0.34);
+      .padding(0.36);
 
-    const subGap = Math.max(6, Math.round(7 * typeScale / READABLE_BASE));
+    const subGap = expanded ? 8 : 7;
     const subH = (yBand.bandwidth() - subGap) / 2;
 
     const rows = [
-      { entity: "This Place", stores: d.storesPerTenK, poverty: d.placePoverty },
-      { entity: "Adj. county (excl. place)", stores: d.adjCountyDensity, poverty: d.adjCountyPoverty },
+      { entity: "This Place", labelLines: ["This Place"], stores: d.storesPerTenK, poverty: d.placePoverty },
+      { entity: "Adj. county (excl. place)", labelLines: ["Adjusted county", "(excl. place)"], stores: d.adjCountyDensity, poverty: d.adjCountyPoverty },
     ];
 
     const aria =
@@ -391,11 +417,11 @@ function initCompareChart(placeData) {
     const g = svg.append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    const labelPadIn = Math.max(8, Math.round(9 * typeScale / READABLE_BASE));
-    const labelGapOut = Math.max(5, Math.round(6 * typeScale / READABLE_BASE));
+    const labelPadIn = 10;
+    const labelGapOut = 7;
 
     if (showPovAxis) {
-      const gTop = g.append("g").attr("transform", `translate(0,${plotTop - 4})`);
+      const gTop = g.append("g").attr("transform", `translate(0,${plotTop - 6})`);
       const povAxis = d3.axisTop(xPoverty)
         .ticks(3)
         .tickSize(4)
@@ -404,18 +430,18 @@ function initCompareChart(placeData) {
       gTop.selectAll("text")
         .attr("fill", "#fb923c")
         .attr("font-size", axisFont)
-        .attr("opacity", 0.58)
+        .attr("opacity", 0.86)
         .attr("font-family", fontFamily);
-      gTop.selectAll("line").attr("stroke", "#f97316").attr("opacity", 0.38);
-      gTop.select("path.domain").attr("stroke", "#f97316").attr("opacity", 0.38);
+      gTop.selectAll("line").attr("stroke", "#f97316").attr("opacity", 0.62);
+      gTop.select("path.domain").attr("stroke", "#f97316").attr("opacity", 0.62);
 
       gTop.append("text")
         .attr("x", innerW / 2)
-        .attr("y", -Math.round(26 * typeScale / READABLE_BASE))
+        .attr("y", -26)
         .attr("text-anchor", "middle")
         .attr("font-size", axisTitleFont)
         .attr("fill", "#fdba74")
-        .attr("opacity", 0.72)
+        .attr("opacity", 0.95)
         .attr("font-family", fontFamily)
         .attr("font-weight", "500")
         .text("Poverty rate");
@@ -511,20 +537,41 @@ function initCompareChart(placeData) {
       .attr("opacity", 0.9)
       .text("N/A");
 
-    g.selectAll("text.entity-label")
+    const entityLabels = g.selectAll("text.entity-label")
       .data(rows)
       .join("text")
       .attr("class", "entity-label")
       .attr("y", r => yBand(r.entity) + yBand.bandwidth() / 2)
-      .attr("x", -8)
+      .attr("x", -12)
       .attr("text-anchor", "end")
-      .attr("dy", "0.35em")
       .attr("font-size", labelFont)
-      .attr("fill", "#94a3b8")
+      .attr("fill", "#b6c3d6")
       .attr("font-family", fontFamily)
-      .attr("font-weight", "500")
-      .attr("opacity", 0.92)
-      .text(r => r.entity);
+      .attr("font-weight", "650")
+      .attr("opacity", 0.98);
+
+    entityLabels.each(function (r) {
+      const text = d3.select(this);
+      text.selectAll("*").remove();
+      if (r.labelLines.length === 1) {
+        text.append("tspan")
+          .attr("x", -12)
+          .attr("dy", "0.35em")
+          .text(r.labelLines[0]);
+        return;
+      }
+      text.append("tspan")
+        .attr("x", -12)
+        .attr("dy", "-0.15em")
+        .text(r.labelLines[0]);
+      text.append("tspan")
+        .attr("x", -12)
+        .attr("dy", "1.2em")
+        .attr("font-size", type.entitySub)
+        .attr("fill", "#94a3b8")
+        .attr("font-weight", "600")
+        .text(r.labelLines[1]);
+    });
 
     const gBot = g.append("g").attr("transform", `translate(0,${plotBottom + 4})`);
     const xAxisStores = d3.axisBottom(xStores)
@@ -535,22 +582,22 @@ function initCompareChart(placeData) {
     gBot.selectAll("text")
       .attr("fill", "#64748b")
       .attr("font-size", axisFont)
-      .attr("opacity", 0.62)
+      .attr("opacity", 0.88)
       .attr("font-family", fontFamily);
     gBot.selectAll("line")
       .attr("stroke", "#3b82f6")
-      .attr("opacity", 0.2);
+      .attr("opacity", 0.42);
     gBot.select("path.domain")
       .attr("stroke", "#3b82f6")
-      .attr("opacity", 0.38);
+      .attr("opacity", 0.68);
 
     gBot.append("text")
       .attr("x", innerW / 2)
-      .attr("y", Math.round(34 * typeScale / READABLE_BASE))
+      .attr("y", 38)
       .attr("text-anchor", "middle")
       .attr("font-size", axisTitleFont)
-      .attr("fill", "#64748b")
-      .attr("opacity", 0.72)
+      .attr("fill", "#9fb0c8")
+      .attr("opacity", 0.95)
       .attr("font-family", fontFamily)
       .attr("font-weight", "500")
       .text("Stores per 10,000 residents");
